@@ -1,0 +1,192 @@
+<?xml version="1.0" ?>
+<argos-configuration>
+
+  <!-- ************************* -->
+  <!-- * General configuration * -->
+  <!-- ************************* -->
+  <framework>
+  	<!-- To make ARGoS faster, you can set 'threads' to some number greater than 0 -->
+    <system threads="8" />
+    <experiment length="0" ticks_per_second="10" />
+  </framework>
+
+  <!-- *************** -->
+  <!-- * Controllers * -->
+  <!-- *************** -->
+  <controllers>
+
+    <!-- ***************************************************** -->
+    <!-- * This is the controller to associate to robots     * -->
+    <!-- ***************************************************** -->
+    
+    <!-- C++ controller -->
+    <e-puck_frontal_barrier_controller id="frontal_barrier"
+                        library="build_simepuck/testing/libfrontal_barrier.so">
+      <actuators>
+        <epuck_wheels implementation="default" />
+        <epuck_range_and_bearing implementation="medium" medium="rab" range="1.0" />
+      </actuators>
+      <sensors>
+        <epuck_range_and_bearing implementation="medium" medium="rab" show_rays="true" calibrated="true" low_level_config="/home/root/ARGoS/low_level_configuration/range_and_bearing_sensor.xml" />
+      	<epuck_proximity implementation="default" show_rays="true" calibrated="true" low_level_config="/home/root/ARGoS/low_level_configuration/proximity_sensor.xml" />
+      </sensors>
+      <params defaultSpeed="5" 
+      	humanPotentialGain="1000" 
+      	humanPotentialDistance="50" 
+      	agentPotentialGain="200" 
+      	agentPotentialDistance="20" 
+        gravityPotentialGain="1"
+      />
+    </e-puck_frontal_barrier_controller>
+
+    <static_e-puck_frontal_barrier_controller id="frontal_barrier_static1"
+                        library="build_simepuck/testing/libfrontal_barrier_static.so">
+      <actuators>
+        <epuck_wheels implementation="default" />
+        <epuck_range_and_bearing implementation="medium" medium="rab" range="1.0" />
+      </actuators>
+      <sensors>
+        <epuck_range_and_bearing implementation="medium" medium="rab" show_rays="true" calibrated="true" low_level_config="/home/root/ARGoS/low_level_configuration/range_and_bearing_sensor.xml" />
+        <epuck_proximity implementation="default" show_rays="true" calibrated="true" low_level_config="/home/root/ARGoS/low_level_configuration/proximity_sensor.xml" />
+      </sensors>
+      <params
+        humanAgentLeftSpeed="0"
+        humanAgentRightSpeed="0"
+        humanAgentSignal="1"
+      />
+    </static_e-puck_frontal_barrier_controller>
+
+    <static_e-puck_frontal_barrier_controller id="frontal_barrier_static2"
+                        library="build_simepuck/testing/libfrontal_barrier_static.so">
+      <actuators>
+        <epuck_wheels implementation="default" />
+        <epuck_range_and_bearing implementation="medium" medium="rab" range="1.0" />
+      </actuators>
+      <sensors>
+        <epuck_range_and_bearing implementation="medium" medium="rab" show_rays="true" calibrated="true" low_level_config="/home/root/ARGoS/low_level_configuration/range_and_bearing_sensor.xml" />
+        <epuck_proximity implementation="default" show_rays="true" calibrated="true" low_level_config="/home/root/ARGoS/low_level_configuration/proximity_sensor.xml" />
+      </sensors>
+      <params
+        humanAgentLeftSpeed="0"
+        humanAgentRightSpeed="0"
+        humanAgentSignal="2"
+      />
+    </static_e-puck_frontal_barrier_controller>
+
+    <static_e-puck_frontal_barrier_controller id="frontal_barrier_static3"
+                        library="build_simepuck/testing/libfrontal_barrier_static.so">
+      <actuators>
+        <epuck_wheels implementation="default" />
+        <epuck_range_and_bearing implementation="medium" medium="rab" range="1.0" />
+      </actuators>
+      <sensors>
+        <epuck_range_and_bearing implementation="medium" medium="rab" show_rays="true" calibrated="true" low_level_config="/home/root/ARGoS/low_level_configuration/range_and_bearing_sensor.xml" />
+        <epuck_proximity implementation="default" show_rays="true" calibrated="true" low_level_config="/home/root/ARGoS/low_level_configuration/proximity_sensor.xml" />
+      </sensors>
+      <params
+        humanAgentLeftSpeed="0"
+        humanAgentRightSpeed="0"
+        humanAgentSignal="3"
+      />
+    </static_e-puck_frontal_barrier_controller>
+
+    <static_e-puck_frontal_barrier_controller id="frontal_barrier_static4"
+                        library="build_simepuck/testing/libfrontal_barrier_static.so">
+      <actuators>
+        <epuck_wheels implementation="default" />
+        <epuck_range_and_bearing implementation="medium" medium="rab" range="1.0" />
+      </actuators>
+      <sensors>
+        <epuck_range_and_bearing implementation="medium" medium="rab" show_rays="true" calibrated="true" low_level_config="/home/root/ARGoS/low_level_configuration/range_and_bearing_sensor.xml" />
+        <epuck_proximity implementation="default" show_rays="true" calibrated="true" low_level_config="/home/root/ARGoS/low_level_configuration/proximity_sensor.xml" />
+      </sensors>
+      <params
+        humanAgentLeftSpeed="0"
+        humanAgentRightSpeed="0"
+        humanAgentSignal="4"
+      />
+    </static_e-puck_frontal_barrier_controller>
+
+  </controllers>
+
+  <!-- *********************** -->
+  <!-- * Arena configuration * -->
+  <!-- *********************** -->
+  <arena size="10, 10, 2" center="0,0,0.5">
+    <box id="bn" size="0.1, 6, 0.2" movable="false">
+      <body position="3,0,0" orientation="0,0,0" />
+    </box>
+    <box id="bs" size="0.1, 6, 0.2" movable="false">
+      <body position="-3,0,0" orientation="0,0,0" />
+    </box>
+    <box id="be" size="6, 0.1, 0.2" movable="false">
+      <body position="0,-3,0" orientation="0,0,0" />
+    </box>
+    <box id="bw" size="6, 0.1, 0.2" movable="false">
+      <body position="0,3,0" orientation="0,0,0" />
+    </box>
+
+    <e-puck id="static1" rab_range = "1">
+      <body position="0,0,0" orientation="0,0,0" />
+      <controller config="frontal_barrier_static1"/>
+    </e-puck>
+    
+    <e-puck id="static2" rab_range = "1">
+      <body position="-0.1,0,0" orientation="0,0,0" />
+      <controller config="frontal_barrier_static2"/>
+    </e-puck>
+    
+    <e-puck id="static3" rab_range = "1">
+      <body position="-0.1,-0.1,0" orientation="0,0,0" />
+      <controller config="frontal_barrier_static3"/>
+    </e-puck>
+    
+    <e-puck id="static4" rab_range = "1">
+      <body position="0,-0.1,0" orientation="0,0,0" />
+      <controller config="frontal_barrier_static4"/>
+    </e-puck>
+    
+    <distribute>
+      <position method="uniform" min="-3,-3,0" max="3,3,0" /> 
+      <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" /> 
+      <entity quantity="6" max_trials="100"> 
+        <e-puck id="agent" rab_range = "1">
+          <controller config="frontal_barrier" /> 
+        </e-puck>
+      </entity> 
+    </distribute> 
+  </arena>
+
+  <!-- ******************* -->
+  <!-- * Physics engines * -->
+  <!-- ******************* -->
+  <physics_engines>
+    <dynamics2d id="dyn2d" />
+  </physics_engines>
+
+  <!-- ********* -->
+  <!-- * Media * -->
+  <!-- ********* -->
+  <media>
+    <range_and_bearing id="rab" index="grid" grid_size="1,1,1" />
+  </media>
+
+  <!-- ****************** -->
+  <!-- * Visualization * -->
+  <!-- ****************** -->
+  <visualization>
+
+    <!-- ************************************************************************ -->
+    <!-- * To activate the Lua editor, just use the 'lua_editor' flag attribute * -->
+    <!-- ************************************************************************ -->
+    <qt-opengl lua_editor="true">
+      <camera>
+        <placement idx="0" position="-0.00569879,0.01,4.86243" look_at="-0.00569879,0.01,3.86243" lens_focal_length="20" />
+        <placement idx="1" position="-2,0,2" look_at="0,0,0" lens_focal_length="20" />
+        <placement idx="2" position="0.884183,0.359128,0.490269" look_at="0.924486,-0.486744,-0.0415919" lens_focal_length="20" />
+      </camera>
+    </qt-opengl>
+
+  </visualization>
+
+</argos-configuration>
