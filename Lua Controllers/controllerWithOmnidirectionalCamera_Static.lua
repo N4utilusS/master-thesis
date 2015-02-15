@@ -1,6 +1,6 @@
 -- Put your global variables here
-LEFT_COLOUR = {0,255,255}
-RIGHT_COLOUR = {255,0,255}
+LEFT_COLOUR = {0,255,255} -- Cyan
+RIGHT_COLOUR = {255,0,255} -- Magenta
 
 --[[ This function is executed every time you press the 'execute'
      button ]]

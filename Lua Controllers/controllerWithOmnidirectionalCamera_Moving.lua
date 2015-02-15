@@ -8,19 +8,22 @@ MAX_COUNT = 20
 
 -- Human Potential
 HUMAN_GAIN = 1000
-HUMAN_DISTANCE = 100
-HUMAN_LEFT_COLOUR = {0,255,255}
-HUMAN_RIGHT_COLOUR = {255,0,255}
+HUMAN_DISTANCE = 60
+HUMAN_LEFT_COLOUR = {0,255,255} -- Cyan
+HUMAN_RIGHT_COLOUR = {255,0,255} -- Magenta
 
 -- Agent Repulsion Potential
 AGENT_GAIN = 200
 AGENT_DISTANCE = 50
 AGENT_SIGNAL = 0
+AGENT_GOOD = {0,255,0}
+AGENT_BAD = {255,0,0}
 
 --[[ This function is executed every time you press the 'execute'
      button ]]
 function init()
-  robot.overo_leds.set_all_colors(LEFT_COLOUR[1],LEFT_COLOUR[2],LEFT_COLOUR[3])
+  robot.overo_leds.set_all_colors(AGENT_GOOD[1],AGENT_GOOD[2],AGENT_GOOD[3])
+  robot.colored_blob_omnidirectional_camera.enable()
 end
 
 
@@ -138,8 +141,8 @@ function defaultPotential()
   vector = {x = 0, y = 0}
   humanFound = false
 
-  for i = 1, #robot.range_and_bearing do
-    if (robot.range_and_bearing[i].data[1] >= HUMAN_SIGNAL_MIN) and (robot.range_and_bearing[i].data[1] <= HUMAN_SIGNAL_MAX) then
+  for i = 1, #robot.colored_blob_omnidirectional_camera do
+    if robot.colored_blob_omnidirectional_camera[i].color.blue > 191 then -- 7/8 * 255, both colours have max component for blue, possible error
       humanFound = true
       break
     end
@@ -155,11 +158,11 @@ end
 function agentRepulsionPotential()
   vector = {x = 0, y = 0}
   
-  for i = 1, #robot.range_and_bearing do
-    if (robot.range_and_bearing[i].data[1] == AGENT_SIGNAL) and (robot.range_and_bearing[i].range < AGENT_DISTANCE) then
-      lj = lennardJones(robot.range_and_bearing[i].range, AGENT_GAIN, AGENT_DISTANCE)
-      vector.x = vector.x + lj * math.cos(robot.range_and_bearing[i].bearing)
-      vector.y = vector.y + lj * math.sin(robot.range_and_bearing[i].bearing)
+  for i = 1, #robot.colored_blob_omnidirectional_camera do
+    if (robot.colored_blob_omnidirectional_camera[i].color.blue < 64) and (robot.colored_blob_omnidirectional_camera[i].distance < AGENT_DISTANCE) then
+      lj = lennardJones(robot.colored_blob_omnidirectional_camera[i].distance, AGENT_GAIN, AGENT_DISTANCE)
+      vector.x = vector.x + lj * math.cos(robot.colored_blob_omnidirectional_camera[i].angle)
+      vector.y = vector.y + lj * math.sin(robot.colored_blob_omnidirectional_camera[i].angle)
     end
   end
 
@@ -170,26 +173,26 @@ function gravityPotential()
   vector = {x = 0, y = 0}
 
   d = 0
-  amountOfMessages = #robot.range_and_bearing
+  amountOfMessages = #robot.colored_blob_omnidirectional_camera
   minimum = math.huge
   minimumIndex = -1
 
   for i=1, amountOfMessages do
-    if (robot.range_and_bearing[i].data[1] >= 1) and (robot.range_and_bearing[i].data[1] <= 4) and (robot.range_and_bearing[i].range < minimum) then
-      minimum = robot.range_and_bearing[i].range
+    if (robot.colored_blob_omnidirectional_camera[i].color.blue > 191) and (robot.colored_blob_omnidirectional_camera[i].distance < minimum) then
+      minimum = robot.colored_blob_omnidirectional_camera[i].distance
       minimumIndex = i
     end
   end
 
   if minimumIndex ~= -1 then
-    if robot.range_and_bearing[minimumIndex].data[1] <= 2 then
+    if robot.colored_blob_omnidirectional_camera[minimumIndex].color.green >= 128 then
       rotationModification = math.pi/2
     else
       rotationModification = -math.pi/2
     end
 
-    vector.x = math.cos(robot.range_and_bearing[minimumIndex].bearing + rotationModification)
-    vector.y = math.sin(robot.range_and_bearing[minimumIndex].bearing + rotationModification)
+    vector.x = math.cos(robot.colored_blob_omnidirectional_camera[minimumIndex].angle + rotationModification)
+    vector.y = math.sin(robot.colored_blob_omnidirectional_camera[minimumIndex].angle + rotationModification)
   end
   
 
@@ -200,17 +203,17 @@ function humanPotential()
   vector = {x = 0, y = 0}
 
   d = 0
-  amountOfMessages = #robot.range_and_bearing
+  amountOfMessages = #robot.colored_blob_omnidirectional_camera
 
   i = 0
   repeat
     i = i + 1
-  until (i >= amountOfMessages) or (robot.range_and_bearing[i].data[1] ~= AGENT_SIGNAL)
+  until (i >= amountOfMessages) or (robot.colored_blob_omnidirectional_camera[i].color.blue > 191)
 
-  if (amountOfMessages ~= 0) and (robot.range_and_bearing[i].data[1] ~= AGENT_SIGNAL) then
-    lj = lennardJones(robot.range_and_bearing[i].range, HUMAN_GAIN, HUMAN_DISTANCE)
-    vector.x = lj * math.cos(robot.range_and_bearing[i].bearing)
-    vector.y = lj * math.sin(robot.range_and_bearing[i].bearing)
+  if (amountOfMessages ~= 0) and (robot.colored_blob_omnidirectional_camera[i].color.blue > 191) then
+    lj = lennardJones(robot.colored_blob_omnidirectional_camera[i].distance, HUMAN_GAIN, HUMAN_DISTANCE)
+    vector.x = lj * math.cos(robot.colored_blob_omnidirectional_camera[i].angle)
+    vector.y = lj * math.sin(robot.colored_blob_omnidirectional_camera[i].angle)
   end
 
   return vector
@@ -228,7 +231,8 @@ end
      called. The state of sensors and actuators is reset
      automatically by ARGoS. ]]
 function reset()
-  robot.range_and_bearing.set_data({0,0,0,0})
+  robot.overo_leds.set_all_colors(AGENT_GOOD[1],AGENT_GOOD[2],AGENT_GOOD[3])
+  robot.colored_blob_omnidirectional_camera.enable()
 end
 
 
