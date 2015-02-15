@@ -32,7 +32,7 @@
         <colored_blob_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="true" />
       </sensors>
       <!-- No required configuration -->
-      <params script="controllerWithRAB_Moving.lua" />
+      <params script="/home/anthony/git/master-thesis/Lua Controllers/controllerWithOmnidirectionalCamera_Moving.lua" />
       <!-- Optionally, you can pass a script as a controller parameter: -->
       <!-- params script="../../src/testing/experiment/test_gripper.lua" / -->
     </lua_controller>
@@ -50,7 +50,7 @@
         <colored_blob_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="true" />
       </sensors>
       <!-- No required configuration -->
-      <params script="controllerWithRAB_Static.lua" />
+      <params script="/home/anthony/git/master-thesis/Lua Controllers/controllerWithOmnidirectionalCamera_Static.lua" />
       <!-- Optionally, you can pass a script as a controller parameter: -->
       <!-- params script="../../src/testing/experiment/test_gripper.lua" / -->
     </lua_controller>
@@ -120,7 +120,7 @@
   <!-- *********************** -->
   <!-- * Arena configuration * -->
   <!-- *********************** -->
-  <arena size="10, 10, 2" center="0,0,0.5">
+  <arena size="10, 10, 1" center="0,0,0.5">
     <box id="bn" size="0.1, 6, 0.2" movable="false">
       <body position="3,0,0" orientation="0,0,0" />
     </box>
@@ -134,12 +134,12 @@
       <body position="0,3,0" orientation="0,0,0" />
     </box>
 
-    <e-puck id="human1" rab_range = "3">
+    <e-puck id="human1" rab_range = "3" >
       <body position="0,0,0" orientation="0,0,0" />
       <controller config="lua_static"/>
     </e-puck>
     
-    <e-puck id="human2" rab_range = "3">
+    <e-puck id="human2" rab_range = "3" >
       <body position="0,-0.1,0" orientation="0,0,0" />
       <controller config="lua_static"/>
     </e-puck>
@@ -148,7 +148,7 @@
       <position method="uniform" min="-3,-3,0" max="3,3,0" /> 
       <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" /> 
       <entity quantity="6" max_trials="100"> 
-        <e-puck id="agent" rab_range = "3">
+        <e-puck id="agent" rab_range = "3" omnidirectional_camera_aperture="89">
           <controller config="lua_moving" /> 
         </e-puck>
       </entity> 
