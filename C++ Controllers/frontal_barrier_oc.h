@@ -1,13 +1,13 @@
 /*
  * AUTHOR: Anthony Debruyn <antdebru@ulb.ac.be>
- *
+ * 
  *
  * This controller is meant to be used with the XML files:
- *    frontal_barrier.argos
+ *    frontal_barrier_omnidirectional_camera.argos
  */
 
-#ifndef FRONTAL_BARRIER_STATIC_OC_H
-#define FRONTAL_BARRIER_STATIC_OC_H
+#ifndef FRONTAL_BARRIER_OC_H
+#define FRONTAL_BARRIER_OC_H
 
 /*
  * Include some necessary headers.
@@ -20,9 +20,9 @@
 #include <argos3/plugins/robots/e-puck/control_interface/ci_epuck_wheels_actuator.h>
 /* Definition of the e-puck proximity sensor */
 #include <argos3/plugins/robots/e-puck/control_interface/ci_epuck_proximity_sensor.h>
-/* Definition of the e-puck omnidirectional camera */
+/* Definition of the e-puck range and bearing */
 #include <argos3/plugins/robots/e-puck/control_interface/ci_epuck_omnidirectional_camera_sensor.h>
-/* Definition of the colors*/
+#include <argos3/core/utility/math/vector2.h>
 #include <argos3/core/utility/datatypes/color.h>
 
 /*
@@ -34,15 +34,15 @@ using namespace argos;
 /*
  * A controller is simply an implementation of the CCI_Controller class.
  */
-class CEpuckFrontalBarrierStaticOC : public CCI_Controller {
+class CEpuckFrontalBarrierOC : public CCI_Controller {
 
 public:
 
    /* Class constructor. */
-   CEpuckFrontalBarrierStaticOC();
+   CEpuckFrontalBarrierOC();
 
    /* Class destructor. */
-   virtual ~CEpuckFrontalBarrierStaticOC() {}
+   virtual ~CEpuckFrontalBarrierOC() {}
 
    /*
     * This function initializes the controller.
@@ -79,6 +79,15 @@ private:
 
    /* parse the <params> xml tree from the config file */
    void ParseParams(TConfigurationNode& t_node);
+   // Step method for the agents.
+   void NormalMode();
+   void BlockedMode();
+   void ComputeDirection(CVector2& cResultVector) const;
+   const CVector2& HumanPotential() const;
+   const CVector2& GravityPotential() const;
+   const CVector2& AgentRepulsionPotential() const;
+   const CVector2& DefaultPotential() const;
+   inline Real LennardJones(Real f_x, Real f_gain, Real f_distance) const;
 
   /*
   * The following variables are used as parameters for the
@@ -86,19 +95,30 @@ private:
   * of the XML configuration file, under the
   * <controllers><footbot_diffusion_controller> section.
   */
+   Real m_fDefaultWheelsSpeed;
 
-   Real m_fHumanAgentLeftSpeed;
-   Real m_fHumanAgentRightSpeed;
+   Real m_fHumanPotentialGain;
+   Real m_fHumanPotentialDistance;
+   CColor m_cHumanLeftColor;
+   CColor m_cHumanRightColor;
 
-   CColor m_cHumanAgentLeftColor;
-   CColor m_cHumanAgentRightColor;
+   Real m_fAgentPotentialGain;
+   Real m_fAgentPotentialDistance;
+   CColor m_cAgentGoodColor;
+   CColor m_cAgentBadColor;
+
+   Real m_fGravityPotentialGain;
 
    /* Pointer to the differential steering actuator */
    CCI_EPuckWheelsActuator* m_pcWheelsActuator;
    /* Pointer to the e-puck proximity sensor */
    CCI_EPuckProximitySensor* m_pcProximitySensor;
-   /*Pointer to the e-puck omnidirectional camera sensor */
+   /* Pointer to the e-puck omnidirectional camera */
    CCI_EPuckOmnidirectionalCameraSensor* m_pcOmnidirectionalCameraSensor;
+
+   /* Blocking System Variables */
+   UInt8 m_unBSDirection;
+   UInt8 m_unBSCount;
 
 };
 

@@ -90,8 +90,7 @@ private:
    Real m_fHumanAgentLeftSpeed;
    Real m_fHumanAgentRightSpeed;
 
-   CColor m_cHumanAgentLeftColor;
-   CColor m_cHumanAgentRightColor;
+   CColor m_cHumanAgentColor;
 
    /* Pointer to the differential steering actuator */
    CCI_EPuckWheelsActuator* m_pcWheelsActuator;

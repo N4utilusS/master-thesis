@@ -7,8 +7,7 @@ using namespace argos;
 /****************************************/
 /****************************************/
 
-DEFAULT_HUMAN_LEFT_COLOR = CColor::CYAN;
-DEFAULT_HUMAN_LEFT_COLOR = CColor::MAGENTA;
+DEFAULT_HUMAN_COLOR = CColor::CYAN;
 
 /****************************************/
 /****************************************/
@@ -16,8 +15,7 @@ DEFAULT_HUMAN_LEFT_COLOR = CColor::MAGENTA;
 CEpuckFrontalBarrierStatic::CEpuckFrontalBarrierStatic() :
     m_fHumanAgentLeftSpeed(0),
     m_fHumanAgentRightSpeed(0),
-    m_cHumanAgentLeftColor(DEFAULT_HUMAN_LEFT_COLOR),
-    m_cHumanAgentRightColor(DEFAULT_HUMAN_RIGHT_COLOR),
+    m_cHumanAgentColor(DEFAULT_HUMAN_COLOR),
     m_pcWheelsActuator(NULL),
     m_pcProximitySensor(NULL),
     m_pcOmnidirectionalCameraSensor(NULL) {
@@ -32,8 +30,8 @@ void CEpuckFrontalBarrierStatic::ParseParams(TConfigurationNode& t_node) {
         GetNodeAttributeOrDefault(t_node, "humanAgentLeftSpeed", m_fHumanAgentLeftSpeed, m_fHumanAgentLeftSpeed);
         /* Human agent right wheel speed */
         GetNodeAttributeOrDefault(t_node, "humanAgentRightSpeed", m_fHumanAgentRightSpeed, m_fHumanAgentRightSpeed);
-        /* Robot ID for signal 1 */
-        GetNodeAttributeOrDefault(t_node, "humanAgentSignal", m_unHumanAgentSignal, m_unHumanAgentSignal);
+        /* Human agent color */
+        GetNodeAttributeOrDefault(t_node, "humanAgentColor", m_cHumanAgentColor, m_cHumanAgentColor);
     } catch (CARGoSException& ex) {
         THROW_ARGOSEXCEPTION_NESTED("Error parsing <params>", ex);
     }
@@ -54,18 +52,8 @@ void CEpuckFrontalBarrierStatic::Init(TConfigurationNode& t_node) {
         m_pcProximitySensor = GetSensor<CCI_EPuckProximitySensor>("epuck_proximity");
     } catch (CARGoSException ex) {}
     try {
-        m_pcRABActuator = GetActuator<CCI_EPuckRangeAndBearingActuator>("epuck_range_and_bearing");
+        m_pcOmnidirectionalCameraSensor = GetSensor<CCI_EPuckOmnidirectionalCameraSensor>("colored_blob_omnidirectional_camera");
     } catch (CARGoSException ex) {}
-    try {
-        m_pcRABSensor = GetSensor<CCI_EPuckRangeAndBearingSensor>("epuck_range_and_bearing");
-    } catch (CARGoSException ex) {}
-
-    if (m_pcRABActuator != NULL) {
-        CCI_EPuckRangeAndBearingActuator::TData tSentData;
-        tSentData[0] = m_unHumanAgentSignal;
-        m_pcRABActuator->SetData(tSentData);
-    }
-
 }
 
 /****************************************/
