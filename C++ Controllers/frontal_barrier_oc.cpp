@@ -1,7 +1,7 @@
 #include "frontal_barrier_oc.h"
 #include <argos3/core/utility/logging/argos_log.h>
 #include <argos3/core/utility/math/angles.h>
-
+#include <argos3/core/utility/math/vector3.h>
 
 using namespace argos;
 
@@ -9,9 +9,10 @@ using namespace argos;
 /****************************************/
 
 static const UInt8 BLOCKING_SYSTEM_MAX_COUNT = 20;
-static const UInt8 HUMAN_SIGNAL_MIN = 1;
-static const UInt8 HUMAN_SIGNAL_MAX = 4;
-static const UInt8 AGENT_SIGNAL = 0;
+static const CColor DEFAULT_HUMAN_LEFT_COLOR = CColor::CYAN;
+static const CColor DEFAULT_HUMAN_RIGHT_COLOR = CColor::MAGENTA;
+static const CColor DEFAULT_AGENT_GOOD_COLOR = CColor::GREEN;
+static const CColor DEFAULT_AGENT_BAD_COLOR = CColor::RED;
 
 /****************************************/
 /****************************************/
@@ -20,8 +21,12 @@ CEpuckFrontalBarrierOC::CEpuckFrontalBarrierOC() :
     m_fDefaultWheelsSpeed(0),
     m_fHumanPotentialGain(0),
     m_fHumanPotentialDistance(0),
+    m_cHumanLeftColor(DEFAULT_HUMAN_LEFT_COLOR),
+    m_cHumanRightColor(DEFAULT_HUMAN_RIGHT_COLOR),
     m_fAgentPotentialGain(0),
     m_fAgentPotentialDistance(0),
+    m_cAgentGoodColor(DEFAULT_AGENT_GOOD_COLOR),
+    m_cAgentBadColor(DEFAULT_AGENT_BAD_COLOR),
     m_fGravityPotentialGain(0),
     m_pcWheelsActuator(NULL),
     m_pcProximitySensor(NULL),
@@ -36,6 +41,11 @@ CEpuckFrontalBarrierOC::CEpuckFrontalBarrierOC() :
 /****************************************/
 
 void CEpuckFrontalBarrierOC::ParseParams(TConfigurationNode& t_node) {
+    UInt8[] humanLeftColor = {DEFAULT_HUMAN_LEFT_COLOR.GetRed(), DEFAULT_HUMAN_LEFT_COLOR.GetGreen(), DEFAULT_HUMAN_LEFT_COLOR.GetBlue()};
+    UInt8[] humanRightColor = {DEFAULT_HUMAN_RIGHT_COLOR.GetRed(), DEFAULT_HUMAN_RIGHT_COLOR.GetGreen(), DEFAULT_HUMAN_RIGHT_COLOR.GetBlue()};
+    UInt8[] agentGoodColor = {DEFAULT_AGENT_GOOD_COLOR.GetRed(), DEFAULT_AGENT_GOOD_COLOR.GetGreen(), DEFAULT_AGENT_GOOD_COLOR.GetBlue()};
+    UInt8[] agentBadColor = {DEFAULT_AGENT_BAD_COLOR.GetRed(), DEFAULT_AGENT_BAD_COLOR.GetGreen(), DEFAULT_AGENT_BAD_COLOR.GetBlue()};
+
     try {
         /* Default wheel speed */
         GetNodeAttributeOrDefault(t_node, "defaultSpeed", m_fDefaultWheelsSpeed, m_fDefaultWheelsSpeed);
@@ -49,6 +59,30 @@ void CEpuckFrontalBarrierOC::ParseParams(TConfigurationNode& t_node) {
         GetNodeAttributeOrDefault(t_node, "agentPotentialDistance", m_fAgentPotentialDistance, m_fAgentPotentialDistance);
         /* Gravity potential gain */
         GetNodeAttributeOrDefault(t_node, "gravityPotentialGain", m_fGravityPotentialGain, m_fGravityPotentialGain);
+
+        /* Human agent left color */
+        GetNodeAttributeOrDefault(t_node, "hLRed", humanLeftColor[0], humanLeftColor[0]);
+        GetNodeAttributeOrDefault(t_node, "hLGreen", humanLeftColor[1], humanLeftColor[1]);
+        GetNodeAttributeOrDefault(t_node, "hLBlue", humanLeftColor[2], humanLeftColor[2]);
+        m_cHumanLeftColor.Set(humanLeftColor[0], humanLeftColor[1], humanLeftColor[2]);
+
+        /* Human agent right color */
+        GetNodeAttributeOrDefault(t_node, "hRRed", humanRightColor[0], humanRightColor[0]);
+        GetNodeAttributeOrDefault(t_node, "hRGreen", humanRightColor[1], humanRightColor[1]);
+        GetNodeAttributeOrDefault(t_node, "hRBlue", humanRightColor[2], humanRightColor[2]);
+        m_cHumanRightColor.Set(humanRightColor[0], humanRightColor[1], humanRightColor[2]);
+
+        /* Agent good color */
+        GetNodeAttributeOrDefault(t_node, "aGRed", agentGoodColor[0], agentGoodColor[0]);
+        GetNodeAttributeOrDefault(t_node, "aGGreen", agentGoodColor[1], agentGoodColor[1]);
+        GetNodeAttributeOrDefault(t_node, "aGBlue", agentGoodColor[2], agentGoodColor[2]);
+        m_cAgentGoodColor.Set(agentGoodColor[0], agentGoodColor[1], agentGoodColor[2]);
+
+        /* Agent bad color */
+        GetNodeAttributeOrDefault(t_node, "aBRed", agentBadColor[0], agentBadColor[0]);
+        GetNodeAttributeOrDefault(t_node, "aBGreen", agentBadColor[1], agentBadColor[1]);
+        GetNodeAttributeOrDefault(t_node, "aBBlue", agentBadColor[2], agentBadColor[2]);
+        m_cAgentBadColor.Set(agentBadColor[0], agentBadColor[1], agentBadColor[2]);
     } catch (CARGoSException& ex) {
         THROW_ARGOSEXCEPTION_NESTED("Error parsing <params>", ex);
     }
@@ -68,17 +102,17 @@ void CEpuckFrontalBarrierOC::Init(TConfigurationNode& t_node) {
         m_pcProximitySensor = GetSensor<CCI_EPuckProximitySensor>("epuck_proximity");
     } catch (CARGoSException ex) {}
     try {
-        m_pcRABActuator = GetActuator<CCI_EPuckRangeAndBearingActuator>("epuck_range_and_bearing");
+        m_pcOmnidirectionalCameraSensor = GetSensor<CCI_EPuckOmnidirectionalCameraSensor>("colored_blob_omnidirectional_camera");
+        // Mandatory to enable the sensor to get data.
+        m_pcOmnidirectionalCameraSensor->Enable();
     } catch (CARGoSException ex) {}
     try {
-        m_pcRABSensor = GetSensor<CCI_EPuckRangeAndBearingSensor>("epuck_range_and_bearing");
-    } catch (CARGoSException ex) {}
+        m_pcRGBLED = GetActuator<CCI_EPuckRGBLEDsActuator>("epuck_rgb_leds");
 
-    if (m_pcRABActuator != NULL) {
-        CCI_EPuckRangeAndBearingActuator::TData tSentData;
-        tSentData[0] = AGENT_SIGNAL;
-        m_pcRABActuator->SetData(tSentData);
-    }
+        if (m_pcRGBLED != NULL) {
+            m_pcRGBLED->SetColors(m_cAgentGoodColor);
+        }
+    } catch (CARGoSException ex) {}
 }
 
 /****************************************/
@@ -86,10 +120,11 @@ void CEpuckFrontalBarrierOC::Init(TConfigurationNode& t_node) {
 
 void CEpuckFrontalBarrierOC::Reset() {
 
-    if (m_pcRABActuator != NULL) {
-        CCI_EPuckRangeAndBearingActuator::TData tSentData;
-        tSentData[0] = AGENT_SIGNAL;
-        m_pcRABActuator->SetData(tSentData);
+    if (m_pcOmnidirectionalCameraSensor != NULL) {
+        m_pcOmnidirectionalCameraSensor->Enable();
+    }
+    if (m_pcRGBLED != NULL) {
+        m_pcRGBLED->SetColors(m_cAgentGoodColor);
     }
 }
 
@@ -212,16 +247,17 @@ void CEpuckFrontalBarrierOC::ComputeDirection(CVector2& c_result_vector) const {
 const CVector2& CEpuckFrontalBarrierOC::HumanPotential() const {
     CVector2 vector;
 
-    if (m_pcRABSensor != NULL) {
-        const CCI_EPuckRangeAndBearingSensor::TPackets& packets = m_pcRABSensor->GetPackets();
+    if (m_pcOmnidirectionalCameraSensor != NULL) {
+        const CCI_EPuckOmnidirectionalCameraSensor::SReadings& readings = m_pcOmnidirectionalCameraSensor->GetReadings();
+        TBlobList& blobs = readings.BlobList;
 
-        if (packets.size() > 0) {
+        if (blobs.size() > 0) {
             Real fMinimum = -100.0; // Arbitrary negative number
             SInt16 unMinimumIndex = -1;
+            CVector3 cColor;
 
-            for (size_t i = 0; i < packets.size(); ++i) {
-                if (packets[i]->Data[0] >= HUMAN_SIGNAL_MIN 
-                    && packets[i]->Data[0] <= HUMAN_SIGNAL_MAX 
+            for (size_t i = 0; i < blobs.size(); ++i) {
+                if (blobs[i]->Data[0]
                     && (packets[i]->Range < fMinimum || fMinimum < 0)) {
 
                     fMinimum = packets[i]->Range;
@@ -229,10 +265,6 @@ const CVector2& CEpuckFrontalBarrierOC::HumanPotential() const {
                 }
             }
 
-            if (unMinimumIndex != -1) {
-                Real fLennardJonesValue = LennardJones(packets[unMinimumIndex]->Range, m_fHumanPotentialGain, m_fHumanPotentialDistance);
-                vector.FromPolarCoordinates(fLennardJonesValue, packets[unMinimumIndex]->Bearing);
-            }
         }
     }
 
@@ -246,7 +278,8 @@ const CVector2& CEpuckFrontalBarrierOC::GravityPotential() const {
     CVector2 cVector;
 
     if (m_pcRABSensor != NULL) {
-        const CCI_EPuckRangeAndBearingSensor::TPackets& packets = m_pcRABSensor->GetPackets();
+        const CCI_EPuckRangeAndBearingSensor::SReadings& readings = m_pcOmnidirectionalCameraSensor->GetReadings();
+        TBlobList& blobs = readings.BlobList;
 
         if (packets.size() > 0) {
             Real fMinimum = -100.0; // Arbitrary negative number
@@ -354,6 +387,16 @@ inline Real CEpuckFrontalBarrierOC::LennardJones(Real f_x, Real f_gain, Real f_d
     Real fRatio = f_distance / f_x;
     fRatio *= fRatio;
     return -4 * f_gain / f_x * ( fRatio * fRatio - fRatio );
+}
+
+/****************************************/
+/****************************************/
+
+inline bool CEpuckFrontalBarrierOC::IsSameColor(CColor& c_color_1, CColor& c_color_2) const {
+    CVector3 cColor1(c_color_1.GetRed(), c_color_1.GetGreen(), c_color_1.GetBlue());
+    CVector3 cColor2(c_color_2.GetRed(), c_color_2.GetGreen(), c_color_2.GetBlue());
+
+    return CVector3::Distance(cColor1, cColor2) < 32;
 }
 
 /****************************************/

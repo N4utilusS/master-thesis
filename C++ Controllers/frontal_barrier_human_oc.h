@@ -98,8 +98,6 @@ private:
     CCI_EPuckWheelsActuator* m_pcWheelsActuator;
    /* Pointer to the e-puck proximity sensor */
     CCI_EPuckProximitySensor* m_pcProximitySensor;
-   /* Pointer to the e-puck omnidirectional camera sensor */
-    CCI_EPuckOmnidirectionalCameraSensor* m_pcOmnidirectionalCameraSensor;
    /* Pointer to the e-puck RGB LED actuator */
     CCI_EPuckRGBLEDsActuator* m_pcRGBLED;
 

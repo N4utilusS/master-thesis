@@ -142,7 +142,7 @@ function defaultPotential()
   humanFound = false
 
   for i = 1, #robot.colored_blob_omnidirectional_camera do
-    if robot.colored_blob_omnidirectional_camera[i].color.blue > 191 then -- 7/8 * 255, both colours have max component for blue, possible error
+    if robot.colored_blob_omnidirectional_camera[i].color.blue > 191 then -- 3/4 * 255, both colours have max component for blue, possible error
       humanFound = true
       break
     end

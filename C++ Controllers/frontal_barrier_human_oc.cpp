@@ -18,7 +18,6 @@ CEpuckFrontalBarrierStaticOC::CEpuckFrontalBarrierStaticOC() :
     m_cColor(DEFAULT_COLOR),
     m_pcWheelsActuator(NULL),
     m_pcProximitySensor(NULL),
-    m_pcOmnidirectionalCameraSensor(NULL),
     m_pcRGBLED(NULL) {
 }
 
@@ -61,9 +60,6 @@ void CEpuckFrontalBarrierStaticOC::Init(TConfigurationNode& t_node) {
     } catch (CARGoSException ex) {}
     try {
         m_pcProximitySensor = GetSensor<CCI_EPuckProximitySensor>("epuck_proximity");
-    } catch (CARGoSException ex) {}
-    try {
-        m_pcOmnidirectionalCameraSensor = GetSensor<CCI_EPuckOmnidirectionalCameraSensor>("colored_blob_omnidirectional_camera");
     } catch (CARGoSException ex) {}
     try {
         m_pcRGBLED = GetActuator<CCI_EPuckRGBLEDsActuator>("epuck_rgb_leds");
