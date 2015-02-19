@@ -7,40 +7,51 @@ using namespace argos;
 /****************************************/
 /****************************************/
 
-DEFAULT_HUMAN_COLOR = CColor::CYAN;
+static const CColor DEFAULT_COLOR = CColor::CYAN;
 
 /****************************************/
 /****************************************/
 
-CEpuckFrontalBarrierStatic::CEpuckFrontalBarrierStatic() :
-    m_fHumanAgentLeftSpeed(0),
-    m_fHumanAgentRightSpeed(0),
-    m_cHumanAgentColor(DEFAULT_HUMAN_COLOR),
+CEpuckFrontalBarrierStaticOC::CEpuckFrontalBarrierStaticOC() :
+    m_fLeftSpeed(0),
+    m_fRightSpeed(0),
+    m_cColor(DEFAULT_COLOR),
     m_pcWheelsActuator(NULL),
     m_pcProximitySensor(NULL),
-    m_pcOmnidirectionalCameraSensor(NULL) {
+    m_pcOmnidirectionalCameraSensor(NULL),
+    m_pcRGBLED(NULL) {
 }
 
 /****************************************/
 /****************************************/
 
-void CEpuckFrontalBarrierStatic::ParseParams(TConfigurationNode& t_node) {
+void CEpuckFrontalBarrierStaticOC::ParseParams(TConfigurationNode& t_node) {
+    UInt8 unRed = DEFAULT_COLOR.GetRed(), 
+    unGreen = DEFAULT_COLOR.GetGreen(), 
+    unBlue = DEFAULT_COLOR.GetBlue();
+
     try {
         /* Human agent left wheel speed */
-        GetNodeAttributeOrDefault(t_node, "humanAgentLeftSpeed", m_fHumanAgentLeftSpeed, m_fHumanAgentLeftSpeed);
+        GetNodeAttributeOrDefault(t_node, "leftSpeed", m_fLeftSpeed, m_fLeftSpeed);
         /* Human agent right wheel speed */
-        GetNodeAttributeOrDefault(t_node, "humanAgentRightSpeed", m_fHumanAgentRightSpeed, m_fHumanAgentRightSpeed);
-        /* Human agent color */
-        GetNodeAttributeOrDefault(t_node, "humanAgentColor", m_cHumanAgentColor, m_cHumanAgentColor);
+        GetNodeAttributeOrDefault(t_node, "rightSpeed", m_fRightSpeed, m_fRightSpeed);
+        /* Human agent color red component */
+        GetNodeAttributeOrDefault(t_node, "red", unRed, unRed);
+        /* Human agent color green component */
+        GetNodeAttributeOrDefault(t_node, "green", unGreen, unGreen);
+        /* Human agent color blue component */
+        GetNodeAttributeOrDefault(t_node, "blue", unBlue, unBlue);
     } catch (CARGoSException& ex) {
         THROW_ARGOSEXCEPTION_NESTED("Error parsing <params>", ex);
     }
+
+    m_cColor.Set(unRed, unGreen, unBlue);
 }
 
 /****************************************/
 /****************************************/
 
-void CEpuckFrontalBarrierStatic::Init(TConfigurationNode& t_node) {
+void CEpuckFrontalBarrierStaticOC::Init(TConfigurationNode& t_node) {
     /* parse the xml tree <params> */
     ParseParams(t_node);
     LOG << GetId() << std::endl;
@@ -54,31 +65,32 @@ void CEpuckFrontalBarrierStatic::Init(TConfigurationNode& t_node) {
     try {
         m_pcOmnidirectionalCameraSensor = GetSensor<CCI_EPuckOmnidirectionalCameraSensor>("colored_blob_omnidirectional_camera");
     } catch (CARGoSException ex) {}
+    try {
+        m_pcRGBLED = GetActuator<CCI_EPuckRGBLEDsActuator>("epuck_rgb_leds");
+
+        if (m_pcRGBLED != NULL) {
+            m_pcRGBLED->SetColors(m_cColor);
+        }
+    } catch (CARGoSException ex) {}
 }
 
 /****************************************/
 /****************************************/
 
-void CEpuckFrontalBarrierStatic::Reset() {
-
-    if (m_pcRABActuator != NULL) {
-        CCI_EPuckRangeAndBearingActuator::TData tSentData;
-        tSentData[0] = m_unHumanAgentSignal;
-        m_pcRABActuator->SetData(tSentData);
-    }
-
+void CEpuckFrontalBarrierStaticOC::Reset() {
     if (m_pcWheelsActuator != NULL) {
-        m_pcWheelsActuator->SetLinearVelocity(m_fHumanAgentLeftSpeed, m_fHumanAgentRightSpeed);
+        m_pcWheelsActuator->SetLinearVelocity(m_fLeftSpeed, m_fRightSpeed);
+    }
+    if (m_pcRGBLED != NULL) {
+        m_pcRGBLED->SetColors(m_cColor);
     }
 }
 
 /****************************************/
 /****************************************/
 
-void CEpuckFrontalBarrierStatic::ControlStep() {
+void CEpuckFrontalBarrierStaticOC::ControlStep() {
 
-    // Clear RAB:
-    m_pcRABSensor->ClearPackets();
 }
 
-REGISTER_CONTROLLER(CEpuckFrontalBarrierStatic, "e-puck_frontal_barrier_human_controller");
+REGISTER_CONTROLLER(CEpuckFrontalBarrierStaticOC, "e-puck_frontal_barrier_human_controller");

@@ -27,6 +27,7 @@ CEpuckFrontalBarrierOC::CEpuckFrontalBarrierOC() :
     m_pcProximitySensor(NULL),
     m_pcRABActuator(NULL),
     m_pcRABSensor(NULL),
+    m_pcRGBLED(NULL),
     m_unBSDirection(0),
     m_unBSCount(0) {
 }

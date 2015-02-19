@@ -22,6 +22,8 @@
 #include <argos3/plugins/robots/e-puck/control_interface/ci_epuck_proximity_sensor.h>
 /* Definition of the e-puck range and bearing */
 #include <argos3/plugins/robots/e-puck/control_interface/ci_epuck_omnidirectional_camera_sensor.h>
+/* Definition of the e-puck RGB LED actuator */
+#include <argos3/plugins/robots/e-puck/control_interface/ci_epuck_RGB_leds_actuator.h>
 #include <argos3/core/utility/math/vector2.h>
 #include <argos3/core/utility/datatypes/color.h>
 
@@ -39,23 +41,23 @@ class CEpuckFrontalBarrierOC : public CCI_Controller {
 public:
 
    /* Class constructor. */
-   CEpuckFrontalBarrierOC();
+    CEpuckFrontalBarrierOC();
 
    /* Class destructor. */
-   virtual ~CEpuckFrontalBarrierOC() {}
+    virtual ~CEpuckFrontalBarrierOC() {}
 
    /*
     * This function initializes the controller.
     * The 't_node' variable points to the <parameters> section in the XML
     * file in the <controllers><footbot_diffusion_controller> section.
     */
-   virtual void Init(TConfigurationNode& t_node);
+    virtual void Init(TConfigurationNode& t_node);
 
    /*
     * This function is called once every time step.
     * The length of the time step is set in the XML file.
     */
-   virtual void ControlStep();
+    virtual void ControlStep();
 
    /*
     * This function resets the controller to its state right after the
@@ -65,7 +67,7 @@ public:
     * so the function could have been omitted. It's here just for
     * completeness.
     */
-   virtual void Reset();
+    virtual void Reset();
 
    /*
     * Called to cleanup what was done by Init() when the experiment finishes.
@@ -73,21 +75,21 @@ public:
     * so the function could have been omitted. It's here just for
     * completeness.
     */
-   virtual void Destroy() {}
+    virtual void Destroy() {}
 
 private:
 
    /* parse the <params> xml tree from the config file */
-   void ParseParams(TConfigurationNode& t_node);
+    void ParseParams(TConfigurationNode& t_node);
    // Step method for the agents.
-   void NormalMode();
-   void BlockedMode();
-   void ComputeDirection(CVector2& cResultVector) const;
-   const CVector2& HumanPotential() const;
-   const CVector2& GravityPotential() const;
-   const CVector2& AgentRepulsionPotential() const;
-   const CVector2& DefaultPotential() const;
-   inline Real LennardJones(Real f_x, Real f_gain, Real f_distance) const;
+    void NormalMode();
+    void BlockedMode();
+    void ComputeDirection(CVector2& cResultVector) const;
+    const CVector2& HumanPotential() const;
+    const CVector2& GravityPotential() const;
+    const CVector2& AgentRepulsionPotential() const;
+    const CVector2& DefaultPotential() const;
+    inline Real LennardJones(Real f_x, Real f_gain, Real f_distance) const;
 
   /*
   * The following variables are used as parameters for the
@@ -95,30 +97,32 @@ private:
   * of the XML configuration file, under the
   * <controllers><footbot_diffusion_controller> section.
   */
-   Real m_fDefaultWheelsSpeed;
+    Real m_fDefaultWheelsSpeed;
 
-   Real m_fHumanPotentialGain;
-   Real m_fHumanPotentialDistance;
-   CColor m_cHumanLeftColor;
-   CColor m_cHumanRightColor;
+    Real m_fHumanPotentialGain;
+    Real m_fHumanPotentialDistance;
+    CColor m_cHumanLeftColor;
+    CColor m_cHumanRightColor;
 
-   Real m_fAgentPotentialGain;
-   Real m_fAgentPotentialDistance;
-   CColor m_cAgentGoodColor;
-   CColor m_cAgentBadColor;
+    Real m_fAgentPotentialGain;
+    Real m_fAgentPotentialDistance;
+    CColor m_cAgentGoodColor;
+    CColor m_cAgentBadColor;
 
-   Real m_fGravityPotentialGain;
+    Real m_fGravityPotentialGain;
 
-   /* Pointer to the differential steering actuator */
-   CCI_EPuckWheelsActuator* m_pcWheelsActuator;
-   /* Pointer to the e-puck proximity sensor */
-   CCI_EPuckProximitySensor* m_pcProximitySensor;
-   /* Pointer to the e-puck omnidirectional camera */
-   CCI_EPuckOmnidirectionalCameraSensor* m_pcOmnidirectionalCameraSensor;
+    /* Pointer to the differential steering actuator */
+    CCI_EPuckWheelsActuator* m_pcWheelsActuator;
+    /* Pointer to the e-puck proximity sensor */
+    CCI_EPuckProximitySensor* m_pcProximitySensor;
+    /* Pointer to the e-puck omnidirectional camera */
+    CCI_EPuckOmnidirectionalCameraSensor* m_pcOmnidirectionalCameraSensor;
+    /* Pointer to the e-puck RGB LED actuator */
+    CCI_EPuckRGBLEDsActuator* m_pcRGBLED;
 
-   /* Blocking System Variables */
-   UInt8 m_unBSDirection;
-   UInt8 m_unBSCount;
+    /* Blocking System Variables */
+    UInt8 m_unBSDirection;
+    UInt8 m_unBSCount;
 
 };
 

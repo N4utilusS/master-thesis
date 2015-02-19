@@ -22,6 +22,8 @@
 #include <argos3/plugins/robots/e-puck/control_interface/ci_epuck_proximity_sensor.h>
 /* Definition of the e-puck omnidirectional camera */
 #include <argos3/plugins/robots/e-puck/control_interface/ci_epuck_omnidirectional_camera_sensor.h>
+/* Definition of the e-puck RGB LED actuator */
+#include <argos3/plugins/robots/e-puck/control_interface/ci_epuck_RGB_leds_actuator.h>
 /* Definition of the colors*/
 #include <argos3/core/utility/datatypes/color.h>
 
@@ -39,23 +41,23 @@ class CEpuckFrontalBarrierStaticOC : public CCI_Controller {
 public:
 
    /* Class constructor. */
-   CEpuckFrontalBarrierStaticOC();
+    CEpuckFrontalBarrierStaticOC();
 
    /* Class destructor. */
-   virtual ~CEpuckFrontalBarrierStaticOC() {}
+    virtual ~CEpuckFrontalBarrierStaticOC() {}
 
    /*
     * This function initializes the controller.
     * The 't_node' variable points to the <parameters> section in the XML
     * file in the <controllers><footbot_diffusion_controller> section.
     */
-   virtual void Init(TConfigurationNode& t_node);
+    virtual void Init(TConfigurationNode& t_node);
 
    /*
     * This function is called once every time step.
     * The length of the time step is set in the XML file.
     */
-   virtual void ControlStep();
+    virtual void ControlStep();
 
    /*
     * This function resets the controller to its state right after the
@@ -65,7 +67,7 @@ public:
     * so the function could have been omitted. It's here just for
     * completeness.
     */
-   virtual void Reset();
+    virtual void Reset();
 
    /*
     * Called to cleanup what was done by Init() when the experiment finishes.
@@ -73,31 +75,33 @@ public:
     * so the function could have been omitted. It's here just for
     * completeness.
     */
-   virtual void Destroy() {}
+    virtual void Destroy() {}
 
 private:
 
-   /* parse the <params> xml tree from the config file */
-   void ParseParams(TConfigurationNode& t_node);
+    /* parse the <params> xml tree from the config file */
+    void ParseParams(TConfigurationNode& t_node);
 
-  /*
-  * The following variables are used as parameters for the
-  * algorithm. You can set their value in the <parameters> section
-  * of the XML configuration file, under the
-  * <controllers><footbot_diffusion_controller> section.
-  */
+    /*
+    * The following variables are used as parameters for the
+    * algorithm. You can set their value in the <parameters> section
+    * of the XML configuration file, under the
+    * <controllers><footbot_diffusion_controller> section.
+    */
 
-   Real m_fHumanAgentLeftSpeed;
-   Real m_fHumanAgentRightSpeed;
+    Real m_fLeftSpeed;
+    Real m_fRightSpeed;
 
-   CColor m_cHumanAgentColor;
+    CColor m_cColor;
 
    /* Pointer to the differential steering actuator */
-   CCI_EPuckWheelsActuator* m_pcWheelsActuator;
+    CCI_EPuckWheelsActuator* m_pcWheelsActuator;
    /* Pointer to the e-puck proximity sensor */
-   CCI_EPuckProximitySensor* m_pcProximitySensor;
-   /*Pointer to the e-puck omnidirectional camera sensor */
-   CCI_EPuckOmnidirectionalCameraSensor* m_pcOmnidirectionalCameraSensor;
+    CCI_EPuckProximitySensor* m_pcProximitySensor;
+   /* Pointer to the e-puck omnidirectional camera sensor */
+    CCI_EPuckOmnidirectionalCameraSensor* m_pcOmnidirectionalCameraSensor;
+   /* Pointer to the e-puck RGB LED actuator */
+    CCI_EPuckRGBLEDsActuator* m_pcRGBLED;
 
 };
 
