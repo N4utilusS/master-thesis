@@ -89,4 +89,4 @@ void CEpuckFrontalBarrierStaticOC::ControlStep() {
 
 }
 
-REGISTER_CONTROLLER(CEpuckFrontalBarrierStaticOC, "e-puck_frontal_barrier_human_controller");
+REGISTER_CONTROLLER(CEpuckFrontalBarrierStaticOC, "e-puck_frontal_barrier_human_oc_controller");

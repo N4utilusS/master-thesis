@@ -23,7 +23,7 @@
 /* Definition of the e-puck omnidirectional camera */
 #include <argos3/plugins/robots/e-puck/control_interface/ci_epuck_omnidirectional_camera_sensor.h>
 /* Definition of the e-puck RGB LED actuator */
-#include <argos3/plugins/robots/e-puck/control_interface/ci_epuck_RGB_leds_actuator.h>
+#include <argos3/plugins/robots/e-puck/control_interface/ci_epuck_rgb_leds_actuator.h>
 /* Definition of the colors*/
 #include <argos3/core/utility/datatypes/color.h>
 
