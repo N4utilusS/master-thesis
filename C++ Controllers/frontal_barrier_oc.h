@@ -90,6 +90,7 @@ private:
     const CVector2& AgentRepulsionPotential() const;
     const CVector2& DefaultPotential() const;
     inline Real LennardJones(Real f_x, Real f_gain, Real f_distance) const;
+    inline bool CEpuckFrontalBarrierOC::IsSameColor(CColor& c_color_1, CColor& c_color_2) const;
 
   /*
   * The following variables are used as parameters for the

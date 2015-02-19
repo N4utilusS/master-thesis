@@ -249,22 +249,25 @@ const CVector2& CEpuckFrontalBarrierOC::HumanPotential() const {
 
     if (m_pcOmnidirectionalCameraSensor != NULL) {
         const CCI_EPuckOmnidirectionalCameraSensor::SReadings& readings = m_pcOmnidirectionalCameraSensor->GetReadings();
-        TBlobList& blobs = readings.BlobList;
+        const TBlobList& blobs = readings.BlobList;
 
         if (blobs.size() > 0) {
             Real fMinimum = -100.0; // Arbitrary negative number
             SInt16 unMinimumIndex = -1;
-            CVector3 cColor;
 
             for (size_t i = 0; i < blobs.size(); ++i) {
-                if (blobs[i]->Data[0]
-                    && (packets[i]->Range < fMinimum || fMinimum < 0)) {
+                if (IsHuman(blobs[i]->Color)
+                    && (blobs[i]->Distance < fMinimum || fMinimum < 0)) {
 
-                    fMinimum = packets[i]->Range;
+                    fMinimum = blobs[i]->Distance;
                     unMinimumIndex = i;
                 }
             }
 
+            if (unMinimumIndex != -1) {
+                Real fLennardJonesValue = LennardJones(blobs[unMinimumIndex]->Distance, m_fHumanPotentialGain, m_fHumanPotentialDistance);
+                vector.FromPolarCoordinates(fLennardJonesValue, blobs[unMinimumIndex]->Angle);
+            }
         }
     }
 
@@ -277,30 +280,29 @@ const CVector2& CEpuckFrontalBarrierOC::HumanPotential() const {
 const CVector2& CEpuckFrontalBarrierOC::GravityPotential() const {
     CVector2 cVector;
 
-    if (m_pcRABSensor != NULL) {
-        const CCI_EPuckRangeAndBearingSensor::SReadings& readings = m_pcOmnidirectionalCameraSensor->GetReadings();
-        TBlobList& blobs = readings.BlobList;
+    if (m_pcOmnidirectionalCameraSensor != NULL) {
+        const CCI_EPuckOmnidirectionalCameraSensor::SReadings& readings = m_pcOmnidirectionalCameraSensor->GetReadings();
+        const TBlobList& blobs = readings.BlobList;
 
-        if (packets.size() > 0) {
+        if (blobs.size() > 0) {
             Real fMinimum = -100.0; // Arbitrary negative number
             SInt16 unMinimumIndex = -1;
 
-            for (size_t i = 0; i < packets.size(); ++i) {
-                if (packets[i]->Data[0] >= HUMAN_SIGNAL_MIN 
-                    && packets[i]->Data[0] <= HUMAN_SIGNAL_MAX 
-                    && (packets[i]->Range < fMinimum || fMinimum < 0)) {
+            for (size_t i = 0; i < blobs.size(); ++i) {
+                if (IsHuman(blobs[i]->Color)
+                    && (blobs[i]->Distance < fMinimum || fMinimum < 0)) {
 
-                    fMinimum = packets[i]->Range;
+                    fMinimum = blobs[i]->Distance;
                     unMinimumIndex = i;
                 }
             }
 
             if (unMinimumIndex != -1) {
                 CRadians cRotationModification = 
-                    (packets[unMinimumIndex]->Data[0] <= (HUMAN_SIGNAL_MIN + HUMAN_SIGNAL_MAX)/2.0f) ? 
+                    (IsSameColor(blobs[i]->Color, m_cHumanLeftColor)) ? 
                     CRadians::PI_OVER_TWO : 
                     -CRadians::PI_OVER_TWO;
-                cVector.FromPolarCoordinates(m_fGravityPotentialGain, packets[unMinimumIndex]->Bearing + cRotationModification);
+                cVector.FromPolarCoordinates(m_fGravityPotentialGain, blobs[unMinimumIndex]->Angle + cRotationModification);
             }
         }
     }
@@ -314,13 +316,14 @@ const CVector2& CEpuckFrontalBarrierOC::GravityPotential() const {
 const CVector2& CEpuckFrontalBarrierOC::AgentRepulsionPotential() const {
     CVector2 cVector;
 
-    if (m_pcRABSensor != NULL) {
-        const CCI_EPuckRangeAndBearingSensor::TPackets& packets = m_pcRABSensor->GetPackets();
+    if (m_pcOmnidirectionalCameraSensor != NULL) {
+        const CCI_EPuckOmnidirectionalCameraSensor::SReadings& readings = m_pcOmnidirectionalCameraSensor->GetReadings();
+        const TBlobList& blobs = readings.BlobList;
 
-        for (size_t i = 0; i < packets.size(); ++i) {
-            if (packets[i]->Data[0] == AGENT_SIGNAL && packets[i]->Range < m_fAgentPotentialDistance) {
-                Real fLennardJonesValue = LennardJones(packets[i]->Range, m_fAgentPotentialGain, m_fAgentPotentialDistance);
-                CVector2 cAgentLennardJones(fLennardJonesValue, packets[i]->Bearing);
+        for (size_t i = 0; i < blobs.size(); ++i) {
+            if (!IsHuman(blobs[i]−>Color) && blobs[i]->Distance < m_fAgentPotentialDistance) {
+                Real fLennardJonesValue = LennardJones(blobs[i]->Distance, m_fAgentPotentialGain, m_fAgentPotentialDistance);
+                CVector2 cAgentLennardJones(fLennardJonesValue, blobs[i]->Angle);
                 cVector += cAgentLennardJones;
             }
         }
@@ -336,11 +339,12 @@ const CVector2& CEpuckFrontalBarrierOC::DefaultPotential() const {
     CVector2 cVector;
     bool bHumanFound = false;
 
-    if (m_pcRABSensor != NULL) {
-        const CCI_EPuckRangeAndBearingSensor::TPackets& packets = m_pcRABSensor->GetPackets();
+    if (m_pcOmnidirectionalCameraSensor != NULL) {
+        const CCI_EPuckOmnidirectionalCameraSensor::SReadings& readings = m_pcOmnidirectionalCameraSensor->GetReadings();
+        const TBlobList& blobs = readings.BlobList;
 
-        for (size_t i = 0; i < packets.size(); ++i) {
-            if (packets[i]->Data[0] >= HUMAN_SIGNAL_MIN && packets[i]->Data[0] <= HUMAN_SIGNAL_MAX) {
+        for (size_t i = 0; i < blobs.size(); ++i) {
+            if (IsHuman(blobs[i]−>Color)) {
                 bHumanFound = true;
                 break;
             }
@@ -387,6 +391,13 @@ inline Real CEpuckFrontalBarrierOC::LennardJones(Real f_x, Real f_gain, Real f_d
     Real fRatio = f_distance / f_x;
     fRatio *= fRatio;
     return -4 * f_gain / f_x * ( fRatio * fRatio - fRatio );
+}
+
+/****************************************/
+/****************************************/
+
+inline bool CEpuckFrontalBarrierOC::IsHuman(CColor& c_color) const {
+    return (IsSameColor(blobs[i]->Color, m_cHumanLeftColor) || IsSameColor(blobs[i]->Color, m_cHumanRightColor));
 }
 
 /****************************************/
