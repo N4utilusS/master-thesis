@@ -85,12 +85,13 @@ private:
     void NormalMode();
     void BlockedMode();
     void ComputeDirection(CVector2& cResultVector) const;
-    const CVector2& HumanPotential() const;
-    const CVector2& GravityPotential() const;
-    const CVector2& AgentRepulsionPotential() const;
-    const CVector2& DefaultPotential() const;
+    const CVector2 HumanPotential() const;
+    const CVector2 GravityPotential() const;
+    const CVector2 AgentRepulsionPotential() const;
+    const CVector2 DefaultPotential() const;
     inline Real LennardJones(Real f_x, Real f_gain, Real f_distance) const;
-    inline bool CEpuckFrontalBarrierOC::IsSameColor(CColor& c_color_1, CColor& c_color_2) const;
+    inline bool IsHuman(const CColor& c_color) const;
+    inline bool IsSameColor(const CColor& c_color_1, const CColor& c_color_2) const;
 
   /*
   * The following variables are used as parameters for the

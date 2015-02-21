@@ -15,7 +15,7 @@ if(ARGOS_BUILD_FOR_SIMULATOR)
   target_link_libraries(e-puck_frontal_barrier_oc_controller argos3plugin_${ARGOS_BUILD_FOR}_epuck)
 
   add_library(e-puck_frontal_barrier_human_controller MODULE frontal_barrier_human_oc.h frontal_barrier_human_oc.cpp)
-  target_link_libraries(e-puck_frontal_barrier_human_controller argos3plugin_${ARGOS_BUILD_FOR}_epuck)
+  target_link_libraries(e-puck_frontal_barrier_human_oc_controller argos3plugin_${ARGOS_BUILD_FOR}_epuck)
 
   #add_subdirectory(NEAT.1.2.1)
 else()
@@ -49,7 +49,7 @@ else()
     frontal_barrier_human_oc.h
     frontal_barrier_human_oc.cpp
     ../plugins/robots/e-puck/real_robot/real_epuck_main.cpp)
-  target_link_libraries(e-puck_frontal_barrier_oc_controller argos3plugin_${ARGOS_BUILD_FOR}_epuck)
+  target_link_libraries(e-puck_frontal_barrier_human_oc_controller argos3plugin_${ARGOS_BUILD_FOR}_epuck)
 
   #add_subdirectory(NEAT.1.2.1)
 endif(ARGOS_BUILD_FOR_SIMULATOR)

@@ -2,6 +2,7 @@
 #include <argos3/core/utility/logging/argos_log.h>
 #include <argos3/core/utility/math/angles.h>
 #include <argos3/core/utility/math/vector3.h>
+#include <iostream>
 
 using namespace argos;
 
@@ -30,8 +31,6 @@ CEpuckFrontalBarrierOC::CEpuckFrontalBarrierOC() :
     m_fGravityPotentialGain(0),
     m_pcWheelsActuator(NULL),
     m_pcProximitySensor(NULL),
-    m_pcRABActuator(NULL),
-    m_pcRABSensor(NULL),
     m_pcRGBLED(NULL),
     m_unBSDirection(0),
     m_unBSCount(0) {
@@ -41,10 +40,10 @@ CEpuckFrontalBarrierOC::CEpuckFrontalBarrierOC() :
 /****************************************/
 
 void CEpuckFrontalBarrierOC::ParseParams(TConfigurationNode& t_node) {
-    UInt8[] humanLeftColor = {DEFAULT_HUMAN_LEFT_COLOR.GetRed(), DEFAULT_HUMAN_LEFT_COLOR.GetGreen(), DEFAULT_HUMAN_LEFT_COLOR.GetBlue()};
-    UInt8[] humanRightColor = {DEFAULT_HUMAN_RIGHT_COLOR.GetRed(), DEFAULT_HUMAN_RIGHT_COLOR.GetGreen(), DEFAULT_HUMAN_RIGHT_COLOR.GetBlue()};
-    UInt8[] agentGoodColor = {DEFAULT_AGENT_GOOD_COLOR.GetRed(), DEFAULT_AGENT_GOOD_COLOR.GetGreen(), DEFAULT_AGENT_GOOD_COLOR.GetBlue()};
-    UInt8[] agentBadColor = {DEFAULT_AGENT_BAD_COLOR.GetRed(), DEFAULT_AGENT_BAD_COLOR.GetGreen(), DEFAULT_AGENT_BAD_COLOR.GetBlue()};
+    UInt8 humanLeftColor[] = {DEFAULT_HUMAN_LEFT_COLOR.GetRed(), DEFAULT_HUMAN_LEFT_COLOR.GetGreen(), DEFAULT_HUMAN_LEFT_COLOR.GetBlue()};
+    UInt8 humanRightColor[] = {DEFAULT_HUMAN_RIGHT_COLOR.GetRed(), DEFAULT_HUMAN_RIGHT_COLOR.GetGreen(), DEFAULT_HUMAN_RIGHT_COLOR.GetBlue()};
+    UInt8 agentGoodColor[] = {DEFAULT_AGENT_GOOD_COLOR.GetRed(), DEFAULT_AGENT_GOOD_COLOR.GetGreen(), DEFAULT_AGENT_GOOD_COLOR.GetBlue()};
+    UInt8 agentBadColor[] = {DEFAULT_AGENT_BAD_COLOR.GetRed(), DEFAULT_AGENT_BAD_COLOR.GetGreen(), DEFAULT_AGENT_BAD_COLOR.GetBlue()};
 
     try {
         /* Default wheel speed */
@@ -132,12 +131,14 @@ void CEpuckFrontalBarrierOC::Reset() {
 /****************************************/
 
 void CEpuckFrontalBarrierOC::ControlStep() {
+    /*
+    // Simple direction method:
     CVector2 cResultVector;
     ComputeDirection(cResultVector);
     CRadians cDirectionAngle = cResultVector.Angle();
 
-// Simple direction method:
-/*    if (cDirectionAngle > (CRadians::PI / 36.0f) && cDirectionAngle < CRadians::PI) { // Left
+
+    if (cDirectionAngle > (CRadians::PI / 36.0f) && cDirectionAngle < CRadians::PI) { // Left
         if (m_pcWheelsActuator != NULL) {
             m_pcWheelsActuator->SetLinearVelocity(-m_fDefaultWheelsSpeed, m_fDefaultWheelsSpeed);
         }
@@ -152,6 +153,7 @@ void CEpuckFrontalBarrierOC::ControlStep() {
     }*/
 
     // Advanced direction method:
+    std::cout << "Step" << std::endl;
     if (m_unBSCount < BLOCKING_SYSTEM_MAX_COUNT) {
         NormalMode();
     } else {
@@ -168,9 +170,6 @@ void CEpuckFrontalBarrierOC::ControlStep() {
                 LOG << "Error " << packets[i]->Data[0] << std::endl;
         }
     }*/
-
-    // Clear RAB:
-    m_pcRABSensor->ClearPackets();
 }
 
 /****************************************/
@@ -244,12 +243,12 @@ void CEpuckFrontalBarrierOC::ComputeDirection(CVector2& c_result_vector) const {
 /****************************************/
 /****************************************/
 
-const CVector2& CEpuckFrontalBarrierOC::HumanPotential() const {
+const CVector2 CEpuckFrontalBarrierOC::HumanPotential() const {
     CVector2 vector;
 
     if (m_pcOmnidirectionalCameraSensor != NULL) {
         const CCI_EPuckOmnidirectionalCameraSensor::SReadings& readings = m_pcOmnidirectionalCameraSensor->GetReadings();
-        const TBlobList& blobs = readings.BlobList;
+        const CCI_EPuckOmnidirectionalCameraSensor::TBlobList& blobs = readings.BlobList;
 
         if (blobs.size() > 0) {
             Real fMinimum = -100.0; // Arbitrary negative number
@@ -277,12 +276,12 @@ const CVector2& CEpuckFrontalBarrierOC::HumanPotential() const {
 /****************************************/
 /****************************************/
 
-const CVector2& CEpuckFrontalBarrierOC::GravityPotential() const {
+const CVector2 CEpuckFrontalBarrierOC::GravityPotential() const {
     CVector2 cVector;
 
     if (m_pcOmnidirectionalCameraSensor != NULL) {
         const CCI_EPuckOmnidirectionalCameraSensor::SReadings& readings = m_pcOmnidirectionalCameraSensor->GetReadings();
-        const TBlobList& blobs = readings.BlobList;
+        const CCI_EPuckOmnidirectionalCameraSensor::TBlobList& blobs = readings.BlobList;
 
         if (blobs.size() > 0) {
             Real fMinimum = -100.0; // Arbitrary negative number
@@ -299,7 +298,7 @@ const CVector2& CEpuckFrontalBarrierOC::GravityPotential() const {
 
             if (unMinimumIndex != -1) {
                 CRadians cRotationModification = 
-                    (IsSameColor(blobs[i]->Color, m_cHumanLeftColor)) ? 
+                    (IsSameColor(blobs[unMinimumIndex]->Color, m_cHumanLeftColor)) ? 
                     CRadians::PI_OVER_TWO : 
                     -CRadians::PI_OVER_TWO;
                 cVector.FromPolarCoordinates(m_fGravityPotentialGain, blobs[unMinimumIndex]->Angle + cRotationModification);
@@ -313,15 +312,15 @@ const CVector2& CEpuckFrontalBarrierOC::GravityPotential() const {
 /****************************************/
 /****************************************/
 
-const CVector2& CEpuckFrontalBarrierOC::AgentRepulsionPotential() const {
+const CVector2 CEpuckFrontalBarrierOC::AgentRepulsionPotential() const {
     CVector2 cVector;
 
     if (m_pcOmnidirectionalCameraSensor != NULL) {
         const CCI_EPuckOmnidirectionalCameraSensor::SReadings& readings = m_pcOmnidirectionalCameraSensor->GetReadings();
-        const TBlobList& blobs = readings.BlobList;
+        const CCI_EPuckOmnidirectionalCameraSensor::TBlobList& blobs = readings.BlobList;
 
         for (size_t i = 0; i < blobs.size(); ++i) {
-            if (!IsHuman(blobs[i]−>Color) && blobs[i]->Distance < m_fAgentPotentialDistance) {
+            if (!IsHuman(blobs[i]->Color) && blobs[i]->Distance < m_fAgentPotentialDistance) {
                 Real fLennardJonesValue = LennardJones(blobs[i]->Distance, m_fAgentPotentialGain, m_fAgentPotentialDistance);
                 CVector2 cAgentLennardJones(fLennardJonesValue, blobs[i]->Angle);
                 cVector += cAgentLennardJones;
@@ -335,16 +334,16 @@ const CVector2& CEpuckFrontalBarrierOC::AgentRepulsionPotential() const {
 /****************************************/
 /****************************************/
 
-const CVector2& CEpuckFrontalBarrierOC::DefaultPotential() const {
+const CVector2 CEpuckFrontalBarrierOC::DefaultPotential() const {
     CVector2 cVector;
     bool bHumanFound = false;
 
     if (m_pcOmnidirectionalCameraSensor != NULL) {
         const CCI_EPuckOmnidirectionalCameraSensor::SReadings& readings = m_pcOmnidirectionalCameraSensor->GetReadings();
-        const TBlobList& blobs = readings.BlobList;
+        const CCI_EPuckOmnidirectionalCameraSensor::TBlobList& blobs = readings.BlobList;
 
         for (size_t i = 0; i < blobs.size(); ++i) {
-            if (IsHuman(blobs[i]−>Color)) {
+            if (IsHuman(blobs[i]->Color)) {
                 bHumanFound = true;
                 break;
             }
@@ -365,7 +364,6 @@ const CVector2& CEpuckFrontalBarrierOC::DefaultPotential() const {
  * It happens if the robot is changing directions a lot between objects.
  */
 void CEpuckFrontalBarrierOC::BlockedMode() {
-    LOG << "Blocked Mode !" << std::endl;
     if (m_pcProximitySensor != NULL) {
         Real fLeftValue = m_pcProximitySensor->GetReading(0).Value;
         Real fRightValue = m_pcProximitySensor->GetReading(7).Value;
@@ -396,18 +394,18 @@ inline Real CEpuckFrontalBarrierOC::LennardJones(Real f_x, Real f_gain, Real f_d
 /****************************************/
 /****************************************/
 
-inline bool CEpuckFrontalBarrierOC::IsHuman(CColor& c_color) const {
-    return (IsSameColor(blobs[i]->Color, m_cHumanLeftColor) || IsSameColor(blobs[i]->Color, m_cHumanRightColor));
+inline bool CEpuckFrontalBarrierOC::IsHuman(const CColor& c_color) const {
+    return (IsSameColor(c_color, m_cHumanLeftColor) || IsSameColor(c_color, m_cHumanRightColor));
 }
 
 /****************************************/
 /****************************************/
 
-inline bool CEpuckFrontalBarrierOC::IsSameColor(CColor& c_color_1, CColor& c_color_2) const {
+inline bool CEpuckFrontalBarrierOC::IsSameColor(const CColor& c_color_1, const CColor& c_color_2) const {
     CVector3 cColor1(c_color_1.GetRed(), c_color_1.GetGreen(), c_color_1.GetBlue());
     CVector3 cColor2(c_color_2.GetRed(), c_color_2.GetGreen(), c_color_2.GetBlue());
 
-    return CVector3::Distance(cColor1, cColor2) < 32;
+    return Distance(cColor1, cColor2) < 32;
 }
 
 /****************************************/
