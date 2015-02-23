@@ -40,11 +40,10 @@ CEpuckFrontalBarrierOC::CEpuckFrontalBarrierOC() :
 /****************************************/
 
 void CEpuckFrontalBarrierOC::ParseParams(TConfigurationNode& t_node) {
-    UInt8 humanLeftColor[] = {DEFAULT_HUMAN_LEFT_COLOR.GetRed(), DEFAULT_HUMAN_LEFT_COLOR.GetGreen(), DEFAULT_HUMAN_LEFT_COLOR.GetBlue()};
-    UInt8 humanRightColor[] = {DEFAULT_HUMAN_RIGHT_COLOR.GetRed(), DEFAULT_HUMAN_RIGHT_COLOR.GetGreen(), DEFAULT_HUMAN_RIGHT_COLOR.GetBlue()};
-    UInt8 agentGoodColor[] = {DEFAULT_AGENT_GOOD_COLOR.GetRed(), DEFAULT_AGENT_GOOD_COLOR.GetGreen(), DEFAULT_AGENT_GOOD_COLOR.GetBlue()};
-    UInt8 agentBadColor[] = {DEFAULT_AGENT_BAD_COLOR.GetRed(), DEFAULT_AGENT_BAD_COLOR.GetGreen(), DEFAULT_AGENT_BAD_COLOR.GetBlue()};
-
+    CVector3 cHumanLeftColor(DEFAULT_HUMAN_LEFT_COLOR.GetRed(), DEFAULT_HUMAN_LEFT_COLOR.GetGreen(), DEFAULT_HUMAN_LEFT_COLOR.GetBlue());
+    CVector3 cHumanRightColor(DEFAULT_HUMAN_RIGHT_COLOR.GetRed(), DEFAULT_HUMAN_RIGHT_COLOR.GetGreen(), DEFAULT_HUMAN_RIGHT_COLOR.GetBlue());
+    CVector3 cAgentGoodColor(DEFAULT_AGENT_GOOD_COLOR.GetRed(), DEFAULT_AGENT_GOOD_COLOR.GetGreen(), DEFAULT_AGENT_GOOD_COLOR.GetBlue());
+    CVector3 cAgentBadColor(DEFAULT_AGENT_BAD_COLOR.GetRed(), DEFAULT_AGENT_BAD_COLOR.GetGreen(), DEFAULT_AGENT_BAD_COLOR.GetBlue());
     try {
         /* Default wheel speed */
         GetNodeAttributeOrDefault(t_node, "defaultSpeed", m_fDefaultWheelsSpeed, m_fDefaultWheelsSpeed);
@@ -60,28 +59,20 @@ void CEpuckFrontalBarrierOC::ParseParams(TConfigurationNode& t_node) {
         GetNodeAttributeOrDefault(t_node, "gravityPotentialGain", m_fGravityPotentialGain, m_fGravityPotentialGain);
 
         /* Human agent left color */
-        GetNodeAttributeOrDefault(t_node, "hLRed", humanLeftColor[0], humanLeftColor[0]);
-        GetNodeAttributeOrDefault(t_node, "hLGreen", humanLeftColor[1], humanLeftColor[1]);
-        GetNodeAttributeOrDefault(t_node, "hLBlue", humanLeftColor[2], humanLeftColor[2]);
-        m_cHumanLeftColor.Set(humanLeftColor[0], humanLeftColor[1], humanLeftColor[2]);
+        GetNodeAttributeOrDefault(t_node, "humanLeftColor", cHumanLeftColor, cHumanLeftColor);
+        m_cHumanLeftColor.Set((UInt8) cHumanLeftColor.GetX(), (UInt8) cHumanLeftColor.GetY(), (UInt8) cHumanLeftColor.GetZ());
 
         /* Human agent right color */
-        GetNodeAttributeOrDefault(t_node, "hRRed", humanRightColor[0], humanRightColor[0]);
-        GetNodeAttributeOrDefault(t_node, "hRGreen", humanRightColor[1], humanRightColor[1]);
-        GetNodeAttributeOrDefault(t_node, "hRBlue", humanRightColor[2], humanRightColor[2]);
-        m_cHumanRightColor.Set(humanRightColor[0], humanRightColor[1], humanRightColor[2]);
+        GetNodeAttributeOrDefault(t_node, "humanRightColor", cHumanRightColor, cHumanRightColor);
+        m_cHumanRightColor.Set((UInt8) cHumanRightColor.GetX(), (UInt8) cHumanRightColor.GetY(), (UInt8) cHumanRightColor.GetZ());
 
         /* Agent good color */
-        GetNodeAttributeOrDefault(t_node, "aGRed", agentGoodColor[0], agentGoodColor[0]);
-        GetNodeAttributeOrDefault(t_node, "aGGreen", agentGoodColor[1], agentGoodColor[1]);
-        GetNodeAttributeOrDefault(t_node, "aGBlue", agentGoodColor[2], agentGoodColor[2]);
-        m_cAgentGoodColor.Set(agentGoodColor[0], agentGoodColor[1], agentGoodColor[2]);
+        GetNodeAttributeOrDefault(t_node, "agentGoodColor", cAgentGoodColor, cAgentGoodColor);
+        m_cAgentGoodColor.Set((UInt8) cAgentGoodColor.GetX(), (UInt8) cAgentGoodColor.GetY(), (UInt8) cAgentGoodColor.GetZ());
 
         /* Agent bad color */
-        GetNodeAttributeOrDefault(t_node, "aBRed", agentBadColor[0], agentBadColor[0]);
-        GetNodeAttributeOrDefault(t_node, "aBGreen", agentBadColor[1], agentBadColor[1]);
-        GetNodeAttributeOrDefault(t_node, "aBBlue", agentBadColor[2], agentBadColor[2]);
-        m_cAgentBadColor.Set(agentBadColor[0], agentBadColor[1], agentBadColor[2]);
+        GetNodeAttributeOrDefault(t_node, "agentBadColor", cAgentBadColor, cAgentBadColor);
+        m_cAgentBadColor.Set((UInt8) cAgentBadColor.GetX(), (UInt8) cAgentBadColor.GetY(), (UInt8) cAgentBadColor.GetZ());
     } catch (CARGoSException& ex) {
         THROW_ARGOSEXCEPTION_NESTED("Error parsing <params>", ex);
     }
@@ -101,10 +92,13 @@ void CEpuckFrontalBarrierOC::Init(TConfigurationNode& t_node) {
         m_pcProximitySensor = GetSensor<CCI_EPuckProximitySensor>("epuck_proximity");
     } catch (CARGoSException ex) {}
     try {
-        m_pcOmnidirectionalCameraSensor = GetSensor<CCI_EPuckOmnidirectionalCameraSensor>("colored_blob_omnidirectional_camera");
+        m_pcOmnidirectionalCameraSensor = GetSensor<CCI_EPuckOmnidirectionalCameraSensor>("epuck_omnidirectional_camera");
         // Mandatory to enable the sensor to get data.
-        m_pcOmnidirectionalCameraSensor->Enable();
-    } catch (CARGoSException ex) {}
+        if (m_pcOmnidirectionalCameraSensor != NULL)
+            m_pcOmnidirectionalCameraSensor->Enable();
+    } catch (CARGoSException ex) {
+        LOG << "Pb with ommidirectional camera initialization." << std::endl;
+    }
     try {
         m_pcRGBLED = GetActuator<CCI_EPuckRGBLEDsActuator>("epuck_rgb_leds");
 
@@ -153,7 +147,6 @@ void CEpuckFrontalBarrierOC::ControlStep() {
     }*/
 
     // Advanced direction method:
-    std::cout << "Step" << std::endl;
     if (m_unBSCount < BLOCKING_SYSTEM_MAX_COUNT) {
         NormalMode();
     } else {
@@ -353,7 +346,6 @@ const CVector2 CEpuckFrontalBarrierOC::DefaultPotential() const {
             cVector.SetX(5.0);
         }
     }
-
     return cVector;
 }
 

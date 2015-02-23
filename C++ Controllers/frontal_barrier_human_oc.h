@@ -36,15 +36,15 @@ using namespace argos;
 /*
  * A controller is simply an implementation of the CCI_Controller class.
  */
-class CEpuckFrontalBarrierStaticOC : public CCI_Controller {
+class CEpuckFrontalBarrierHumanOC : public CCI_Controller {
 
 public:
 
    /* Class constructor. */
-    CEpuckFrontalBarrierStaticOC();
+    CEpuckFrontalBarrierHumanOC();
 
    /* Class destructor. */
-    virtual ~CEpuckFrontalBarrierStaticOC() {}
+    virtual ~CEpuckFrontalBarrierHumanOC() {}
 
    /*
     * This function initializes the controller.
