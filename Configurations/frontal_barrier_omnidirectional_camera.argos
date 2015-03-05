@@ -27,7 +27,7 @@
       </actuators>
       <sensors>
         <epuck_proximity implementation="default" show_rays="true" />
-        <colored_blob_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="true" />
+        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="true" />
       </sensors>
       <!-- No required configuration -->
       <params script="/home/anthony/git/master-thesis/Lua Controllers/controllerWithOmnidirectionalCamera_Moving.lua" />
@@ -43,7 +43,7 @@
       </actuators>
       <sensors>
         <epuck_proximity implementation="default" show_rays="true" />
-        <colored_blob_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="true" />
+        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="true" />
       </sensors>
       <!-- No required configuration -->
       <params script="/home/anthony/git/master-thesis/Lua Controllers/controllerWithOmnidirectionalCamera_Static.lua" />
@@ -53,14 +53,14 @@
 
     <!-- C++ controller -->
     <e-puck_frontal_barrier_oc_controller id="cppAgent"
-                        library="../../build_simepuck/testing/libe-puck_frontal_barrier_human_oc_controller.so">
+                        library="../../build_simepuck/testing/libe-puck_frontal_barrier_oc_controller.so">
       <actuators>
         <epuck_wheels implementation="default" />
         <epuck_rgb_leds implementation="default" medium="leds"/>
       </actuators>
       <sensors>
-        <epuck_proximity implementation="default" show_rays="true" />
-        <colored_blob_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="true" />
+        <epuck_proximity implementation="default" show_rays="true" noise_level="0.1"/>
+        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.1"/>
       </sensors>
       <params defaultSpeed="5" 
       	humanPotentialGain="1000" 
@@ -72,37 +72,36 @@
     </e-puck_frontal_barrier_oc_controller>
 
     <e-puck_frontal_barrier_human_oc_controller id="cppHumanLeft"
-                        library="../../build_simepuck/testing/libe-puck_frontal_barrier_oc_controller.so">
+                        library="../../build_simepuck/testing/libe-puck_frontal_barrier_human_oc_controller.so">
       <actuators>
         <epuck_wheels implementation="default" />
         <epuck_rgb_leds implementation="default" medium="leds"/>
       </actuators>
       <sensors>
-        <epuck_proximity implementation="default" show_rays="true" />
-        <colored_blob_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="true" />
+        <epuck_proximity implementation="default" show_rays="true" noise_level="0.1"/>
+        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.1"/>
       </sensors>
       <params
-        humanAgentLeftSpeed="0"
-        humanAgentRightSpeed="0"
+        leftSpeed="1"
+        rightSpeed="1.1"
+        color="0,255,255"
       />
     </e-puck_frontal_barrier_human_oc_controller>
 
     <e-puck_frontal_barrier_human_oc_controller id="cppHumanRight"
-                        library="../../build_simepuck/testing/libe-puck_frontal_barrier_oc_controller.so">
+                        library="../../build_simepuck/testing/libe-puck_frontal_barrier_human_oc_controller.so">
       <actuators>
         <epuck_wheels implementation="default" />
-        <leds implementation="default" medium="leds" />
+        <epuck_rgb_leds implementation="default" medium="leds" />
       </actuators>
       <sensors>
-        <epuck_proximity implementation="default" show_rays="true" />
-        <colored_blob_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="true" />
+        <epuck_proximity implementation="default" show_rays="true" noise_level="0.1"/>
+        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.1"/>
       </sensors>
       <params
-        humanAgentLeftSpeed="0"
-        humanAgentRightSpeed="0"
-        red="255"
-        green="0"
-        blue="255"
+        leftSpeed="1"
+        rightSpeed="1.1"
+        color="255,0,255"
       />
     </e-puck_frontal_barrier_human_oc_controller>
 
@@ -136,14 +135,14 @@
     </e-puck>
     
     <distribute>
-      <position method="uniform" min="-3,-3,0" max="3,3,0" /> 
+      <position method="uniform" min="-0.5,-0.5,0" max="0.5,0.5,0" /> 
       <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" /> 
-      <entity quantity="6" max_trials="100"> 
-        <e-puck id="agent" omnidirectional_camera_aperture="89">
+      <entity quantity="5" max_trials="100"> 
+        <e-puck id="agent" omnidirectional_camera_aperture="80">
           <controller config="cppAgent" /> 
         </e-puck>
       </entity> 
-    </distribute> 
+    </distribute>
   </arena>
 
   <!-- ******************* -->
@@ -169,7 +168,7 @@
     <!-- ************************************************************************ -->
     <!-- * To activate the Lua editor, just use the 'lua_editor' flag attribute * -->
     <!-- ************************************************************************ -->
-    <qt-opengl lua_editor="true">
+    <qt-opengl lua_editor="false">
       <camera>
         <placement idx="0" position="-0.00569879,0.01,4.86243" look_at="-0.00569879,0.01,3.86243" lens_focal_length="20" />
         <placement idx="1" position="-2,0,2" look_at="0,0,0" lens_focal_length="20" />

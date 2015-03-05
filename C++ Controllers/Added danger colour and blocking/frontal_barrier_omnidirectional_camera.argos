@@ -10,6 +10,11 @@
     <experiment length="0" ticks_per_second="10" />
   </framework>
 
+  <!-- ****************** -->
+  <!-- * Loop functions * -->
+  <!-- ****************** -->
+  <loop_functions library="../../build_simepuck/testing/loop_functions/libfrontal_barrier_lp" label="frontal_barrier_lp" />
+
   <!-- *************** -->
   <!-- * Controllers * -->
   <!-- *************** -->
@@ -53,14 +58,15 @@
 
     <!-- C++ controller -->
     <e-puck_frontal_barrier_oc_controller id="cppAgent"
-                        library="../../build_simepuck/testing/libe-puck_frontal_barrier_oc_controller.so">
+                        library="../../build_simepuck/testing/libe-puck_frontal_barrier_oc_controller">
       <actuators>
         <epuck_wheels implementation="default" />
         <epuck_rgb_leds implementation="default" medium="leds"/>
       </actuators>
       <sensors>
-        <epuck_proximity implementation="default" show_rays="true" noise_level="0.1"/>
-        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.1"/>
+        <epuck_proximity implementation="default" show_rays="true" noise_level="0.*"/>
+        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.*"/>
+        <epuck_ground implementation="rot_z_only" noise_level="0.0"/>
       </sensors>
       <params defaultSpeed="5" 
       	humanPotentialGain="1000" 
@@ -72,14 +78,15 @@
     </e-puck_frontal_barrier_oc_controller>
 
     <e-puck_frontal_barrier_human_oc_controller id="cppHumanLeft"
-                        library="../../build_simepuck/testing/libe-puck_frontal_barrier_human_oc_controller.so">
+                        library="../../build_simepuck/testing/libe-puck_frontal_barrier_human_oc_controller">
       <actuators>
         <epuck_wheels implementation="default" />
         <epuck_rgb_leds implementation="default" medium="leds"/>
       </actuators>
       <sensors>
-        <epuck_proximity implementation="default" show_rays="true" noise_level="0.1"/>
-        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.1"/>
+        <epuck_proximity implementation="default" show_rays="true" noise_level="0.0"/>
+        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.0"/>
+        <epuck_ground implementation="rot_z_only" noise_level="0.0"/>
       </sensors>
       <params
         leftSpeed="1"
@@ -89,14 +96,15 @@
     </e-puck_frontal_barrier_human_oc_controller>
 
     <e-puck_frontal_barrier_human_oc_controller id="cppHumanRight"
-                        library="../../build_simepuck/testing/libe-puck_frontal_barrier_human_oc_controller.so">
+                        library="../../build_simepuck/testing/libe-puck_frontal_barrier_human_oc_controller">
       <actuators>
         <epuck_wheels implementation="default" />
         <epuck_rgb_leds implementation="default" medium="leds" />
       </actuators>
       <sensors>
-        <epuck_proximity implementation="default" show_rays="true" noise_level="0.1"/>
-        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.1"/>
+        <epuck_proximity implementation="default" show_rays="true" noise_level="0.0"/>
+        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.0"/>
+        <epuck_ground implementation="rot_z_only" noise_level="0.0"/>
       </sensors>
       <params
         leftSpeed="1"
@@ -111,6 +119,11 @@
   <!-- * Arena configuration * -->
   <!-- *********************** -->
   <arena size="10, 10, 1" center="0,0,0.5">
+
+    <!-- Floor -->
+    <floor id="floor" source="loop_functions" pixels_per_meter="100" />
+
+    <!-- Walls -->
     <box id="bn" size="0.1, 6, 0.2" movable="false">
       <body position="3,0,0" orientation="0,0,0" />
     </box>
@@ -137,7 +150,7 @@
     <distribute>
       <position method="uniform" min="-0.5,-0.5,0" max="0.5,0.5,0" /> 
       <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" /> 
-      <entity quantity="5" max_trials="100"> 
+      <entity quantity="20" max_trials="100"> 
         <e-puck id="agent" omnidirectional_camera_aperture="80">
           <controller config="cppAgent" /> 
         </e-puck>
