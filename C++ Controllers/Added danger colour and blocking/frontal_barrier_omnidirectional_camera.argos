@@ -64,8 +64,8 @@
         <epuck_rgb_leds implementation="default" medium="leds"/>
       </actuators>
       <sensors>
-        <epuck_proximity implementation="default" show_rays="true" noise_level="0.*"/>
-        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.*"/>
+        <epuck_proximity implementation="default" show_rays="true" noise_level="0.0"/>
+        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.0"/>
         <epuck_ground implementation="rot_z_only" noise_level="0.0"/>
       </sensors>
       <params defaultSpeed="5" 
@@ -89,8 +89,8 @@
         <epuck_ground implementation="rot_z_only" noise_level="0.0"/>
       </sensors>
       <params
-        leftSpeed="1"
-        rightSpeed="1.1"
+        leftSpeed="2"
+        rightSpeed="2.1"
         color="0,255,255"
       />
     </e-puck_frontal_barrier_human_oc_controller>
@@ -107,8 +107,8 @@
         <epuck_ground implementation="rot_z_only" noise_level="0.0"/>
       </sensors>
       <params
-        leftSpeed="1"
-        rightSpeed="1.1"
+        leftSpeed="2"
+        rightSpeed="2.1"
         color="255,0,255"
       />
     </e-puck_frontal_barrier_human_oc_controller>
@@ -150,7 +150,7 @@
     <distribute>
       <position method="uniform" min="-0.5,-0.5,0" max="0.5,0.5,0" /> 
       <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" /> 
-      <entity quantity="20" max_trials="100"> 
+      <entity quantity="15" max_trials="100"> 
         <e-puck id="agent" omnidirectional_camera_aperture="80">
           <controller config="cppAgent" /> 
         </e-puck>

@@ -34,7 +34,9 @@ CEpuckFrontalBarrierOC::CEpuckFrontalBarrierOC() :
     m_pcRGBLED(NULL),
     m_pcGroundSensor(NULL),
     m_unBSDirection(0),
-    m_unBSCount(0) {
+    m_unBSCount(0),
+    m_fHumanPotentialModifiedDistance(0),
+    m_unColorCountdownCounter(0) {
 }
 
 /****************************************/
@@ -218,8 +220,8 @@ void CEpuckFrontalBarrierOC::NormalMode() {
     CRadians cDirectionAngle = cResultVector.Angle();
     Real fSpeed = cResultVector.Length();
     fSpeed = (fSpeed > 10.0) ? 10 : fSpeed; // E-pucks cannot go faster than 10 cm/s.
-    UInt8 unNewDirection;
-
+    UInt8 unNewDirection(0);
+    
     if (cDirectionAngle > CRadians::ZERO && cDirectionAngle < CRadians::PI) { // Left
         unNewDirection = 1;
         if (m_pcWheelsActuator != NULL) {
@@ -233,6 +235,24 @@ void CEpuckFrontalBarrierOC::NormalMode() {
             m_pcWheelsActuator->SetLinearVelocity(fSpeed, fSpeed * Cos(cDirectionAngle));
         }
     }
+/*
+    if (m_pcWheelsActuator != NULL) {
+        if (cDirectionAngle > (CRadians::PI / 36.0f) && cDirectionAngle < CRadians::PI) { // Left
+            if (m_pcWheelsActuator != NULL) {
+                m_pcWheelsActuator->SetLinearVelocity(-fSpeed, fSpeed);
+                unNewDirection = 1;
+            }
+        } else if (cDirectionAngle < (-CRadians::PI / 36.0f)) {                           // Right
+            if (m_pcWheelsActuator != NULL) {
+                m_pcWheelsActuator->SetLinearVelocity(fSpeed, -fSpeed);
+                unNewDirection = -1;
+            }
+        } else {
+            if (m_pcWheelsActuator != NULL) {
+                m_pcWheelsActuator->SetLinearVelocity(fSpeed, fSpeed);
+            }
+        }
+    }*/
 
     if (m_unBSDirection != unNewDirection) {
         m_unBSCount++;
@@ -244,7 +264,7 @@ void CEpuckFrontalBarrierOC::NormalMode() {
 /****************************************/
 
 /* Adds the interesting directions to the final direction vector. */
-void CEpuckFrontalBarrierOC::ComputeDirection(CVector2& c_result_vector) const {
+void CEpuckFrontalBarrierOC::ComputeDirection(CVector2& c_result_vector) {
     // Add the potentials:
     c_result_vector += HumanPotential(); // Certain distance to human
     c_result_vector += GravityPotential(); // Move in front of human
@@ -254,7 +274,7 @@ void CEpuckFrontalBarrierOC::ComputeDirection(CVector2& c_result_vector) const {
 /****************************************/
 /****************************************/
 
-const CVector2 CEpuckFrontalBarrierOC::HumanPotential() const {
+const CVector2 CEpuckFrontalBarrierOC::HumanPotential() {
     CVector2 vector;
 
     if (m_pcOmnidirectionalCameraSensor != NULL) {
@@ -278,14 +298,19 @@ const CVector2 CEpuckFrontalBarrierOC::HumanPotential() const {
                 // 2 CASES: IN DANGER ZONE OR NOT --------------------------
                 // 1 - IN DANGER ZONE:
                 if (IsInDanger()) {
-                    
-                    vector.FromPolarCoordinates(m_fHumanPotentialGain, blobs[unMinimumIndex]->Angle);
+                    m_fHumanPotentialModifiedDistance = (m_fHumanPotentialModifiedDistance > 15) ? 
+                    m_fHumanPotentialModifiedDistance-0.25 : 
+                    m_fHumanPotentialModifiedDistance;
                 // 2- NOT IN DANGER ZONE:
                 } else {
-                    Real fLennardJonesValue = LennardJones(blobs[unMinimumIndex]->Distance, m_fHumanPotentialGain, m_fHumanPotentialDistance);
-                    vector.FromPolarCoordinates(fLennardJonesValue, blobs[unMinimumIndex]->Angle);
+                    m_fHumanPotentialModifiedDistance = (m_fHumanPotentialModifiedDistance < m_fHumanPotentialDistance) ? 
+                    m_fHumanPotentialModifiedDistance+0.25 : 
+                    m_fHumanPotentialModifiedDistance;
                 }
-                // ---------------------------------------------------------
+
+                Real fLennardJonesValue = LennardJones(blobs[unMinimumIndex]->Distance, m_fHumanPotentialGain, m_fHumanPotentialModifiedDistance);
+                vector.FromPolarCoordinates(fLennardJonesValue, blobs[unMinimumIndex]->Angle);
+            
             }
         }
     }
@@ -358,11 +383,18 @@ const CVector2 CEpuckFrontalBarrierOC::DefaultPotential() const {
     CVector2 cVector;
 
     if (m_pcOmnidirectionalCameraSensor != NULL) {
+        const CCI_EPuckOmnidirectionalCameraSensor::SReadings& readings = m_pcOmnidirectionalCameraSensor->GetReadings();
+        const CCI_EPuckOmnidirectionalCameraSensor::TBlobList& blobs = readings.BlobList;
 
-        if (!HumanFound()) {
-            cVector.SetX(5.0);
+        for (size_t i = 0; i < blobs.size(); ++i) {
+            Real fLennardJonesValue = LennardJones(blobs[i]->Distance, m_fAgentPotentialGain, m_fAgentPotentialDistance);
+            CVector2 cAgentLennardJones(fLennardJonesValue, blobs[i]->Angle);
+            cVector += cAgentLennardJones;
         }
     }
+
+    if (cVector.SquareLength() == 0)
+        cVector.SetX(5);
     return cVector;
 }
 
@@ -441,12 +473,17 @@ bool CEpuckFrontalBarrierOC::HumanFound() const {
 /****************************************/
 /****************************************/
 
-inline const CColor CEpuckFrontalBarrierOC::GetAgentSituationColor() const {
+inline const CColor CEpuckFrontalBarrierOC::GetAgentSituationColor(){
 
     if (IsInDanger())
+        m_unColorCountdownCounter = 20;
+
+    if (m_unColorCountdownCounter > 0) {
+        m_unColorCountdownCounter--;
         return m_cAgentBadColor;
-    else
+    } else {
         return m_cAgentGoodColor;
+    }
 }
 
 /****************************************/

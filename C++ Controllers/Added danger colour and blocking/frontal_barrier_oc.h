@@ -85,8 +85,8 @@ private:
    // Step method for the agents.
     void NormalMode();
     void BlockedMode();
-    void ComputeDirection(CVector2& cResultVector) const;
-    const CVector2 HumanPotential() const;
+    void ComputeDirection(CVector2& cResultVector);
+    const CVector2 HumanPotential();
     const CVector2 GravityPotential() const;
     const CVector2 AgentRepulsionPotential() const;
     const CVector2 DefaultPotential() const;
@@ -94,7 +94,7 @@ private:
     inline bool IsHuman(const CColor& c_color) const;
     inline bool IsSameColor(const CColor& c_color_1, const CColor& c_color_2) const;
     bool HumanFound() const;
-    inline const CColor GetAgentSituationColor() const;
+    inline const CColor GetAgentSituationColor();
     inline const bool IsInDanger() const;
 
   /*
@@ -131,6 +131,12 @@ private:
     /* Blocking System Variables */
     UInt8 m_unBSDirection;
     UInt8 m_unBSCount;
+
+    /* Human potential distance variation variable */
+    Real m_fHumanPotentialModifiedDistance;
+
+    /* Agent color countdown counter */
+    UInt8 m_unColorCountdownCounter;
 
 };
 
