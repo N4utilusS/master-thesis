@@ -64,8 +64,8 @@
         <epuck_rgb_leds implementation="default" medium="leds"/>
       </actuators>
       <sensors>
-        <epuck_proximity implementation="default" show_rays="true" noise_level="0.0"/>
-        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.0"/>
+        <epuck_proximity implementation="default" show_rays="true" noise_level="0.0" calibrated="true" low_level_config="/home/root/gfrancesca/low_level_configuration/proximity_sensor.xml" />
+        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.0" calibrated="true" low_level_config="/home/root/ARGoS/low_level_configuration/omnidirectional_camera_sensor.xml"/>
         <epuck_ground implementation="rot_z_only" noise_level="0.0"/>
       </sensors>
       <params defaultSpeed="5" 
@@ -84,13 +84,13 @@
         <epuck_rgb_leds implementation="default" medium="leds"/>
       </actuators>
       <sensors>
-        <epuck_proximity implementation="default" show_rays="true" noise_level="0.0"/>
-        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.0"/>
+        <epuck_proximity implementation="default" show_rays="true" noise_level="0.0" calibrated="true" low_level_config="/home/root/gfrancesca/low_level_configuration/proximity_sensor.xml" />
+        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.0" calibrated="true" low_level_config="/home/root/ARGoS/low_level_configuration/omnidirectional_camera_sensor.xml"/>
         <epuck_ground implementation="rot_z_only" noise_level="0.0"/>
       </sensors>
       <params
-        leftSpeed="2"
-        rightSpeed="2.1"
+        leftSpeed="0"
+        rightSpeed="0"
         color="0,255,255"
       />
     </e-puck_frontal_barrier_human_oc_controller>
@@ -102,13 +102,13 @@
         <epuck_rgb_leds implementation="default" medium="leds" />
       </actuators>
       <sensors>
-        <epuck_proximity implementation="default" show_rays="true" noise_level="0.0"/>
-        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.0"/>
+        <epuck_proximity implementation="default" show_rays="true" noise_level="0.0" calibrated="true" low_level_config="/home/root/gfrancesca/low_level_configuration/proximity_sensor.xml" />
+        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.0" calibrated="true" low_level_config="/home/root/ARGoS/low_level_configuration/omnidirectional_camera_sensor.xml"/>
         <epuck_ground implementation="rot_z_only" noise_level="0.0"/>
       </sensors>
       <params
-        leftSpeed="2"
-        rightSpeed="2.1"
+        leftSpeed="0"
+        rightSpeed="0"
         color="255,0,255"
       />
     </e-puck_frontal_barrier_human_oc_controller>

@@ -2,7 +2,6 @@
 #include <argos3/core/utility/logging/argos_log.h>
 #include <argos3/core/utility/math/angles.h>
 #include <argos3/core/utility/math/vector3.h>
-#include <iostream>
 
 using namespace argos;
 
@@ -155,8 +154,21 @@ void CEpuckFrontalBarrierOC::ControlStep() {
             m_pcWheelsActuator->SetLinearVelocity(m_fDefaultWheelsSpeed, m_fDefaultWheelsSpeed);
         }
     }*/
+    /*
+    if (m_pcOmnidirectionalCameraSensor != NULL) {
+        const CCI_EPuckOmnidirectionalCameraSensor::SReadings& readings = m_pcOmnidirectionalCameraSensor->GetReadings();
+        const CCI_EPuckOmnidirectionalCameraSensor::TBlobList& blobs = readings.BlobList;
+        
+        for (size_t i = 0; i < blobs.size(); ++i)
+            if (blobs[i]->Distance > 9)
+                LOG << "(Color = " << blobs[i]->Color << "," << "Angle = " << ToDegrees(blobs[i]->Angle) << ","
+                           << "Distance = " << blobs[i]->Distance<< ", Area = " << blobs[i]->Area << ")" << std::endl;
+    }
+    LOG << std::endl;
+    */
 
     // Advanced direction method:
+    
     if (m_unBSCount < BLOCKING_SYSTEM_MAX_COUNT) {
         NormalMode();
     } else {
@@ -200,6 +212,7 @@ void CEpuckFrontalBarrierOC::NormalMode() {
     // ------------ Different cases ---------------------------------------------------
     if (fMaxValue > 0.15) { // Obstacle to deal with
         cResultVector -= cObstacleVector;
+        LOG << "OBSTACLE " << fMaxValue << std::endl;
 
     } else if (HumanFound()) {                // No obstacle
         ComputeDirection(cResultVector);
@@ -207,12 +220,16 @@ void CEpuckFrontalBarrierOC::NormalMode() {
         if (m_pcRGBLED != NULL) {
             m_pcRGBLED->SetColors(GetAgentSituationColor());
         }
+        LOG << "AGENT" << std::endl;
+
     } else {
         cResultVector += DefaultPotential(); // If no human found, makes the agents move
         m_unBSCount = 0; // No obstacle detected, so the blocked mode counter is set to 0.
         if (m_pcRGBLED != NULL) {
             m_pcRGBLED->SetColors(CColor::BLACK);
         }
+        LOG << "NO HUMAN" << std::endl;
+
     }
     // --------------------------------------------------------------------------------
 
@@ -221,6 +238,8 @@ void CEpuckFrontalBarrierOC::NormalMode() {
     Real fSpeed = cResultVector.Length();
     fSpeed = (fSpeed > 10.0) ? 10 : fSpeed; // E-pucks cannot go faster than 10 cm/s.
     UInt8 unNewDirection(0);
+
+    LOG << cResultVector << std::endl;
     
     if (cDirectionAngle > CRadians::ZERO && cDirectionAngle < CRadians::PI) { // Left
         unNewDirection = 1;
@@ -286,7 +305,7 @@ const CVector2 CEpuckFrontalBarrierOC::HumanPotential() {
             SInt16 unMinimumIndex = -1;
 
             for (size_t i = 0; i < blobs.size(); ++i) {
-                if (IsHuman(blobs[i]->Color)
+                if (blobs[i]->Distance > 9 && IsHuman(blobs[i]->Color)
                     && (blobs[i]->Distance < fMinimum || fMinimum < 0)) {
 
                     fMinimum = blobs[i]->Distance;
@@ -333,7 +352,7 @@ const CVector2 CEpuckFrontalBarrierOC::GravityPotential() const {
             SInt16 unMinimumIndex = -1;
 
             for (size_t i = 0; i < blobs.size(); ++i) {
-                if (IsHuman(blobs[i]->Color)
+                if (blobs[i]->Distance > 9 && IsHuman(blobs[i]->Color)
                     && (blobs[i]->Distance < fMinimum || fMinimum < 0)) {
 
                     fMinimum = blobs[i]->Distance;
@@ -365,7 +384,7 @@ const CVector2 CEpuckFrontalBarrierOC::AgentRepulsionPotential() const {
         const CCI_EPuckOmnidirectionalCameraSensor::TBlobList& blobs = readings.BlobList;
 
         for (size_t i = 0; i < blobs.size(); ++i) {
-            if (!IsHuman(blobs[i]->Color) && blobs[i]->Distance < m_fAgentPotentialDistance) {
+            if (blobs[i]->Distance > 9 && !IsHuman(blobs[i]->Color) && blobs[i]->Distance < m_fAgentPotentialDistance) {
                 Real fLennardJonesValue = LennardJones(blobs[i]->Distance, m_fAgentPotentialGain, m_fAgentPotentialDistance);
                 CVector2 cAgentLennardJones(fLennardJonesValue, blobs[i]->Angle);
                 cVector += cAgentLennardJones;
@@ -387,9 +406,11 @@ const CVector2 CEpuckFrontalBarrierOC::DefaultPotential() const {
         const CCI_EPuckOmnidirectionalCameraSensor::TBlobList& blobs = readings.BlobList;
 
         for (size_t i = 0; i < blobs.size(); ++i) {
-            Real fLennardJonesValue = LennardJones(blobs[i]->Distance, m_fAgentPotentialGain, m_fAgentPotentialDistance);
-            CVector2 cAgentLennardJones(fLennardJonesValue, blobs[i]->Angle);
-            cVector += cAgentLennardJones;
+            if (blobs[i]->Distance > 9) {
+                Real fLennardJonesValue = LennardJones(blobs[i]->Distance, m_fAgentPotentialGain, m_fAgentPotentialDistance);
+                CVector2 cAgentLennardJones(fLennardJonesValue, blobs[i]->Angle);
+                cVector += cAgentLennardJones;
+            }
         }
     }
 
@@ -460,7 +481,7 @@ bool CEpuckFrontalBarrierOC::HumanFound() const {
         const CCI_EPuckOmnidirectionalCameraSensor::TBlobList& blobs = readings.BlobList;
 
         for (size_t i = 0; i < blobs.size(); ++i) {
-            if (IsHuman(blobs[i]->Color)) {
+            if (blobs[i]->Distance > 9 && IsHuman(blobs[i]->Color)) {
                 bHumanFound = true;
                 break;
             }
