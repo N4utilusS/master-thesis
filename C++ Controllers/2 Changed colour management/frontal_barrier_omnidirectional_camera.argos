@@ -1,0 +1,194 @@
+<?xml version="1.0" ?>
+<argos-configuration>
+
+  <!-- ************************* -->
+  <!-- * General configuration * -->
+  <!-- ************************* -->
+  <framework>
+  	<!-- To make ARGoS faster, you can set 'threads' to some number greater than 0 -->
+    <system threads="8" />
+    <experiment length="0" ticks_per_second="10" />
+  </framework>
+
+  <!-- ****************** -->
+  <!-- * Loop functions * -->
+  <!-- ****************** -->
+  <loop_functions library="../../build_simepuck/testing/loop_functions/libfrontal_barrier_lp" label="frontal_barrier_lp" />
+
+  <!-- *************** -->
+  <!-- * Controllers * -->
+  <!-- *************** -->
+  <controllers>
+
+    <!-- ***************************************************** -->
+    <!-- * This is the controller to associate to robots     * -->
+    <!-- ***************************************************** -->
+
+    <lua_controller id="lua_moving">
+      <!-- Normal actuator/sensor configuration follows -->
+      <actuators>
+        <epuck_wheels implementation="default" />
+        <epuck_rgb_leds implementation="default" medium="leds"/>
+      </actuators>
+      <sensors>
+        <epuck_proximity implementation="default" show_rays="true" />
+        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="true" />
+      </sensors>
+      <!-- No required configuration -->
+      <params script="/home/anthony/git/master-thesis/Lua Controllers/controllerWithOmnidirectionalCamera_Moving.lua" />
+      <!-- Optionally, you can pass a script as a controller parameter: -->
+      <!-- params script="../../src/testing/experiment/test_gripper.lua" / -->
+    </lua_controller>
+
+    <lua_controller id="lua_static">
+      <!-- Normal actuator/sensor configuration follows -->
+      <actuators>
+        <epuck_wheels implementation="default" />
+        <epuck_rgb_leds implementation="default" medium="leds"/>
+      </actuators>
+      <sensors>
+        <epuck_proximity implementation="default" show_rays="true" />
+        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="true" />
+      </sensors>
+      <!-- No required configuration -->
+      <params script="/home/anthony/git/master-thesis/Lua Controllers/controllerWithOmnidirectionalCamera_Static.lua" />
+      <!-- Optionally, you can pass a script as a controller parameter: -->
+      <!-- params script="../../src/testing/experiment/test_gripper.lua" / -->
+    </lua_controller>
+
+    <!-- C++ controller -->
+    <e-puck_frontal_barrier_oc_controller id="cppAgent"
+                        library="../../build_simepuck/testing/libe-puck_frontal_barrier_oc_controller">
+      <actuators>
+        <epuck_wheels implementation="default" />
+        <epuck_rgb_leds implementation="default" medium="leds"/>
+      </actuators>
+      <sensors>
+        <epuck_proximity implementation="default" show_rays="true" noise_level="0.0" calibrated="true" low_level_config="/home/root/gfrancesca/low_level_configuration/proximity_sensor.xml" />
+        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.0" calibrated="true" low_level_config="/home/root/ARGoS/low_level_configuration/omnidirectional_camera_sensor.xml"/>
+        <epuck_ground implementation="rot_z_only" noise_level="0.0"/>
+      </sensors>
+      <params defaultSpeed="5" 
+      	humanPotentialGain="1000" 
+      	humanPotentialDistance="50" 
+      	agentPotentialGain="200" 
+      	agentPotentialDistance="20" 
+        gravityPotentialGain="1"
+      />
+    </e-puck_frontal_barrier_oc_controller>
+
+    <e-puck_frontal_barrier_human_oc_controller id="cppHumanLeft"
+                        library="../../build_simepuck/testing/libe-puck_frontal_barrier_human_oc_controller">
+      <actuators>
+        <epuck_wheels implementation="default" />
+        <epuck_rgb_leds implementation="default" medium="leds"/>
+      </actuators>
+      <sensors>
+        <epuck_proximity implementation="default" show_rays="true" noise_level="0.0" calibrated="true" low_level_config="/home/root/gfrancesca/low_level_configuration/proximity_sensor.xml" />
+        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.0" calibrated="true" low_level_config="/home/root/ARGoS/low_level_configuration/omnidirectional_camera_sensor.xml"/>
+        <epuck_ground implementation="rot_z_only" noise_level="0.0"/>
+      </sensors>
+      <params
+        leftSpeed="2"
+        rightSpeed="2.1"
+        color="cyan"
+      />
+    </e-puck_frontal_barrier_human_oc_controller>
+
+    <e-puck_frontal_barrier_human_oc_controller id="cppHumanRight"
+                        library="../../build_simepuck/testing/libe-puck_frontal_barrier_human_oc_controller">
+      <actuators>
+        <epuck_wheels implementation="default" />
+        <epuck_rgb_leds implementation="default" medium="leds" />
+      </actuators>
+      <sensors>
+        <epuck_proximity implementation="default" show_rays="true" noise_level="0.0" calibrated="true" low_level_config="/home/root/gfrancesca/low_level_configuration/proximity_sensor.xml" />
+        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.0" calibrated="true" low_level_config="/home/root/ARGoS/low_level_configuration/omnidirectional_camera_sensor.xml"/>
+        <epuck_ground implementation="rot_z_only" noise_level="0.0"/>
+      </sensors>
+      <params
+        leftSpeed="2"
+        rightSpeed="2.1"
+        color="magenta"
+      />
+    </e-puck_frontal_barrier_human_oc_controller>
+
+  </controllers>
+
+  <!-- *********************** -->
+  <!-- * Arena configuration * -->
+  <!-- *********************** -->
+  <arena size="10, 10, 1" center="0,0,0.5">
+
+    <!-- Floor -->
+    <floor id="floor" source="loop_functions" pixels_per_meter="100" />
+
+    <!-- Walls -->
+    <box id="bn" size="0.1, 6, 0.2" movable="false">
+      <body position="3,0,0" orientation="0,0,0" />
+    </box>
+    <box id="bs" size="0.1, 6, 0.2" movable="false">
+      <body position="-3,0,0" orientation="0,0,0" />
+    </box>
+    <box id="be" size="6, 0.1, 0.2" movable="false">
+      <body position="0,-3,0" orientation="0,0,0" />
+    </box>
+    <box id="bw" size="6, 0.1, 0.2" movable="false">
+      <body position="0,3,0" orientation="0,0,0" />
+    </box>
+
+    <e-puck id="human1" >
+      <body position="0,0,0" orientation="0,0,0" />
+      <controller config="cppHumanLeft"/>
+    </e-puck>
+    
+    <e-puck id="human2" >
+      <body position="0,-0.1,0" orientation="0,0,0" />
+      <controller config="cppHumanRight"/>
+    </e-puck>
+    
+    <distribute>
+      <position method="uniform" min="-0.5,-0.5,0" max="0.5,0.5,0" /> 
+      <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" /> 
+      <entity quantity="15" max_trials="100"> 
+        <e-puck id="agent" omnidirectional_camera_aperture="80">
+          <controller config="cppAgent" /> 
+        </e-puck>
+      </entity> 
+    </distribute>
+  </arena>
+
+  <!-- ******************* -->
+  <!-- * Physics engines * -->
+  <!-- ******************* -->
+  <physics_engines>
+    <dynamics2d id="dyn2d" />
+  </physics_engines>
+
+  <!-- ********* -->
+  <!-- * Media * -->
+  <!-- ********* -->
+  <media>
+    <range_and_bearing id="rab" index="grid" grid_size="1,1,1" />
+    <led id="leds" index="grid" grid_size="1,1,1" />
+  </media>
+
+  <!-- ****************** -->
+  <!-- * Visualization * -->
+  <!-- ****************** -->
+  <visualization>
+
+    <!-- ************************************************************************ -->
+    <!-- * To activate the Lua editor, just use the 'lua_editor' flag attribute * -->
+    <!-- ************************************************************************ -->
+    <qt-opengl lua_editor="false">
+      <camera>
+        <placement idx="0" position="-0.00569879,0.01,4.86243" look_at="-0.00569879,0.01,3.86243" lens_focal_length="20" />
+        <placement idx="1" position="-2,0,2" look_at="0,0,0" lens_focal_length="20" />
+        <placement idx="2" position="0.884183,0.359128,0.490269" look_at="0.924486,-0.486744,-0.0415919" lens_focal_length="20" />
+      </camera>
+    </qt-opengl>
+
+  </visualization>
+
+</argos-configuration>
