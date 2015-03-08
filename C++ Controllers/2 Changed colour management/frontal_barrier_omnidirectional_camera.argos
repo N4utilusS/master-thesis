@@ -73,7 +73,7 @@
       	humanPotentialDistance="50" 
       	agentPotentialGain="200" 
       	agentPotentialDistance="20" 
-        gravityPotentialGain="1"
+        gravityPotentialGain="5"
       />
     </e-puck_frontal_barrier_oc_controller>
 
@@ -90,7 +90,7 @@
       </sensors>
       <params
         leftSpeed="2"
-        rightSpeed="2.1"
+        rightSpeed="2.5"
         color="cyan"
       />
     </e-puck_frontal_barrier_human_oc_controller>
@@ -108,7 +108,7 @@
       </sensors>
       <params
         leftSpeed="2"
-        rightSpeed="2.1"
+        rightSpeed="2.5"
         color="magenta"
       />
     </e-puck_frontal_barrier_human_oc_controller>
