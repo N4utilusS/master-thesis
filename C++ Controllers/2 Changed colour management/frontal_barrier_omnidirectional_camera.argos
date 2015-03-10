@@ -71,9 +71,15 @@
       <params defaultSpeed="5" 
       	humanPotentialGain="1000" 
       	humanPotentialDistance="50" 
-      	agentPotentialGain="200" 
-      	agentPotentialDistance="20" 
+      	agentPotentialGain="100" 
+      	agentPotentialDistance="10" 
         gravityPotentialGain="5"
+        humanLeftColorRef="blue"
+        humanRightColorRef="magenta"
+        agentGoodColor="30,150,0"
+        agentBadColor="150,0,0"
+        agentGoodColorRef="green"
+        agentBadColorRef="red"
       />
     </e-puck_frontal_barrier_oc_controller>
 
@@ -89,9 +95,9 @@
         <epuck_ground implementation="rot_z_only" noise_level="0.0"/>
       </sensors>
       <params
-        leftSpeed="2"
-        rightSpeed="2.5"
-        color="cyan"
+        leftSpeed="0"
+        rightSpeed="0"
+        color="0,30,200"
       />
     </e-puck_frontal_barrier_human_oc_controller>
 
@@ -107,9 +113,9 @@
         <epuck_ground implementation="rot_z_only" noise_level="0.0"/>
       </sensors>
       <params
-        leftSpeed="2"
-        rightSpeed="2.5"
-        color="magenta"
+        leftSpeed="0"
+        rightSpeed="0"
+        color="150,0,60"
       />
     </e-puck_frontal_barrier_human_oc_controller>
 

@@ -9,10 +9,13 @@ using namespace argos;
 /****************************************/
 
 static const UInt8 BLOCKING_SYSTEM_MAX_COUNT = 20;
-static const std::string DEFAULT_HUMAN_LEFT_COLOR = "cyan";
-static const std::string DEFAULT_HUMAN_RIGHT_COLOR = "magenta";
-static const std::string DEFAULT_AGENT_GOOD_COLOR = "green";
-static const std::string DEFAULT_AGENT_BAD_COLOR = "red";
+static const std::string DEFAULT_HUMAN_LEFT_COLOR_REF = "blue";
+static const std::string DEFAULT_HUMAN_RIGHT_COLOR_REF = "magenta";
+static const CColor DEFAULT_AGENT_GOOD_COLOR = CColor::GREEN;
+static const CColor DEFAULT_AGENT_BAD_COLOR = CColor::RED;
+static const std::string DEFAULT_AGENT_GOOD_COLOR_REF = "green";
+static const std::string DEFAULT_AGENT_BAD_COLOR_REF = "red";
+
 
 /****************************************/
 /****************************************/
@@ -21,12 +24,14 @@ CEpuckFrontalBarrierOC::CEpuckFrontalBarrierOC() :
     m_fDefaultWheelsSpeed(0),
     m_fHumanPotentialGain(0),
     m_fHumanPotentialDistance(0),
-    m_cHumanLeftColor(CColor::BLACK),
-    m_cHumanRightColor(CColor::BLACK),
+    m_cHumanLeftColorRef(CColor::BLACK),
+    m_cHumanRightColorRef(CColor::BLACK),
     m_fAgentPotentialGain(0),
     m_fAgentPotentialDistance(0),
-    m_cAgentGoodColor(CColor::BLACK),
-    m_cAgentBadColor(CColor::BLACK),
+    m_cAgentGoodColor(DEFAULT_AGENT_GOOD_COLOR),
+    m_cAgentBadColor(DEFAULT_AGENT_BAD_COLOR),
+    m_cAgentGoodColorRef(CColor::BLACK),
+    m_cAgentBadColorRef(CColor::BLACK),
     m_fGravityPotentialGain(0),
     m_pcWheelsActuator(NULL),
     m_pcProximitySensor(NULL),
@@ -36,14 +41,22 @@ CEpuckFrontalBarrierOC::CEpuckFrontalBarrierOC() :
     m_unBSCount(0),
     m_fHumanPotentialModifiedDistance(0),
     m_unColorCountdownCounter(0) {
+
+        m_vecDirectionVectorsWindow.push_back(CVector2(0.0,0.0));
+        m_vecDirectionVectorsWindow.push_back(CVector2(0.0,0.0));
+        m_vecDirectionVectorsWindow.push_back(CVector2(0.0,0.0));
+        m_vecDirectionVectorsWindow.push_back(CVector2(0.0,0.0));
+        m_vecDirectionVectorsWindow.push_back(CVector2(0.0,0.0));
 }
 
 /****************************************/
 /****************************************/
 
 void CEpuckFrontalBarrierOC::ParseParams(TConfigurationNode& t_node) {
-    std::string strHumanLeftColor, strHumanRightColor, strAgentGoodColor, strAgentBadColor;
-
+    std::string strHumanLeftColorReference, strHumanRightColorReference, strAgentGoodColorReference, strAgentBadColorReference;
+    CVector3 cAgentGoodColor(DEFAULT_AGENT_GOOD_COLOR.GetRed(), DEFAULT_AGENT_GOOD_COLOR.GetGreen(), DEFAULT_AGENT_GOOD_COLOR.GetBlue());
+    CVector3 cAgentBadColor(DEFAULT_AGENT_BAD_COLOR.GetRed(), DEFAULT_AGENT_BAD_COLOR.GetGreen(), DEFAULT_AGENT_BAD_COLOR.GetBlue());
+    
     try {
         /* Default wheel speed */
         GetNodeAttributeOrDefault(t_node, "defaultSpeed", m_fDefaultWheelsSpeed, m_fDefaultWheelsSpeed);
@@ -58,21 +71,30 @@ void CEpuckFrontalBarrierOC::ParseParams(TConfigurationNode& t_node) {
         /* Gravity potential gain */
         GetNodeAttributeOrDefault(t_node, "gravityPotentialGain", m_fGravityPotentialGain, m_fGravityPotentialGain);
 
-        /* Human agent left color */
-        GetNodeAttributeOrDefault(t_node, "humanLeftColor", strHumanLeftColor, DEFAULT_HUMAN_LEFT_COLOR);
-        m_cHumanLeftColor.Set(strHumanLeftColor);
+        /* Human agent left color reference */
+        GetNodeAttributeOrDefault(t_node, "humanLeftColorRef", strHumanLeftColorReference, DEFAULT_HUMAN_LEFT_COLOR_REF);
+        m_cHumanLeftColorRef.Set(strHumanLeftColorReference);
 
-        /* Human agent right color */
-        GetNodeAttributeOrDefault(t_node, "humanRightColor", strHumanRightColor, DEFAULT_HUMAN_RIGHT_COLOR);
-        m_cHumanRightColor.Set(strHumanRightColor);
+        /* Human agent right color reference */
+        GetNodeAttributeOrDefault(t_node, "humanRightColorRef", strHumanRightColorReference, DEFAULT_HUMAN_RIGHT_COLOR_REF);
+        m_cHumanRightColorRef.Set(strHumanRightColorReference);
 
         /* Agent good color */
-        GetNodeAttributeOrDefault(t_node, "agentGoodColor", strAgentGoodColor, DEFAULT_AGENT_GOOD_COLOR);
-        m_cAgentGoodColor.Set(strAgentGoodColor);
+        GetNodeAttributeOrDefault(t_node, "agentGoodColor", cAgentGoodColor, cAgentGoodColor);
+        m_cAgentGoodColor.Set((UInt8) cAgentGoodColor.GetX(), (UInt8) cAgentGoodColor.GetY(), (UInt8) cAgentGoodColor.GetZ());
 
         /* Agent bad color */
-        GetNodeAttributeOrDefault(t_node, "agentBadColor", strAgentBadColor, DEFAULT_AGENT_BAD_COLOR);
-        m_cAgentBadColor.Set(strAgentBadColor);
+        GetNodeAttributeOrDefault(t_node, "agentBadColor", cAgentBadColor, cAgentBadColor);
+        m_cAgentBadColor.Set((UInt8) cAgentBadColor.GetX(), (UInt8) cAgentBadColor.GetY(), (UInt8) cAgentBadColor.GetZ());
+
+        /* Agent good color reference */
+        GetNodeAttributeOrDefault(t_node, "agentGoodColorRef", strAgentGoodColorReference, DEFAULT_AGENT_GOOD_COLOR_REF);
+        m_cAgentGoodColorRef.Set(strAgentGoodColorReference);
+
+        /* Agent bad color reference */
+        GetNodeAttributeOrDefault(t_node, "agentBadColorRef", strAgentBadColorReference, DEFAULT_AGENT_BAD_COLOR_REF);
+        m_cAgentBadColorRef.Set(strAgentBadColorReference);
+
     } catch (CARGoSException& ex) {
         THROW_ARGOSEXCEPTION_NESTED("Error parsing <params>", ex);
     }
@@ -210,15 +232,29 @@ void CEpuckFrontalBarrierOC::NormalMode() {
     // ------------ Different cases ---------------------------------------------------
     if (fMaxValue > 0.15) { // Obstacle to deal with
         cResultVector -= cObstacleVector;
-        //LOG << "OBSTACLE " << fMaxValue << std::endl;
+        if (m_pcRGBLED != NULL) {
+            m_pcRGBLED->SetColors(CColor::BLACK);
+        }
+
+        LOG << "OBSTACLE " << fMaxValue << std::endl;
 
     } else if (HumanFound()) {                // No obstacle
         ComputeDirection(cResultVector);
+
+        m_vecDirectionVectorsWindow.erase(m_vecDirectionVectorsWindow.begin());
+        m_vecDirectionVectorsWindow.push_back(cResultVector);
+        CVector2 cAverageOnWindow(0.0, 0.0);
+
+        for (std::vector<CVector2>::iterator i = m_vecDirectionVectorsWindow.begin(); i != m_vecDirectionVectorsWindow.end(); ++i) {
+            cAverageOnWindow += *i;
+        }
+        cResultVector = cAverageOnWindow / 5;
+
         m_unBSCount = 0; // No obstacle detected, so the blocked mode counter is set to 0.
         if (m_pcRGBLED != NULL) {
             m_pcRGBLED->SetColors(GetAgentSituationColor());
         }
-        //LOG << "AGENT" << std::endl;
+        LOG << "AGENT" << std::endl;
 
     } else {
         cResultVector += DefaultPotential(); // If no human found, makes the agents move
@@ -226,7 +262,7 @@ void CEpuckFrontalBarrierOC::NormalMode() {
         if (m_pcRGBLED != NULL) {
             m_pcRGBLED->SetColors(CColor::BLACK);
         }
-        //LOG << "NO HUMAN" << std::endl;
+        LOG << "NO HUMAN" << std::endl;
 
     }
     // --------------------------------------------------------------------------------
@@ -237,7 +273,7 @@ void CEpuckFrontalBarrierOC::NormalMode() {
     fSpeed = (fSpeed > 10.0) ? 10 : fSpeed; // E-pucks cannot go faster than 10 cm/s.
     UInt8 unNewDirection(0);
 
-    //LOG << cResultVector << std::endl;
+    LOG << cResultVector << std::endl;
     
     if (cDirectionAngle > CRadians::ZERO && cDirectionAngle < CRadians::PI) { // Left
         unNewDirection = 1;
@@ -360,7 +396,7 @@ const CVector2 CEpuckFrontalBarrierOC::GravityPotential() const {
 
             if (unMinimumIndex != -1) {
                 CRadians cRotationModification = 
-                    (IsSameColor(blobs[unMinimumIndex]->Color, m_cHumanLeftColor)) ? 
+                    (IsSameColor(blobs[unMinimumIndex]->Color, m_cHumanLeftColorRef)) ? 
                     CRadians::PI_OVER_TWO : 
                     -CRadians::PI_OVER_TWO;
                 cVector.FromPolarCoordinates(m_fGravityPotentialGain, blobs[unMinimumIndex]->Angle + cRotationModification);
@@ -413,7 +449,7 @@ const CVector2 CEpuckFrontalBarrierOC::DefaultPotential() const {
     }
 
     // If no other robot to go to, then go straight forward.
-    if (cVector.SquareLength() == 0)
+    if (cVector.SquareLength() == 0.0)
         cVector.SetX(5);
     return cVector;
 }
@@ -456,7 +492,7 @@ inline Real CEpuckFrontalBarrierOC::LennardJones(Real f_x, Real f_gain, Real f_d
 /****************************************/
 
 inline bool CEpuckFrontalBarrierOC::IsHuman(const CColor& c_color) const {
-    return (IsSameColor(c_color, m_cHumanLeftColor) || IsSameColor(c_color, m_cHumanRightColor));
+    return (IsSameColor(c_color, m_cHumanLeftColorRef) || IsSameColor(c_color, m_cHumanRightColorRef));
 }
 
 /****************************************/

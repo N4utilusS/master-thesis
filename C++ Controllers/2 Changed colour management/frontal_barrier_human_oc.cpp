@@ -8,7 +8,7 @@ using namespace argos;
 /****************************************/
 /****************************************/
 
-static const std::string DEFAULT_COLOR = "cyan";
+static const CColor DEFAULT_COLOR = CColor::CYAN;
 
 /****************************************/
 /****************************************/
@@ -16,7 +16,7 @@ static const std::string DEFAULT_COLOR = "cyan";
 CEpuckFrontalBarrierHumanOC::CEpuckFrontalBarrierHumanOC() :
     m_fLeftSpeed(0),
     m_fRightSpeed(0),
-    m_cColor(CColor::BLACK),
+    m_cColor(DEFAULT_COLOR),
     m_pcWheelsActuator(NULL),
     m_pcProximitySensor(NULL),
     m_pcRGBLED(NULL) {
@@ -26,19 +26,21 @@ CEpuckFrontalBarrierHumanOC::CEpuckFrontalBarrierHumanOC() :
 /****************************************/
 
 void CEpuckFrontalBarrierHumanOC::ParseParams(TConfigurationNode& t_node) {
-    std::string strColor(DEFAULT_COLOR);
-
+    CVector3 cColorVector(DEFAULT_COLOR.GetRed(), 
+    DEFAULT_COLOR.GetGreen(), 
+    DEFAULT_COLOR.GetBlue());
+    
     try {
         /* Human agent left wheel speed */
         GetNodeAttributeOrDefault(t_node, "leftSpeed", m_fLeftSpeed, m_fLeftSpeed);
         /* Human agent right wheel speed */
         GetNodeAttributeOrDefault(t_node, "rightSpeed", m_fRightSpeed, m_fRightSpeed);
         /* Human agent color */
-        GetNodeAttributeOrDefault(t_node, "color", strColor, DEFAULT_COLOR);
+        GetNodeAttributeOrDefault(t_node, "color", cColorVector, cColorVector);
     } catch (CARGoSException& ex) {
         THROW_ARGOSEXCEPTION_NESTED("Error parsing <params>", ex);
     }
-    m_cColor.Set(strColor);
+    m_cColor.Set((UInt8) cColorVector.GetX(), (UInt8) cColorVector.GetY(), (UInt8) cColorVector.GetZ());
 }
 
 /****************************************/

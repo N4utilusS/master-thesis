@@ -27,6 +27,7 @@
 #include <argos3/plugins/robots/e-puck/control_interface/ci_epuck_ground_sensor.h>
 #include <argos3/core/utility/math/vector2.h>
 #include <argos3/core/utility/datatypes/color.h>
+#include <vector>
 
 /*
  * All the ARGoS stuff in the 'argos' namespace.
@@ -107,13 +108,15 @@ private:
 
     Real m_fHumanPotentialGain;
     Real m_fHumanPotentialDistance;
-    CColor m_cHumanLeftColor;
-    CColor m_cHumanRightColor;
+    CColor m_cHumanLeftColorRef;
+    CColor m_cHumanRightColorRef;
 
     Real m_fAgentPotentialGain;
     Real m_fAgentPotentialDistance;
     CColor m_cAgentGoodColor;
     CColor m_cAgentBadColor;
+    CColor m_cAgentGoodColorRef;
+    CColor m_cAgentBadColorRef;
 
     Real m_fGravityPotentialGain;
 
@@ -135,8 +138,11 @@ private:
     /* Human potential distance variation variable */
     Real m_fHumanPotentialModifiedDistance;
 
+
     /* Agent color countdown counter */
     UInt8 m_unColorCountdownCounter;
+
+    std::vector<CVector2> m_vecDirectionVectorsWindow;
 
 };
 
