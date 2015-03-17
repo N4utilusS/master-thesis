@@ -237,7 +237,7 @@ void CEpuckFrontalBarrierOC::NormalMode() {
             m_pcRGBLED->SetColors(m_cAgentGoodColor); // TODO put black instead
         }
 
-        LOG << "OBSTACLE " << fMaxValue << std::endl;
+        //LOG << "OBSTACLE " << fMaxValue << std::endl;
 
     } else if (HumanFound()) {                // No obstacle
         ComputeDirection(cResultVector);
@@ -255,7 +255,7 @@ void CEpuckFrontalBarrierOC::NormalMode() {
         if (m_pcRGBLED != NULL) {
             m_pcRGBLED->SetColors(GetAgentSituationColor());
         }
-        LOG << "AGENT" << std::endl;
+        //LOG << "AGENT" << std::endl;
 
     } else {
         cResultVector += DefaultPotential(); // If no human found, makes the agents move
@@ -273,7 +273,7 @@ void CEpuckFrontalBarrierOC::NormalMode() {
         if (m_pcRGBLED != NULL) {
             m_pcRGBLED->SetColors(m_cAgentGoodColor); // TODO put black instead
         }
-        LOG << "NO HUMAN" << std::endl;
+        //LOG << "NO HUMAN" << std::endl;
 
     }
     // --------------------------------------------------------------------------------
@@ -285,39 +285,41 @@ void CEpuckFrontalBarrierOC::NormalMode() {
     UInt8 unNewDirection(0);
     fSpeed = (fSpeed < 1.0) ? 0.0 : fSpeed;
     
-    LOG << cResultVector << std::endl;
-    /*
-    if (cDirectionAngle > CRadians::ZERO && cDirectionAngle < CRadians::PI) { // Left
-        unNewDirection = 1;
-        if (m_pcWheelsActuator != NULL) {
+    //LOG << cResultVector << std::endl;
+
+    if (m_pcWheelsActuator != NULL) {
+        if (cDirectionAngle > CRadians::ZERO && cDirectionAngle < CRadians::PI) { // Left
+            unNewDirection = 1;
+
+            cDirectionAngle = cDirectionAngle * 3;
+            cDirectionAngle = (cDirectionAngle >= CRadians::PI) ? CRadians::PI : cDirectionAngle;
+
             // First parameter = speed * cos(angle) = x
             m_pcWheelsActuator->SetLinearVelocity(fSpeed * Cos(cDirectionAngle), fSpeed);
-        }
-    } else {                                                                  // Right
-        unNewDirection = -1;
-        if (m_pcWheelsActuator != NULL) {
+        } else {                                                                  // Right
+            unNewDirection = -1;
+
+            cDirectionAngle = cDirectionAngle * 3;
+            cDirectionAngle = (cDirectionAngle < -CRadians::PI) ? -CRadians::PI : cDirectionAngle;
+
             // Second parameter = speed * cos(angle) = x
             m_pcWheelsActuator->SetLinearVelocity(fSpeed, fSpeed * Cos(cDirectionAngle));
         }
     }
-*/
+/*
     if (m_pcWheelsActuator != NULL) {
         if (cDirectionAngle > (CRadians::PI / 36.0f) && cDirectionAngle < CRadians::PI) { // Left
-            if (m_pcWheelsActuator != NULL) {
-                m_pcWheelsActuator->SetLinearVelocity(-fSpeed, fSpeed);
-                unNewDirection = 1;
-            }
+            m_pcWheelsActuator->SetLinearVelocity(-fSpeed, fSpeed);
+            unNewDirection = 1;
+            
         } else if (cDirectionAngle < (-CRadians::PI / 36.0f)) {                           // Right
-            if (m_pcWheelsActuator != NULL) {
-                m_pcWheelsActuator->SetLinearVelocity(fSpeed, -fSpeed);
-                unNewDirection = -1;
-            }
+            m_pcWheelsActuator->SetLinearVelocity(fSpeed, -fSpeed);
+            unNewDirection = -1;
+            
         } else {
-            if (m_pcWheelsActuator != NULL) {
-                m_pcWheelsActuator->SetLinearVelocity(fSpeed, fSpeed);
-            }
+            m_pcWheelsActuator->SetLinearVelocity(fSpeed, fSpeed);
         }
-    }
+    }*/
 
     if (m_unBSDirection != unNewDirection) {
         m_unBSCount++;
@@ -466,7 +468,7 @@ const CVector2 CEpuckFrontalBarrierOC::DefaultPotential() const {
                 CVector2 cAgentLennardJones(fLennardJonesValue, blobs[i]->Angle);
                 cVector += cAgentLennardJones;
 
-                LOG << fDistance << " " << *blobs[i] << std::endl;
+                //LOG << fDistance << " " << *blobs[i] << std::endl;
             }
         }
     }
