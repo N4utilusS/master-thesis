@@ -237,7 +237,7 @@ void CEpuckFrontalBarrierOC::NormalMode() {
             m_pcRGBLED->SetColors(m_cAgentGoodColor); // TODO put black instead
         }
 
-        //LOG << "OBSTACLE " << fMaxValue << std::endl;
+        LOG << "OBSTACLE " << fMaxValue << std::endl;
 
     } else if (HumanFound()) {                // No obstacle
         ComputeDirection(cResultVector);
@@ -255,7 +255,7 @@ void CEpuckFrontalBarrierOC::NormalMode() {
         if (m_pcRGBLED != NULL) {
             m_pcRGBLED->SetColors(GetAgentSituationColor());
         }
-        //LOG << "AGENT" << std::endl;
+        LOG << "AGENT" << std::endl;
 
     } else {
         cResultVector += DefaultPotential(); // If no human found, makes the agents move
@@ -273,7 +273,7 @@ void CEpuckFrontalBarrierOC::NormalMode() {
         if (m_pcRGBLED != NULL) {
             m_pcRGBLED->SetColors(m_cAgentGoodColor); // TODO put black instead
         }
-        //LOG << "NO HUMAN" << std::endl;
+        LOG << "NO HUMAN" << std::endl;
 
     }
     // --------------------------------------------------------------------------------
@@ -285,7 +285,7 @@ void CEpuckFrontalBarrierOC::NormalMode() {
     UInt8 unNewDirection(0);
     fSpeed = (fSpeed < 1.0) ? 0.0 : fSpeed;
     
-    //LOG << cResultVector << std::endl;
+    LOG << cResultVector << std::endl;
 
     if (m_pcWheelsActuator != NULL) {
         if (cDirectionAngle > CRadians::ZERO && cDirectionAngle < CRadians::PI) { // Left
@@ -357,6 +357,7 @@ const CVector2 CEpuckFrontalBarrierOC::HumanPotential() {
                 fDistance = blobs[i]->Distance * DISTANCE_CORRECTION_FACTOR;
                 if (fDistance > 9 && IsHuman(blobs[i]->Color)
                     && (fDistance < fMinimum || fMinimum < 0)) {
+                    LOG << fDistance << " " << *blobs[i] << std::endl;
 
                     fMinimum = fDistance;
                     unMinimumIndex = i;
@@ -377,7 +378,7 @@ const CVector2 CEpuckFrontalBarrierOC::HumanPotential() {
                     m_fHumanPotentialDistance;
                 }
 
-                Real fLennardJonesValue = LennardJones(blobs[unMinimumIndex]->Distance * DISTANCE_CORRECTION_FACTOR, m_fHumanPotentialGain, m_fHumanPotentialModifiedDistance);
+                Real fLennardJonesValue = LennardJonesStrongAttraction(blobs[unMinimumIndex]->Distance * DISTANCE_CORRECTION_FACTOR, m_fHumanPotentialGain, m_fHumanPotentialModifiedDistance);
                 vector.FromPolarCoordinates(fLennardJonesValue, blobs[unMinimumIndex]->Angle);
             
             }
@@ -511,6 +512,21 @@ inline Real CEpuckFrontalBarrierOC::LennardJones(Real f_x, Real f_gain, Real f_d
     Real fRatio = f_distance / f_x;
     fRatio *= fRatio;
     return -4 * f_gain / f_x * ( fRatio * fRatio - fRatio );
+}
+
+/****************************************/
+/****************************************/
+
+inline Real CEpuckFrontalBarrierOC::LennardJonesStrongAttraction(Real f_x, Real f_gain, Real f_distance) const {
+    if (f_x <= f_distance) {
+        Real fRatio = f_distance / f_x;
+        fRatio *= fRatio;
+        return -4 * f_gain / f_x * ( fRatio * fRatio - fRatio );
+    } else {
+        Real fDiff = f_x - f_distance;
+        return fDiff * fDiff / 6;
+    }
+    
 }
 
 /****************************************/

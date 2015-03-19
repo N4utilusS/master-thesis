@@ -92,6 +92,7 @@ private:
     const CVector2 AgentRepulsionPotential() const;
     const CVector2 DefaultPotential() const;
     inline Real LennardJones(Real f_x, Real f_gain, Real f_distance) const;
+    inline Real LennardJonesStrongAttraction(Real f_x, Real f_gain, Real f_distance) const;
     inline bool IsHuman(const CColor& c_color) const;
     inline bool IsSameColor(const CColor& c_color_1, const CColor& c_color_2) const;
     bool HumanFound() const;
