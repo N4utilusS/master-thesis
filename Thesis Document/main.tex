@@ -2,13 +2,16 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage{color}
-\usepackage[top=2.5cm, bottom=1.5cm, left=2.5cm, right=1cm]{geometry}
+\usepackage{geometry}
 \usepackage[pdftex]{graphicx}
 \usepackage{tikz}
 
+\usepackage{filecontents}
+
+
 % Logos
-\newcommand{\ulb}{\includegraphics[scale=1.1]{logo_ULB2.pdf}}
-\newcommand{\polytech}{\includegraphics[scale=0.35]{logo_polytech_FR.pdf}}
+\newcommand{\ulb}{\includegraphics[scale=1.1]{PageDeGarde_MFE/logo_ULB2.pdf}}
+\newcommand{\polytech}{\includegraphics[scale=0.35]{PageDeGarde_MFE/logo_polytech_FR.pdf}}
 
 % Polices
 \definecolor{ULBblue}{rgb}{0,0.2196,0.5765}
@@ -83,6 +86,8 @@
 	\end{picture}
 	\restoregeometry
 	
+% Template conçu par Benjamin Vanhemelryck et revu par François Bronchart - Mai 2013
+	
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TABLE OF CONTENT
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -101,10 +106,37 @@
 
 \chapter{Solution}
 
+\section{Introduction}
+\section{Virtual Physics}
+\section{Potentials}
+\section{Range and Bearing Sensor}
+\subsection{Tests}
+\subsection{Calibration}
+\subsection{Conclusions}
+
+\section{Omnidirectional Camera Sensor}
+\subsection{Tests}
+
+
 \chapter{Assessments}
 
 \chapter{Future Works}
 
-\end{document}
 
-% Template conçu par Benjamin Vanhemelryck et revu par François Bronchart - Mai 2013
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% BIBLIOGRAPHY
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{filecontents}{thesis.bib}
+%http://en.wikibooks.org/wiki/LaTeX/Bibliography_Management
+
+
+\end{filecontents}
+
+\nocite*{}
+\bibliographystyle{plain}
+\bibliography{thesis}
+
+\end{document}
