@@ -7,6 +7,9 @@
 \usepackage{tikz}
 
 \usepackage{filecontents}
+\usepackage[T1]{fontenc}
+\usepackage[UKenglish]{babel}
+\usepackage{newpxtext} % DA AMAZING FONT
 
 
 % Logos
@@ -22,12 +25,12 @@
 
 % Titre
 \newcommand{\titleA}{\fontTitle{Human - Robots Swarms Interactions}} % Titre identique au titre remis au secrétariat
-\newcommand{\titleB}{\fontTitle{Deuxième ligne de titre du mémoire}} % (dans la langue de rédaction a priori)
+%\newcommand{\titleB}{\fontTitle{Deuxième ligne de titre du mémoire}} % (dans la langue de rédaction a priori)
 % Sous-titre
 \newcommand{\subtitle}{\fontSubtitle{Ligne du sous-titre du mémoire}}
 % Titre du diplôme
 \newcommand{\diplomaA}{\fontText{Mémoire présenté en vue de l’obtention du diplôme}} % A laisser en Français
-\newcommand{\diplomaB}{\fontText{d'Ingénieur Civil [...] à finalité [...]}}
+\newcommand{\diplomaB}{\fontText{d'Ingénieur Civil en Informatique à finalité Intelligence Computationnelle}}
 
 % Etudiant
 \newcommand{\student}{\textbf{\sffamily \large Anthony Debruyn}}
@@ -57,7 +60,7 @@
 		\put(153,139.5){\ulb}
 		
 		\put(8,155){\makebox(150,10)[l]{\titleA}}
-		\put(8,145){\makebox(150,10)[l]{\titleB}}
+%		\put(8,145){\makebox(150,10)[l]{\titleB}}
 		\put(8,135){\makebox(150,10)[l]{\subtitle}}
 		
 		\put(0,75){
@@ -101,26 +104,53 @@
 \chapter{Introduction}
 
 \chapter{Problem}
+	\section{Robots - Human Feedback}
+	\section{Protection and Exploration}
 
 \chapter{State of the Art}
+	\section{Introduction}
+	\section{Swarm Intelligence/Robotics}
+	\section{Design Methods}
+	\section{Feedbacks}
 
 \chapter{Solution}
 
-\section{Introduction}
-\section{Virtual Physics}
-\section{Potentials}
-\section{Range and Bearing Sensor}
-\subsection{Tests}
-\subsection{Calibration}
-\subsection{Conclusions}
+	\section{Introduction}
+	\section{Swarm Robotics}
+	\section{The Shape}
+	\section{Virtual Physics}
+	\section{Potentials}
+		\subsection{Human Potential}
+		\subsection{Gravity Potential}
+		\subsection{Agent Repulsion Potential}
+		\subsection{Default Potential}
+	\section{Range and Bearing Sensor}
+		\subsection{Tests}
+		\subsection{Calibration}
+		\subsection{Conclusions}
 
-\section{Omnidirectional Camera Sensor}
-\subsection{Tests}
+	\section{Omnidirectional Camera Sensor}
+		\subsection{Tests}
 
+	\section{The Hardware}
+		\subsection{Objective}
+		\subsection{Choices}
+		\subsection{Blueprints}
+		\subsection{Build Process}
 
 \chapter{Assessments}
+	\section{Metrics}
+	\section{More robots ?}
+	\section{Tests Scenarios}
+	\section{Human Travelling Speed ?}
 
 \chapter{Future Works}
+	\section{Other Robots}
+	\section{Human Guidance}
+		\subsection{Zero Visibility Areas or Blind People}
+		\subsection{Human Motion Synchronisation}
+
+\chapter{Acknowledgements}
 
 
 \newpage
