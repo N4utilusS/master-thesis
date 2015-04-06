@@ -10,6 +10,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[UKenglish]{babel}
 \usepackage{newpxtext} % DA AMAZING FONT
+\usepackage[babel=true]{csquotes}
 
 
 % Logos
@@ -48,6 +49,16 @@
 % Année académique
 \newcommand{\yearA}{\fontColor{Année académique}}
 \newcommand{\yearB}{\fontText{2014 - 2015}}
+
+\newcommand{\quoto}[2]{
+\begin{quotation}
+\begin{it}
+\enquote{#1} - #2
+\end{it}
+\end{quotation}
+}
+
+\newcommand{\quot}[1]{\textit{\enquote{#1}}}
 
 \begin{document}
 
@@ -106,17 +117,34 @@
 [To write at the end. When I have a global view.]
 
 \chapter{The Problem}
+	\section{Introduction}
+	
+	In this section, we will discuss the problem that led to the creation of this thesis by first providing the reader with some general insight in the world of swarm robotics and swarm intelligence. Then we will focus on specific parts of these domains of study: design methods, feedbacks between human and robots' swarm. Eventually, we will conclude with the main problem this thesis is trying to solve.
+	
+	\section{Swarm Engineering}
+	
+	This section is largely inspired by~\cite{brambilla2013swarm}, a reviewing article on swarm engineering. For \c{S}ahin, swarm robotics is defined as \quot{the study of how large numbers of relatively simple physically embodied agents can be designed such that a desired collective behavior emerges from the local interactions among agents and between the agents and the environment}~\cite{csahin2005swarm}. Swarm robotics can be separated from other robotic studies by the following characteristics (\cite{brambilla2013swarm}):
+	
+\begin{itemize}
+\item Robots are \emph{autonomous}
+\item Robots evolve \emph{in the environment} and can interact with it
+\item Robots' interactions are \emph{local} (sensors and communications)
+\item No \emph{centralised control} or \emph{global knowledge}
+\item Robots \emph{cooperate} to achieve a certain goal
+\end{itemize}
+	
+	\section{Design Methods}
+	\section{Feedbacks}
 	\section{Robots - Human Feedback}
 	
 [Currently, only little research on feedback between human and robots swarms. That research is focused on interaction with an additional layer... Mostly unidirectional communication (human to robots). Need new types of interactions for new applications. Robots to human (guide). Write about article saying self-organised feedback is better.]
 
-	\section{Protection and Exploration}
 
-\chapter{State of the Art}
-	\section{Introduction}
-	\section{Swarm Intelligence/Robotics}
-	\section{Design Methods}
-	\section{Feedbacks}
+
+	\section{Protection and Exploration}
+	
+	The final objective of this thesis is to create a protective behaviour for a swarm of robots
+	
 
 \chapter{Solution}
 
@@ -148,12 +176,14 @@
 	\section{More robots ?}
 	\section{Tests Scenarios}
 	\section{Human Travelling Speed ?}
+	\section{Usability Study}
 
 \chapter{Future Works}
 	\section{Other Robots}
 	\section{Human Guidance}
 		\subsection{Zero Visibility Areas or Blind People}
 		\subsection{Human Motion Synchronisation}
+		\subsection{Vehicle Guidance}
 
 \chapter{Acknowledgements}
 
@@ -173,19 +203,6 @@ Never gonna tell a lie and hurt you]
 \begin{filecontents}{thesis.bib}
 %http://en.wikibooks.org/wiki/LaTeX/Bibliography_Management
 
-
-@article{Brambilla2013a,
-    author    = {Manuele Brambilla and Eliseo Ferrante and Mauro Birattari and Marco Dorigo},
-    title     = {Swarm robotics: a review from the swarm engineering perspective},
-    journal   = {Swarm Intelligence},
-    %volume   = {},
-    %number   = {},
-    %pages    = {},
-    year      = {2013},
-    %month    = {},
-    %note     = {},
-}
-
 @inproceedings{podevijn2012self,
   title={Self-organised feedback in human swarm interaction},
   author={Podevijn, Ga{\"e}tan and O’Grady, Rehan and Dorigo, Marco},
@@ -201,6 +218,27 @@ Never gonna tell a lie and hurt you]
   year={2014},
   publisher={Springer}
 }
+
+@article{brambilla2013swarm,
+  title={Swarm robotics: a review from the swarm engineering perspective},
+  author={Brambilla, Manuele and Ferrante, Eliseo and Birattari, Mauro and Dorigo, Marco},
+  journal={Swarm Intelligence},
+  volume={7},
+  number={1},
+  pages={1--41},
+  year={2013},
+  publisher={Springer}
+}
+
+@incollection{csahin2005swarm,
+  title={Swarm robotics: From sources of inspiration to domains of application},
+  author={{\c{S}}ahin, Erol},
+  booktitle={Swarm robotics},
+  pages={10--20},
+  year={2005},
+  publisher={Springer}
+}
+
 
 \end{filecontents}
 
