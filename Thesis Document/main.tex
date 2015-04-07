@@ -9,8 +9,9 @@
 \usepackage{filecontents}
 \usepackage[T1]{fontenc}
 \usepackage[UKenglish]{babel}
-\usepackage{newpxtext} % DA AMAZING FONT
+\usepackage{newpxtext,newpxmath}
 \usepackage[babel=true]{csquotes}
+\usepackage[round]{natbib}
 
 
 % Logos
@@ -123,7 +124,7 @@
 	
 	\section{Swarm Engineering}
 	
-	This section is largely inspired by~\cite{brambilla2013swarm}, a reviewing article on swarm engineering. For \c{S}ahin, swarm robotics is defined as \quot{the study of how large numbers of relatively simple physically embodied agents can be designed such that a desired collective behavior emerges from the local interactions among agents and between the agents and the environment}~\cite{csahin2005swarm}. Swarm robotics can be separated from other robotic studies by the following characteristics (\cite{brambilla2013swarm}):
+	This section is largely inspired by~\citet{brambilla2013swarm}, a reviewing article on swarm engineering. For \citet{csahin2005swarm}, swarm robotics is defined as \quot{the study of how large numbers of relatively simple physically embodied agents can be designed such that a desired collective behavior emerges from the local interactions among agents and between the agents and the environment}~\citep{csahin2005swarm}. Swarm robotics can be separated from other robotic studies by the following characteristics \citep{brambilla2013swarm}:
 	
 \begin{itemize}
 \item Robots are \emph{autonomous}
@@ -133,15 +134,23 @@
 \item Robots \emph{cooperate} to achieve a certain goal
 \end{itemize}
 
-As in this field of study, one is always looking for \emph{robust}, \emph{scalable} and \emph{flexible} systems, the main source of inspiration is the group of social animals: ants, birds, fishes, ... When some of these simple animals gather in groups, they are able to perform tasks that could not be achieved individually (collective behaviour emerges from local interactions). Below are listed the definitions of these three terms:
+As in this field of study, one is always looking for \emph{robust}, \emph{scalable} and \emph{flexible} systems, the main source of inspiration is the group of social animals: ants, birds, fishes, ... When some of these simple animals gather in groups, they are able to perform tasks that could not be achieved individually (collective behaviour emerges from local interactions). Below are listed the definitions of these three terms \citep{brambilla2013swarm}:
 
 \begin{description}
-\item[Robustness:] Resistance against loss of group entities. One can increase it by adding redundancy or remove the need for a leader.
-\item[Scalability:] Low variation in the performance of a system with respect to the size of the system. It can be increased by encouraging local interactions, such as sensing and communications.
-\item[Flexibility:] Low variation in the performance of a system with respect to the type of environment or the task.
+\item[Robustness:] Resistance against \emph{loss of group entities}. One can increase it by adding redundancy or remove the need for a leader.
+\item[Scalability:] Low variation in the performance of a system with respect to the \emph{size of the system}. It can be increased by encouraging local interactions, such as sensing and communications.
+\item[Flexibility:] Low variation in the performance of a system with respect to the \emph{type of environment or the task}.
 \end{description}
+
+With these definitions in mind, we can explain swarm engineering as:
+
+\quoto{Swarm engineering is an emerging discipline that aims at defining systematic and well founded procedures for modeling, designing, realizing, verifying, validating, operating, and maintaining a swarm robotics system.}{\cite{brambilla2013swarm}}
+
+\citet{kazadi2000swarm} points out that \quot{to the swarm engineer, the important points in the design of a swarm are that the swarm will do precisely what it is designed to do, and that it will do so reliably and on time} \citep{kazadi2000swarm}.
 	
 	\section{Design Methods}
+	
+	\citet{brambilla2013swarm} did a pretty good job in classifying the different methods to design and 
 	\section{Feedbacks}
 	\section{Robots - Human Feedback}
 	
@@ -247,11 +256,17 @@ Never gonna tell a lie and hurt you]
   publisher={Springer}
 }
 
+@phdthesis{kazadi2000swarm,
+  title={Swarm engineering},
+  author={Kazadi, Sanza T},
+  year={2000},
+  school={California Institute of Technology}
+}
 
 \end{filecontents}
 
 \nocite{*}
-\bibliographystyle{alpha}
+\bibliographystyle{plainnat}
 \bibliography{thesis}
 
 \end{document}
