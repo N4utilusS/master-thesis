@@ -12,7 +12,7 @@
 \usepackage{newpxtext,newpxmath}
 \usepackage[babel=true]{csquotes}
 \usepackage[round]{natbib}
-
+\usepackage[colorinlistoftodos]{todonotes}
 
 % Logos
 \newcommand{\ulb}{\includegraphics[scale=1.1]{PageDeGarde_MFE/logo_ULB2.pdf}}
@@ -153,6 +153,27 @@ With these definitions in mind, we can explain swarm engineering as:
 	\citet{brambilla2013swarm} did a pretty good job in classifying the different methods to design swarm robotics systems. Design is the period of time that starts at the definition of the requirements and specifications, and ends with the development. They divide the methods into two categories: \emph{behaviour-based design}, and \emph{automatic design}.
 	
 		\subsection{Behaviour-based Design}
+		
+		All methods in this group mean developing the solution by hand. No learning or automatic tool was used to arrive at an accepting collective behaviour. This is associated with a trial and error process, and involves a lot of tuning. This is the kind of procedure that people usually implement. \citeauthor{brambilla2013swarm} subdivided this group into 3 categories: \emph{probabilistic finite state machine design}, \emph{virtual physics-based design} and \emph{other design methods}.
+		
+			\subsubsection{Probabilistic Finite State Machine Design}
+			
+			PFSMs \citep{minsky1967computation} are one of the most used methods to create collective behaviours. As the robots need to take decisions based on their readings and current state, they constitute an intuitive choice. Each transition is characterised by a probability to follow that transition. The value can be fixed or variable, in which case it will generally depend on the current state of the system. One example of such a variable value is the \emph{response threshold} found by \citet{granovetter1978threshold} (also \citet{bonabeau1997adaptive}) \todo{Add figures}.
+			
+			\subsubsection{Virtual Physics-Based Design}
+			
+			The next subcategory takes physics laws as a model to generate behaviours. Robots are assimilated to virtual particles under the influence of virtual potential fields and virtual forces. The robots compute the total force by summing all the forces associated to each influence in the system:
+			$$\overline{F} = \sum_{i}{\overline{f_i}} ~\mbox{, where $\overline{f_i}$ is a virtual force.}$$
+			$\overline{f_i}$ can be expressed in polar coordinates: $$\overline{f_i} = f_i(d_i)e^{j\theta_i}.$$ 
+			One of the most used virtual potentials is the Lennard-Jones potential \todo{Figure}: 
+			$$ \nu(d) = \epsilon \left[ \left(\frac{\sigma}{d}\right)^{12} - 2 \left(\frac{\sigma}{d}\right)^6 \right]$$
+			This method can be very appealing thanks to the absence of multiple rules, states, and tests to decide which actions to execute. Only one mathematical formula translates the inputs into outputs for the actuators, in a smooth and elegant way. Multiple behaviours can be combined by simply summing the corresponding resulting vectors \citep{brambilla2013swarm}.
+			
+			\subsubsection{Other Design Methods}
+		
+		
+		
+		\subsection{Automatic Design}
 	\section{Feedbacks}
 	\section{Robots - Human Feedback}
 	
@@ -263,6 +284,30 @@ Never gonna tell a lie and hurt you]
   author={Kazadi, Sanza T},
   year={2000},
   school={California Institute of Technology}
+}
+
+@book{minsky1967computation,
+  title={Computation: finite and infinite machines},
+  author={Minsky, Marvin L},
+  year={1967},
+  publisher={Prentice-Hall, Inc.}
+}
+
+@article{granovetter1978threshold,
+  title={Threshold models of collective behavior},
+  author={Granovetter, Mark},
+  journal={American journal of sociology},
+  pages={1420--1443},
+  year={1978},
+  publisher={JSTOR}
+}
+
+@inproceedings{bonabeau1997adaptive,
+  title={Adaptive Task Allocation Inspired by a Model of Division of Labor in Social Insects.},
+  author={Bonabeau, Eric and Sobkowski, Andrej and Theraulaz, Guy and Deneubourg, Jean-Louis},
+  booktitle={BCEC},
+  pages={36--45},
+  year={1997}
 }
 
 \end{filecontents}
