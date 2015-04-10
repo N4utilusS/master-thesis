@@ -124,7 +124,7 @@
 	
 	\section{Swarm Engineering}
 	
-	This section is largely inspired by~\citet{brambilla2013swarm}, a reviewing article on swarm engineering. For \citet{csahin2005swarm}, swarm robotics is defined as \quot{the study of how large numbers of relatively simple physically embodied agents can be designed such that a desired collective behavior emerges from the local interactions among agents and between the agents and the environment}~\citep{csahin2005swarm}. Swarm robotics can be separated from other robotic studies by the following characteristics \citep{brambilla2013swarm}:
+	This section and the next one are largely inspired by~\citet{brambilla2013swarm}, a reviewing article on swarm engineering. For \citet{csahin2005swarm}, swarm robotics is defined as \quot{the study of how large numbers of relatively simple physically embodied agents can be designed such that a desired collective behavior emerges from the local interactions among agents and between the agents and the environment}~\citep{csahin2005swarm}. Swarm robotics can be separated from other robotic studies by the following characteristics \citep{brambilla2013swarm}:
 	
 \begin{itemize}
 \item Robots are \emph{autonomous}
@@ -166,7 +166,7 @@ With these definitions in mind, we can explain swarm engineering as:
 			$$\overline{F} = \sum_{i}{\overline{f_i}} ~\mbox{, where $\overline{f_i}$ is a virtual force.}$$
 			$\overline{f_i}$ can be expressed in polar coordinates: $$\overline{f_i} = f_i(d_i)e^{j\theta_i}.$$ 
 			One of the most used virtual potentials is the Lennard-Jones potential whose utility is to keep a robot at a certain distance\todo{Figure}: 
-			$$ \nu(d) = \epsilon \left[ \left(\frac{\sigma}{d}\right)^{12} - 2 \left(\frac{\sigma}{d}\right)^6 \right]$$, where $\epsilon$ is the gain, $\sigma$ is the target distance and $d$ is the current real distance. 
+			$$ f(d) = \epsilon \left[ \left(\frac{\sigma}{d}\right)^{12} - 2 \left(\frac{\sigma}{d}\right)^6 \right]$$, where $\epsilon$ is the gain, $\sigma$ is the target distance and $d$ is the current real distance. 
 			This method is very appealing thanks to the absence of multiple rules, states, and tests to decide which actions to execute. Only one mathematical formula translates the inputs into outputs for the actuators, in a smooth and elegant way. Multiple behaviours can be combined by simply summing the corresponding resulting vectors \citep{brambilla2013swarm}. As this method is based on the laws of physics, it is often used when a robot formation is needed.
 			
 			\subsubsection{Other Design Methods}
@@ -180,6 +180,10 @@ With these definitions in mind, we can explain swarm engineering as:
 			\subsubsection{Reinforcement Learning}
 			
 			Through reinforcement learning, the agent can learn the target behaviour with a trial and error procedure. Positive feedback is returned if the resulting behaviour is close to the target one, and negative feedback is returned if it is far from it. Iteratively, the robot (or agent in a simulation) will come closer to the wanted behaviour by trying to maximise the rewards received from the environment. Although it may look interesting on paper, designers would need to overcome some difficulties. One of them is called \emph{spatial credit assignment}: since the swarm gets the reward at the end of the experiment, how can we manage to turn it into individual rewards? Indeed, the learning is at the individual level, not at the collective level \citep{wolpert1999introduction}.
+			
+			\subsubsection{Evolutionary Robotics}
+			
+			Evolutionary robotics are based on the Darwinian principle of natural selection and evolution. At the beginning of the learning process, a population of individual behaviours is generated randomly. For each generation of the population, a few experiments are run with each individual behaviour. This means the behaviour is used by the entire group of agents. A fitness is computed on basis of the collective performance. At the end of all the experiments, the best individual behaviours in the population are kept and may undergo some changes, like mutation or cross-over. Generations over generations, the behaviours in the population move towards the target collective behaviour. Most of the time, this method is associated with neural networks whose parameters are iteratively adjusted. This whole learning process is computationally intensive and does not guarantee its convergence. Furthermore, the complexity of the final behaviours are relatively low. Usually the same behaviours can be obtained by using behaviour-based design \citep{brambilla2013swarm}.
 	\section{Feedbacks}
 	\section{Robots - Human Feedback}
 	
