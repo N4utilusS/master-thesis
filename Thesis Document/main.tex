@@ -165,15 +165,21 @@ With these definitions in mind, we can explain swarm engineering as:
 			The next subcategory takes physics laws as a model to generate behaviours. Robots are assimilated to virtual particles under the influence of virtual potential fields and virtual forces. The robots compute the total force by summing all the forces associated to each influence in the system:
 			$$\overline{F} = \sum_{i}{\overline{f_i}} ~\mbox{, where $\overline{f_i}$ is a virtual force.}$$
 			$\overline{f_i}$ can be expressed in polar coordinates: $$\overline{f_i} = f_i(d_i)e^{j\theta_i}.$$ 
-			One of the most used virtual potentials is the Lennard-Jones potential \todo{Figure}: 
-			$$ \nu(d) = \epsilon \left[ \left(\frac{\sigma}{d}\right)^{12} - 2 \left(\frac{\sigma}{d}\right)^6 \right]$$
-			This method can be very appealing thanks to the absence of multiple rules, states, and tests to decide which actions to execute. Only one mathematical formula translates the inputs into outputs for the actuators, in a smooth and elegant way. Multiple behaviours can be combined by simply summing the corresponding resulting vectors \citep{brambilla2013swarm}.
+			One of the most used virtual potentials is the Lennard-Jones potential whose utility is to keep a robot at a certain distance\todo{Figure}: 
+			$$ \nu(d) = \epsilon \left[ \left(\frac{\sigma}{d}\right)^{12} - 2 \left(\frac{\sigma}{d}\right)^6 \right]$$, where $\epsilon$ is the gain, $\sigma$ is the target distance and $d$ is the current real distance. 
+			This method is very appealing thanks to the absence of multiple rules, states, and tests to decide which actions to execute. Only one mathematical formula translates the inputs into outputs for the actuators, in a smooth and elegant way. Multiple behaviours can be combined by simply summing the corresponding resulting vectors \citep{brambilla2013swarm}. As this method is based on the laws of physics, it is often used when a robot formation is needed.
 			
 			\subsubsection{Other Design Methods}
 		
-		
+			Other methods not belonging to the two previous sections can also be cited. Among them, a scripting language created by \citet{bachrach2010composable}: \emph{Protoswarm}. The language allows one to code for the group, and not for the individual, easing the design of the system.
 		
 		\subsection{Automatic Design}
+		
+		Automatic design allows \quot{the automatic generation of behaviors without the explicit intervention of the developer}\citep{brambilla2013swarm}. \citeauthor{brambilla2013swarm} subdivide again the main category into subcategories: reinforcement learning, and evolutionary robotics.
+		
+			\subsubsection{Reinforcement Learning}
+			
+			Through reinforcement learning, the agent can learn the target behaviour with a trial and error procedure. Positive feedback is returned if the resulting behaviour is close to the target one, and negative feedback is returned if it is far from it. Iteratively, the robot (or agent in a simulation) will come closer to the wanted behaviour by trying to maximise the rewards received from the environment. Although it may look interesting on paper, designers would need to overcome some difficulties. One of them is called \emph{spatial credit assignment}: since the swarm gets the reward at the end of the experiment, how can we manage to turn it into individual rewards? Indeed, the learning is at the individual level, not at the collective level \citep{wolpert1999introduction}.
 	\section{Feedbacks}
 	\section{Robots - Human Feedback}
 	
@@ -308,6 +314,24 @@ Never gonna tell a lie and hurt you]
   booktitle={BCEC},
   pages={36--45},
   year={1997}
+}
+
+@article{bachrach2010composable,
+  title={Composable continuous-space programs for robotic swarms},
+  author={Bachrach, Jonathan and Beal, Jacob and McLurkin, James},
+  journal={Neural Computing and Applications},
+  volume={19},
+  number={6},
+  pages={825--847},
+  year={2010},
+  publisher={Springer}
+}
+
+@article{wolpert1999introduction,
+  title={An introduction to collective intelligence},
+  author={Wolpert, David H and Tumer, Kagan},
+  journal={arXiv preprint cs/9908014},
+  year={1999}
 }
 
 \end{filecontents}
