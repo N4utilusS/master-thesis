@@ -153,6 +153,7 @@ With these definitions in mind, we can explain swarm engineering as:
 	\citet{brambilla2013swarm} did a pretty good job in classifying the different methods to design swarm robotics systems. Design is the period of time that starts at the definition of the requirements and specifications, and ends with the development. They divide the methods into two categories: \emph{behaviour-based design}, and \emph{automatic design}.
 	
 		\subsection{Behaviour-based Design}
+		\label{sec:behaviour_based_design}
 		
 		All methods in this group mean developing the solution by hand. No learning or automatic tool was used to arrive at an accepting collective behaviour. This is associated with a trial and error process, and involves a lot of tuning. This is the kind of procedure that people usually implement. \citeauthor{brambilla2013swarm} subdivided this group into 3 categories: \emph{probabilistic finite state machine design}, \emph{virtual physics-based design} and \emph{other design methods}.
 		
@@ -183,13 +184,15 @@ With these definitions in mind, we can explain swarm engineering as:
 			
 			\subsubsection{Evolutionary Robotics}
 			
-			Evolutionary robotics are based on the Darwinian principle of natural selection and evolution. At the beginning of the learning process, a population of individual behaviours is generated randomly. For each generation of the population, a few experiments are run with each individual behaviour. This means the behaviour is used by the entire group of agents. A fitness is computed on basis of the collective performance. At the end of all the experiments, the best individual behaviours in the population are kept and may undergo some changes, like mutation or cross-over. Generations over generations, the behaviours in the population move towards the target collective behaviour. Most of the time, this method is associated with neural networks whose parameters are iteratively adjusted. This whole learning process is computationally intensive and does not guarantee its convergence. Furthermore, the complexity of the final behaviours are relatively low. Usually the same behaviours can be obtained by using behaviour-based design \citep{brambilla2013swarm}.
+			Evolutionary robotics are based on the Darwinian principle of natural selection and evolution. At the beginning of the learning process, a population of individual behaviours is generated randomly. For each generation of the population, a few experiments are run with each individual behaviour. This means the behaviour is used by the entire group of agents. A fitness is computed on basis of the collective performance. At the end of all the experiments, the best individual behaviours in the population are kept and may undergo some changes, like mutation or cross-over. Generations over generations, the behaviours in the population move towards the target collective behaviour. Most of the time, this method is associated with neural networks whose parameters are iteratively adjusted. This whole learning process is computationally intensive and does not guarantee its convergence. Furthermore, the complexity of the final behaviours is relatively low. Usually the same behaviours can be obtained by using behaviour-based design \citep{brambilla2013swarm}.
 			
 	\section{Analysis}
 	
 	To check that the system verifies certain properties and exhibits the target behaviour, the swarm engineer has to go through the analysis process, usually by means of models. One can classify the models into 2 levels: \emph{the microscopic level}, and \emph{the macroscopic level} \citep{brambilla2013swarm}. The first one considers the individuals constituting the group, and their interactions. The second one focuses on the group itself and its characteristics. \quot{Modeling both the microscopic and the macroscopic level and their interaction is very difficult due to the nature of self-organized systems} \citep{brambilla2013swarm, abbott2006emergence}. This is why most of the works only focus on one of the two aspects.
 	
 		\subsection{Microscopic Models}
+		
+		The level considered here models the entities composing the group, their interactions between one another, and with the environment (their behaviour, see section \ref{sec:behaviour_based_design}) in \emph{simulations}. The amount of detail in the model can vary from representing robots as point-masses to 3D worlds with advanced physics and accurate representation of the sensors and actuators. Most of the simulators for swarm robotics systems do not offer a great scalability, i.e., they do not perform well with very large groups of agents. This is problematic since large numbers are common in this field of study. To address this issue, \citet{pinciroli2012argos} developed a simulator which allows experiments with more than $10^5$ robots in real time.
 		
 		\subsection{Macroscopic Models}
 	
@@ -357,6 +360,18 @@ Never gonna tell a lie and hurt you]
   year={2006},
   publisher={Wiley Online Library}
 }
+
+@article{pinciroli2012argos,
+  title={ARGoS: a modular, parallel, multi-engine simulator for multi-robot systems},
+  author={Pinciroli, Carlo and Trianni, Vito and O’Grady, Rehan and Pini, Giovanni and Brutschy, Arne and Brambilla, Manuele and Mathews, Nithin and Ferrante, Eliseo and Di Caro, Gianni and Ducatelle, Frederick and others},
+  journal={Swarm intelligence},
+  volume={6},
+  number={4},
+  pages={271--295},
+  year={2012},
+  publisher={Springer}
+}
+
 
 \end{filecontents}
 
