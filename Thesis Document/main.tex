@@ -176,7 +176,7 @@ With these definitions in mind, we can explain swarm engineering as:
 		
 		\subsection{Automatic Design}
 		
-		Automatic design allows \quot{the automatic generation of behaviors without the explicit intervention of the developer}\citep{brambilla2013swarm}. \citeauthor{brambilla2013swarm} subdivide again the main category into subcategories: reinforcement learning, and evolutionary robotics and others (which we will not talk about).
+		With automatic design, the generation of the behaviours is left to the computer. No real intervention from the developer is needed \citep{brambilla2013swarm}. \citeauthor{brambilla2013swarm} subdivide again the main category into subcategories: reinforcement learning, and evolutionary robotics and others (which we will not talk about).
 		
 			\subsubsection{Reinforcement Learning}
 			
@@ -188,15 +188,28 @@ With these definitions in mind, we can explain swarm engineering as:
 			
 	\section{Analysis}
 	
-	To check that the system verifies certain properties and exhibits the target behaviour, the swarm engineer has to go through the analysis process, usually by means of models. One can classify the models into 2 levels: \emph{the microscopic level}, and \emph{the macroscopic level} \citep{brambilla2013swarm}. The first one considers the individuals constituting the group, and their interactions. The second one focuses on the group itself and its characteristics. \quot{Modeling both the microscopic and the macroscopic level and their interaction is very difficult due to the nature of self-organized systems} \citep{brambilla2013swarm, abbott2006emergence}. This is why most of the works only focus on one of the two aspects.
+	To check that the system verifies certain properties and exhibits the target behaviour, the swarm engineer has to go through the analysis process, usually by means of models. One can classify the models into 2 levels: \emph{the microscopic level}, and \emph{the macroscopic level} \citep{brambilla2013swarm}. The first one considers the individuals constituting the group, and their interactions. The second one focuses on the group itself and its characteristics. Managing to find a model comprising both levels, microscopic and macroscopic, is very challenging \citep{abbott2006emergence}. This is why most of the works only focus on one of the two aspects.
 	
 		\subsection{Microscopic Models}
 		
-		The level considered here models the entities composing the group, their interactions between one another, and with the environment (their behaviour, see section \ref{sec:behaviour_based_design}) in \emph{simulations}. The amount of detail in the model can vary from representing robots as point-masses to 3D worlds with advanced physics and accurate representation of the sensors and actuators. Most of the simulators for swarm robotics systems do not offer a great scalability, i.e., they do not perform well with very large groups of agents. This is problematic since large numbers are common in this field of study. To address this issue, \citet{pinciroli2012argos} developed a simulator which allows experiments with more than $10^5$ robots in real time.
+		The level considered here describes the entities composing the group, their interactions between one another, and with the environment (their behaviour, see section \ref{sec:behaviour_based_design}) in \emph{simulations}. The amount of detail in the model can vary from representing robots as point-masses to 3D worlds with advanced physics and accurate representation of the sensors and actuators. Most of the simulators for swarm robotics systems do not offer a great scalability, i.e., they do not perform well with very large groups of agents. This is problematic since large numbers are common in this field of study. To address this issue, \citet{pinciroli2012argos} developed a simulator (ARGoS) which allows experiments with more than $10^5$ robots in real time \citep{brambilla2013swarm}.
 		
 		\subsection{Macroscopic Models}
+		
+		The system is here studied at a higher level, not viewing the group as composed of agents, but as a single entity. In this category, works can use \emph{rate or differential equations}, \emph{classical control and stability theory} or other mathematical framework \citep{brambilla2013swarm}.
+		
+		\subsection{Real-robot Analysis}
+		
+		Experiments with real robots allow the developer to assess the performance of the system under real conditions for the sensors and actuators, which are somehow idealised in the simulators or the other models. It should not be used to validate the behaviours in real-world applications, as the arena environment in which the robots evolve is heavily controlled (light intensity, landscape, interferences). Therefore, it should be viewed as a way to include realistic noise patterns in the experiments \citep{brambilla2013swarm}.
 	
-	\section{Feedbacks}
+	\section{Human - Robot Interaction}
+	
+	
+	
+	\section{Human - Robots Swarm Interaction}
+	
+	Human - Robotic swarm interaction is the study of how humans can interact with a swarm to control it and receive feedback from it \citep{brambilla2013swarm}. Since swarms must ideally be autonomous and make decisions in a distributed way, it becomes difficult to insert a communication with a human operator in the system.
+	
 	\section{Robots - Human Feedback}
 	
 [Currently, only little research on feedback between human and robots swarms. That research is focused on interaction with an additional layer... Mostly unidirectional communication (human to robots). Need new types of interactions for new applications. Robots to human (guide). Write about article saying self-organised feedback is better.]
@@ -206,7 +219,9 @@ With these definitions in mind, we can explain swarm engineering as:
 	\section{Protection and Exploration}
 	
 	The final objective of this thesis is to create a protective behaviour for a swarm of robots
+	\section{Why, Problem ?}
 	
+	Pourquoi mon travail est important ?
 
 \chapter{Solution}
 
@@ -219,6 +234,11 @@ With these definitions in mind, we can explain swarm engineering as:
 		\subsection{Gravity Potential}
 		\subsection{Agent Repulsion Potential}
 		\subsection{Default Potential}
+		
+	\section{E-pucks}
+	
+	\section{ARGoS}
+	
 	\section{Range and Bearing Sensor}
 		\subsection{Tests}
 		\subsection{Calibration}
