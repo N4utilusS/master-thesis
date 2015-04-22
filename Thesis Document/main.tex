@@ -210,9 +210,11 @@ With these definitions in mind, we can explain swarm engineering as:
 	
 	Human - Robotic swarm interaction is the study of how humans can interact with a swarm to control it and receive feedback from it \citep{brambilla2013swarm}. A proper feedback is needed by the operator in order to make the right decisions. Since swarms must ideally be autonomous and make decisions in a distributed way, it is difficult to insert a communication with a human operator in the system to gain control.\\
 	
-	Currently, little attention has been devoted to the study of the interaction between humans and robotic swarms, how one can send instructions and receive feedback. People investigating in the field encounter many difficulties, such as the difference of perspective between the swarm and the human operator (the human only observes the global collective behaviour, not the local interactions or individual behaviours driving the robots), the simplicity of the hardware found on the robots, or the efficient synthesis of all the information sent by the robots. All the existing types of interactions in the literature present a major disadvantage: they require an extra layer between the group of robots and the human. This requirement might not always be satisfied when we remember that swarms like this are mostly destined to evolve in an unknown environment. The monitoring equipment necessary to operate the swarm may not be safely deployed. Furthermore, a synthesis of all the local information pieces must be done in order to provide an understandable state of the system to the human. A supplementary step that involves modelling, additional overheads and perhaps heavy computations, and the gathering of all information at a central point (eliminating by the way the distributed and not centralised properties of the swarm system) \citep{podevijn2012self}.
+	Currently, little attention has been devoted to the study of the interaction between humans and robotic swarms, how one can send instructions and receive feedback. People investigating in the field encounter many difficulties, such as the difference of perspective between the swarm and the human operator (the human only observes the global collective behaviour, not the local interactions or individual behaviours driving the robots), the simplicity of the hardware found on the robots, or the efficient synthesis of all the information sent by the robots. All the existing types of interactions in the literature present a major disadvantage: they require an extra layer between the group of robots and the human. This requirement might not always be satisfied when we remember that swarms like this are mostly destined to evolve in an unknown environment. The monitoring equipment necessary to operate the swarm may not be safely deployed. Furthermore, a synthesis of all the local information pieces must be done in order to provide an understandable state of the system to the human. A supplementary step that involves modelling, additional overheads and perhaps heavy computations, and the gathering of all information at a central point (eliminating by the way the distributed and not centralised properties of the swarm system) \citep{podevijn2012self}.\\
 	
-	\citet{podevijn2012self} argue that self-organised mechanism, as those ruling the behaviour of the swarm, should be used to provide feedback to the operator. They affirm that the best entity we could use to communicate the status of the system and the whole swarm is the swarm itself \citep{podevijn2012self}.\\
+	\citet{daily2003world} used a head-mounted display and augmented reality to add information right on top of the robot in the environment itself, suppressing the need for an additional display. \citet{baizid2009human} proposed a platform to interact with multiple robots simultaneously through a graphical user interface, or a head-mounted display, virtual reality etc. They also studied how virtual reality abstraction affected the human perception and cognitive capabilities, i.e, they created a virtual environment by filtering useless information. \citet{mclurkin2006speaking} developed an centralised graphical user interface taking inspiration from real-time strategy video games, where one must control armies. They also imagined a feedback approach based on LEDs and sounds. Robots would transmit their internal state by applying to their LEDs and sound system a certain pattern, recognisable by the operator, now able to quickly understand the state of the swarm without looking at a supplementary interface.
+	
+	\citet{podevijn2012self} argue that self-organised mechanism, as those ruling the behaviour of the swarm, should be used to provide feedback to the operator. They affirm that the best entity we could use to communicate the status of the system and the whole swarm is the swarm itself.\\
 	
 	
 [Currently, only little research on feedback between human and robots swarms. That research is focused on interaction with an additional layer... Mostly unidirectional communication (human to robots). Need new types of interactions for new applications. Robots to human (guide). Write about article saying self-organised feedback is better.]
@@ -398,6 +400,32 @@ Never gonna tell a lie and hurt you]
   pages={271--295},
   year={2012},
   publisher={Springer}
+}
+
+@inproceedings{daily2003world,
+  title={World embedded interfaces for human-robot interaction},
+  author={Daily, Mike and Cho, Youngkwan and Martin, Kevin and Payton, Dave},
+  booktitle={System Sciences, 2003. Proceedings of the 36th Annual Hawaii International Conference on},
+  pages={6--pp},
+  year={2003},
+  organization={IEEE}
+}
+
+@incollection{baizid2009human,
+  title={Human multi-robots interaction with high virtual reality abstraction level},
+  author={Baizid, Khelifa and Li, Zhao and Mollet, Nicolas and Chellali, Ryad},
+  booktitle={Intelligent Robotics and Applications},
+  pages={23--32},
+  year={2009},
+  publisher={Springer}
+}
+
+@inproceedings{mclurkin2006speaking,
+  title={Speaking Swarmish: Human-Robot Interface Design for Large Swarms of Autonomous Mobile Robots.},
+  author={McLurkin, James and Smith, Jennifer and Frankel, James and Sotkowitz, David and Blau, David and Schmidt, Brian},
+  booktitle={AAAI Spring Symposium: To Boldly Go Where No Human-Robot Team Has Gone Before},
+  pages={72--75},
+  year={2006}
 }
 
 
