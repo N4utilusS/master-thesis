@@ -2,7 +2,7 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage{color}
-\usepackage{geometry}
+\usepackage[marginparwidth=28mm]{geometry}
 \usepackage[pdftex]{graphicx}
 \usepackage{tikz}
 
@@ -13,6 +13,10 @@
 \usepackage[babel=true]{csquotes}
 \usepackage[round]{natbib}
 \usepackage[colorinlistoftodos]{todonotes}
+\usepackage{comment}
+\usepackage{tikz}
+\usetikzlibrary{shapes,snakes}
+\usepackage{ccaption}
 
 % Logos
 \newcommand{\ulb}{\includegraphics[scale=1.1]{PageDeGarde_MFE/logo_ULB2.pdf}}
@@ -51,6 +55,10 @@
 \newcommand{\yearA}{\fontColor{Année académique}}
 \newcommand{\yearB}{\fontText{2014 - 2015}}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MY NEW COMMANDS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \newcommand{\quoto}[2]{
 \begin{quotation}
 \begin{it}
@@ -60,6 +68,32 @@
 }
 
 \newcommand{\quot}[1]{\textit{\enquote{#1}}}
+
+
+\newcommand{\epuck}[3][0] % [angle]{x}{y}
+{
+	\draw [very thick] (#2,#3) circle [radius=0.5];
+	\draw [very thick, rotate around={#1:(#2,#3)}] (#2-0.25,#3-0.433) -- (#2,#3+0.45) -- (#2+0.25,#3-0.433);
+}
+
+\newcommand{\human}[3][0] % [angle]{x}{y}
+{
+	\draw [line width=1.5pt, rotate around={#1:(#2,#3)}] (#2,#3+1) -- (#2-0.866,#3-0.5) -- (#2+0.866,#3-0.5) -- cycle;
+	\draw (#2,#3) node[scale=2, rotate around={#1:(#2,#3)}]{H};
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NEW STYLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\captiondelim{ -- }
+\captionnamefont{\small\sf\bfseries}
+\captiontitlefont{\small\sf}
+\precaption{\rule{\linewidth}{0.4pt}\\}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THE DOCUMENT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
 
@@ -108,6 +142,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \tableofcontents
+\listoftodos
 	
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TEXT
@@ -136,6 +171,7 @@
 
 As in this field of study, one is always looking for \emph{robust}, \emph{scalable} and \emph{flexible} systems, the main source of inspiration is the group of social animals: ants, birds, fishes, ... When some of these simple animals gather in groups, they are able to perform tasks that could not be achieved individually (collective behaviour emerges from local interactions). Below are listed the definitions of these three terms \citep{brambilla2013swarm}:
 
+\label{def:robustness_scalability_flexibility}
 \begin{description}
 \item[Robustness:] Resistance against \emph{loss of group entities}. One can increase it by adding redundancy or remove the need for a leader.
 \item[Scalability:] Low variation in the performance of a system with respect to the \emph{size of the system}. It can be increased by encouraging local interactions, such as sensing and communications.
@@ -204,7 +240,7 @@ With these definitions in mind, we can explain swarm engineering as:
 	
 	\section{Human - Robot Interaction}
 	
-	
+	\todo[inline]{Necessary?}
 	
 	\section{Human - Robots Swarm Interaction}
 	
@@ -216,9 +252,9 @@ With these definitions in mind, we can explain swarm engineering as:
 	
 	\citet{podevijn2012self} argue that self-organised mechanism, as those ruling the behaviour of the swarm, should be used to provide feedback to the operator. They suggest that the best entity which could communicate the status of the system and the whole swarm is the swarm itself. They performed experiments using colour feedback to distinguish different internal states and split the swarms into groups to tackle different tasks.\\
 	
-	
+\begin{comment}
 [Currently, only little research on feedback between human and robots swarms. That research is focused on interaction with an additional layer... Mostly unidirectional communication (human to robots). Need new types of interactions for new applications. Robots to human (guide). Write about article saying self-organised feedback is better.] \todo{Remove}
-
+\end{comment}
 
 
 	\section{Protection and Exploration}
@@ -227,18 +263,42 @@ With these definitions in mind, we can explain swarm engineering as:
 	
 	The human operator is here part of the swarm system. The swarm has to protect him by preventing him from going into dangerous areas, in the same way a group of bodyguards protects someone. The swarm has to follow the operator anywhere to ensure permanent protection.\\
 	
-	We believe this work to be important since it could lay the foundations of a new branch in swarm engineering: human protection, escort or human turn-by-turn navigation.
+	We believe this work to be important since it could lay the foundations of a new branch in swarm engineering: human protection, escort or swarm turn-by-turn navigation.
 
 \chapter{Solution}
 
 	\section{Introduction}
 	
-	This section details the solution to the given problem and all the choices that resulted in it. The explanation will take a top-down approach, first reviewing the general and early choices faced. It will then go deeper in the details.
+	This section details the solution to the given problem and all the choices that resulted in it. The explanation will take a top-down approach, first reviewing the general and early choices faced (as early choices mean general choices). It will then go deeper in the details.
 	
 	\section{Swarm Robotics}
 	
-	Unknown env.
+	The first question one could ask is: why swarm robotics for such an application? The answer to that question lays in section \ref{def:robustness_scalability_flexibility}. Robustness, scalability and flexibility are characteristics that make swarms of robots really interesting in unknown environments \citep{brambilla2013swarm}.\todo{Insert justification?} In case one of the agents is broken, we do not want to see the whole system collapse and leave the human unattended. Flexibility guarantees that the solution will work in different conditions, environments, which is an advantage for exploration. In case of loss of robots, scalability would maintain the protection.
+	
 	\section{The Shape}
+	
+	The first step of the thesis is the design of the solution, to imagine how the system will look like and how we will implement it. The first choice faced was the overall behaviour of the swarm. How do the robots move around the human? What shape will they try to respect? This choice is important because it will define the overall look of the system.\\
+	
+	The first shape that intuitively comes in mind is the circle. The circle is the most elementary shape in geometry. It offers the best ratio:
+	$$\frac{\mbox{Surface}}{\mbox{Perimeter}} = \frac{r}{2}~\mbox{, where r is the ray of the circle.}$$
+	
+	That means that fewer robots are needed for the same protected area, and more space for the human with a certain amount of robots.
+	
+	\begin{figure}[!h]\centering
+	\begin{tikzpicture}
+		\epuck{4}{0}
+		\epuck{2}{3.464}
+		\epuck{-2}{3.464}
+		\epuck{-4}{0}
+		\epuck{-2}{-3.464}
+		\epuck{2}{-3.464}
+		
+		\human{0}{0}
+		%\draw (0,0) node[regular polygon,regular polygon sides=3,minimum height=2cm,minimum width=1cm,line width=1.5pt, draw] {\Huge{H}};
+	\end{tikzpicture}
+	\caption{Circle shape for the swarm to get the widest protected surface a given amount of robots.}
+	\end{figure}
+	
 	\section{Virtual Physics}
 	\section{Potentials}
 		\subsection{Human Potential}
@@ -265,6 +325,7 @@ With these definitions in mind, we can explain swarm engineering as:
 		\subsection{Build Process}
 
 \chapter{Assessments}
+	\section{Tracking System}
 	\section{Metrics}
 	\section{More robots ?}
 	\section{Tests Scenarios}
