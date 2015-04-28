@@ -45,9 +45,9 @@ CEpuckFrontalBarrierOC::CEpuckFrontalBarrierOC() :
 
         m_vecDirectionVectorsWindow.push_back(CVector2(0.0,0.0));
         m_vecDirectionVectorsWindow.push_back(CVector2(0.0,0.0));
-        /*m_vecDirectionVectorsWindow.push_back(CVector2(0.0,0.0));
         m_vecDirectionVectorsWindow.push_back(CVector2(0.0,0.0));
-        m_vecDirectionVectorsWindow.push_back(CVector2(0.0,0.0));*/
+        m_vecDirectionVectorsWindow.push_back(CVector2(0.0,0.0));
+        m_vecDirectionVectorsWindow.push_back(CVector2(0.0,0.0));
 }
 
 /****************************************/
@@ -234,7 +234,7 @@ void CEpuckFrontalBarrierOC::NormalMode() {
     if (fMaxValue > 0.15) { // Obstacle to deal with
         cResultVector -= cObstacleVector;
         if (m_pcRGBLED != NULL) {
-            m_pcRGBLED->SetColors(CColor::BLACK);
+            m_pcRGBLED->SetColors(m_cAgentGoodColor); // TODO put black instead
         }
 
         LOG << "OBSTACLE " << fMaxValue << std::endl;
@@ -249,7 +249,7 @@ void CEpuckFrontalBarrierOC::NormalMode() {
         for (std::vector<CVector2>::iterator i = m_vecDirectionVectorsWindow.begin(); i != m_vecDirectionVectorsWindow.end(); ++i) {
             cAverageOnWindow += *i;
         }
-        cResultVector = cAverageOnWindow / 2.0;
+        cResultVector = cAverageOnWindow / 5.0;
 
         m_unBSCount = 0; // No obstacle detected, so the blocked mode counter is set to 0.
         if (m_pcRGBLED != NULL) {
@@ -267,11 +267,11 @@ void CEpuckFrontalBarrierOC::NormalMode() {
         for (std::vector<CVector2>::iterator i = m_vecDirectionVectorsWindow.begin(); i != m_vecDirectionVectorsWindow.end(); ++i) {
             cAverageOnWindow += *i;
         }
-        cResultVector = cAverageOnWindow / 2.0;
+        cResultVector = cAverageOnWindow / 5.0;
 
         m_unBSCount = 0; // No obstacle detected, so the blocked mode counter is set to 0.
         if (m_pcRGBLED != NULL) {
-            m_pcRGBLED->SetColors(CColor::BLACK);
+            m_pcRGBLED->SetColors(m_cAgentGoodColor); // TODO put black instead
         }
         LOG << "NO HUMAN" << std::endl;
 
@@ -281,8 +281,9 @@ void CEpuckFrontalBarrierOC::NormalMode() {
     // We have the direction and speed. Let's apply it on the wheels:
     CRadians cDirectionAngle = cResultVector.Angle();
     Real fSpeed = cResultVector.Length();
-    fSpeed = (fSpeed > 10.0) ? 10.0 : fSpeed; // E-pucks cannot go faster than 10 cm/s.
+    fSpeed = (fSpeed > 5.0) ? 5.0 : fSpeed; // E-pucks cannot go faster than 10 cm/s.
     UInt8 unNewDirection(0);
+    fSpeed = (fSpeed < 1.0) ? 0.0 : fSpeed;
     
     LOG << cResultVector << std::endl;
 
@@ -333,7 +334,7 @@ void CEpuckFrontalBarrierOC::NormalMode() {
 void CEpuckFrontalBarrierOC::ComputeDirection(CVector2& c_result_vector) {
     // Add the potentials:
     c_result_vector += HumanPotential(); // Certain distance to human
-    //c_result_vector += GravityPotential(); // Move in front of human
+    c_result_vector += GravityPotential(); // Move in front of human
     c_result_vector += AgentRepulsionPotential(); // Repulsion among agents
 }
 
@@ -508,29 +509,22 @@ void CEpuckFrontalBarrierOC::BlockedMode() {
 /****************************************/
 
 inline Real CEpuckFrontalBarrierOC::LennardJones(Real f_x, Real f_gain, Real f_distance) const {
-    if (std::abs(f_x - f_distance) >= 5) {
-        Real fRatio = f_distance / f_x;
-        fRatio *= fRatio;
-        return -4 * f_gain / f_x * ( fRatio * fRatio - fRatio );
-    } else {
-        return 0.0;
-    }
-    
+    Real fRatio = f_distance / f_x;
+    fRatio *= fRatio;
+    return -4 * f_gain / f_x * ( fRatio * fRatio - fRatio );
 }
 
 /****************************************/
 /****************************************/
 
 inline Real CEpuckFrontalBarrierOC::LennardJonesStrongAttraction(Real f_x, Real f_gain, Real f_distance) const {
-    if (f_x <= f_distance - 3) {
+    if (f_x <= f_distance) {
         Real fRatio = f_distance / f_x;
         fRatio *= fRatio;
         return -4 * f_gain / f_x * ( fRatio * fRatio - fRatio );
-    } else if (f_x >= f_distance + 3) {
-        Real fDiff = f_x - f_distance;
-        return fDiff * 15.0;
     } else {
-        return 0.0;
+        Real fDiff = f_x - f_distance;
+        return fDiff * fDiff / 6;
     }
     
 }

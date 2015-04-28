@@ -69,11 +69,11 @@
         <epuck_ground implementation="rot_z_only" noise_level="0.0"/>
       </sensors>
       <params defaultSpeed="5" 
-      	humanPotentialGain="500" 
-      	humanPotentialDistance="25" 
+      	humanPotentialGain="1000" 
+      	humanPotentialDistance="30" 
       	agentPotentialGain="100" 
-      	agentPotentialDistance="20" 
-        gravityPotentialGain="30"
+      	agentPotentialDistance="30" 
+        gravityPotentialGain="20"
         humanLeftColorRef="blue"
         humanRightColorRef="red"
         agentGoodColor="0,125,0"
@@ -91,7 +91,7 @@
       </actuators>
       <sensors>
         <epuck_proximity implementation="default" show_rays="true" noise_level="0.0" calibrated="true" low_level_config="/home/root/gfrancesca/low_level_configuration/proximity_sensor.xml" />
-        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.1" calibrated="true" low_level_config="/home/root/ARGoS/low_level_configuration/omnidirectional_camera_sensor.xml"/>
+        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.0" calibrated="true" low_level_config="/home/root/ARGoS/low_level_configuration/omnidirectional_camera_sensor.xml"/>
         <epuck_ground implementation="rot_z_only" noise_level="0.0"/>
       </sensors>
       <params
@@ -109,7 +109,7 @@
       </actuators>
       <sensors>
         <epuck_proximity implementation="default" show_rays="true" noise_level="0.0" calibrated="true" low_level_config="/home/root/gfrancesca/low_level_configuration/proximity_sensor.xml" />
-        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.1" calibrated="true" low_level_config="/home/root/ARGoS/low_level_configuration/omnidirectional_camera_sensor.xml"/>
+        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.0" calibrated="true" low_level_config="/home/root/ARGoS/low_level_configuration/omnidirectional_camera_sensor.xml"/>
         <epuck_ground implementation="rot_z_only" noise_level="0.0"/>
       </sensors>
       <params
@@ -156,7 +156,7 @@
     <distribute>
       <position method="uniform" min="-0.5,-0.5,0" max="0.5,0.5,0" /> 
       <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" /> 
-      <entity quantity="3" max_trials="100"> 
+      <entity quantity="15" max_trials="100"> 
         <e-puck id="agent" omnidirectional_camera_aperture="80">
           <controller config="cppAgent" /> 
         </e-puck>
