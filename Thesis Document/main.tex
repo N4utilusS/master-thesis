@@ -70,7 +70,7 @@
 \newcommand{\quot}[1]{\textit{\enquote{#1}}}
 
 
-\newcommand{\epuck}[3][0] % [angle]{x}{y}
+\newcommand{\epuck}[3][0] % [angle]{x}{y} avec angle optionel
 {
 	\draw [very thick, fill=white] (#2,#3) circle [radius=0.5];
 	\draw [very thick, rotate around={#1:(#2,#3)}] (#2-0.25,#3-0.433) -- (#2,#3+0.45) -- (#2+0.25,#3-0.433);
@@ -306,23 +306,61 @@ With these definitions in mind, we can explain swarm engineering as:
 		
 	\section{State Machine}
 	
+	The final implementation is built on 2 layers. The upper layer is the state machine, having for each state a specific sub-behaviour in the lower layer. Figure \ref{state_machine} illustrates the whole structure of the upper layer. Only part of the states rely on virtual physics.
+	
 	\begin{figure}[!h]\centering
-	\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=4cm, semithick]
-		\node[initial,state] (NORMAL)                    {Normal};
-  		\node[state]         (OBS) [below left of=NORMAL] {Obstacle};
-  		\node[state]         (HU) [below of=NORMAL] {Human};
-  		\node[state]         (DEF) [below right of=NORMAL] {Default};
-  		\node[state]         (BLOCK) [above of=NORMAL]       {Blocked};
-  		
-  		\path	(BLOCK)		edge		node		{\color{gray} 1}				(NORMAL)
-  				(NORMAL)		edge		node		{\color{gray} 2}				(OBS)
-  				(NORMAL)		edge		node		{\color{gray} 3}				(HU)
-  				(NORMAL)		edge		node		{\color{gray} 4}				(DEF)
-  				(OBS)		edge		[bend left]	node		{\color{gray} 5}	(BLOCK)
-  				(HU)			edge		[bend right]	node		{}				(NORMAL)
-  				(DEF)		edge		[bend right]	node		{}				(NORMAL);
-	\end{tikzpicture}
-	\caption{State machine of the final behaviour.}
+		\begin{minipage}[c]{.49\textwidth}
+%			\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=4cm, semithick]
+%				\node[initial,state] (NORMAL)                    {Normal};
+%		  		\node[state]         (OBS) [below left of=NORMAL] {Obstacle};
+%		  		\node[state]         (HU) [below of=NORMAL] {Human};
+%		  		\node[state]         (DEF) [below right of=NORMAL] {Default};
+%		  		\node[state]         (BLOCK) [above of=NORMAL]       {Blocked};
+%		  		
+%		  		\path	(BLOCK)		edge		node		{\color{gray} 1}				(NORMAL)
+%		  				(NORMAL)		edge		node		{\color{gray} 2}				(OBS)
+%		  				(NORMAL)		edge		node		{\color{gray} 3}				(HU)
+%		  				(NORMAL)		edge		node		{\color{gray} 4}				(DEF)
+%		  				(OBS)		edge		[bend left]	node		{\color{gray} 5}	(BLOCK)
+%		  				(OBS)		edge		[bend right]	node		{}				(NORMAL)
+%		  				(HU)			edge		[bend right]	node		{}				(NORMAL)
+%		  				(DEF)		edge		[bend right]	node		{}				(NORMAL);
+%			\end{tikzpicture}
+			
+			\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=4cm, semithick]
+		  		\node[state]         (OBS)						{Obstacle};
+		  		\node[state]         (HU) [below of=OBS]	{Human};
+		  		\node[state]         (DEF) [below of=HU]		{Default};
+		  		\node[state]         (BLOCK) [right of=HU]{Blocked};
+		  		
+		  		\path	(OBS)		edge	[bend left]	node		{\color{gray} 1}	(BLOCK)
+		  				(OBS)		edge	[bend left]	node[yshift=-1cm]		{\color{gray} 2}				(DEF)
+		  				(OBS)		edge	[bend left]	node	[left]	{\color{gray} 3}				(HU)
+		  				(HU)			edge	[bend left]	node[right]		{\color{gray} 4}				(OBS)
+		  				(HU)			edge	[bend left]	node	[left]	{\color{gray} 2}				(DEF)
+		  				(DEF)		edge	[bend left]	node[right]		{\color{gray} 3}				(HU)
+		  				(DEF)		edge	[bend left]	node		{\color{gray} 4}				(OBS)
+		  				(BLOCK)		edge				node		{\color{gray} 5}				(OBS)
+		  				(BLOCK)		edge				node		{\color{gray} 6}				(HU)
+		  				(BLOCK)		edge				node		{\color{gray} 7}				(DEF);
+			\end{tikzpicture}
+		\end{minipage}
+		\hfill
+		\begin{minipage}[c]{.49\textwidth}
+			\begin{enumerate}
+				\item Amount of direction change (left/right) while having an obstacle around reaches a threshold.
+				\item No human nor obstacle found.
+				\item Human found around the robot.
+				\item Obstacle around the robot.
+				\item No more obstacle in front but obstacle elsewhere.
+				\item No more obstacle in front \& human found.
+				\item No more obstacle in front \& no human nor obstacle.
+
+			\end{enumerate}
+		\end{minipage}
+		
+		\caption{State machine of the final behaviour.}
+		\label{fig:state_machine}
 	\end{figure}
 	
 	\section{Virtual Physics}
