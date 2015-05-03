@@ -41,13 +41,9 @@ CEpuckFrontalBarrierOC::CEpuckFrontalBarrierOC() :
     m_unBSDirection(0),
     m_unBSCount(0),
     m_fHumanPotentialModifiedDistance(0),
-    m_unColorCountdownCounter(0) {
+    m_unColorCountdownCounter(0),
+    m_unDirectionVectorsWindowSize(1) {
 
-        m_vecDirectionVectorsWindow.push_back(CVector2(0.0,0.0));
-        m_vecDirectionVectorsWindow.push_back(CVector2(0.0,0.0));
-        /*m_vecDirectionVectorsWindow.push_back(CVector2(0.0,0.0));
-        m_vecDirectionVectorsWindow.push_back(CVector2(0.0,0.0));
-        m_vecDirectionVectorsWindow.push_back(CVector2(0.0,0.0));*/
 }
 
 /****************************************/
@@ -96,6 +92,9 @@ void CEpuckFrontalBarrierOC::ParseParams(TConfigurationNode& t_node) {
         GetNodeAttributeOrDefault(t_node, "agentBadColorRef", strAgentBadColorReference, DEFAULT_AGENT_BAD_COLOR_REF);
         m_cAgentBadColorRef.Set(strAgentBadColorReference);
 
+        /* Direction vectors window size for average */
+        GetNodeAttributeOrDefault(t_node, "directionVectorsWindowSize", m_unDirectionVectorsWindowSize, m_unDirectionVectorsWindowSize);
+
     } catch (CARGoSException& ex) {
         THROW_ARGOSEXCEPTION_NESTED("Error parsing <params>", ex);
     }
@@ -107,6 +106,10 @@ void CEpuckFrontalBarrierOC::ParseParams(TConfigurationNode& t_node) {
 void CEpuckFrontalBarrierOC::Init(TConfigurationNode& t_node) {
 	/* parse the xml tree <params> */
     ParseParams(t_node);
+
+    for (int i = 0; i < m_unDirectionVectorsWindowSize; ++i) {
+        m_vecDirectionVectorsWindow.push_back(CVector2(0.0,0.0));
+    }
 
     try {
         m_pcWheelsActuator = GetActuator<CCI_EPuckWheelsActuator>("epuck_wheels");
@@ -249,7 +252,7 @@ void CEpuckFrontalBarrierOC::NormalMode() {
         for (std::vector<CVector2>::iterator i = m_vecDirectionVectorsWindow.begin(); i != m_vecDirectionVectorsWindow.end(); ++i) {
             cAverageOnWindow += *i;
         }
-        cResultVector = cAverageOnWindow / 2.0;
+        cResultVector = cAverageOnWindow / m_unDirectionVectorsWindowSize;
 
         m_unBSCount = 0; // No obstacle detected, so the blocked mode counter is set to 0.
         if (m_pcRGBLED != NULL) {
@@ -267,7 +270,7 @@ void CEpuckFrontalBarrierOC::NormalMode() {
         for (std::vector<CVector2>::iterator i = m_vecDirectionVectorsWindow.begin(); i != m_vecDirectionVectorsWindow.end(); ++i) {
             cAverageOnWindow += *i;
         }
-        cResultVector = cAverageOnWindow / 2.0;
+        cResultVector = cAverageOnWindow / m_unDirectionVectorsWindowSize;
 
         m_unBSCount = 0; // No obstacle detected, so the blocked mode counter is set to 0.
         if (m_pcRGBLED != NULL) {
@@ -333,7 +336,7 @@ void CEpuckFrontalBarrierOC::NormalMode() {
 void CEpuckFrontalBarrierOC::ComputeDirection(CVector2& c_result_vector) {
     // Add the potentials:
     c_result_vector += HumanPotential(); // Certain distance to human
-    //c_result_vector += GravityPotential(); // Move in front of human
+    c_result_vector += GravityPotential(); // Move in front of human
     c_result_vector += AgentRepulsionPotential(); // Repulsion among agents
 }
 
