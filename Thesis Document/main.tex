@@ -1,7 +1,7 @@
 \documentclass[a4paper, 12pt]{report}
 
 \usepackage[utf8]{inputenc}
-\usepackage{color}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \usepackage[marginparwidth=28mm]{geometry}
 \usepackage[pdftex]{graphicx}
 \usepackage{tikz}
@@ -15,7 +15,7 @@
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage{comment}
 \usepackage{tikz}
-\usetikzlibrary{shapes,snakes}
+\usetikzlibrary{arrows,automata}
 \usepackage{ccaption}
 
 % Logos
@@ -72,7 +72,7 @@
 
 \newcommand{\epuck}[3][0] % [angle]{x}{y}
 {
-	\draw [very thick] (#2,#3) circle [radius=0.5];
+	\draw [very thick, fill=white] (#2,#3) circle [radius=0.5];
 	\draw [very thick, rotate around={#1:(#2,#3)}] (#2-0.25,#3-0.433) -- (#2,#3+0.45) -- (#2+0.25,#3-0.433);
 }
 
@@ -198,6 +198,7 @@ With these definitions in mind, we can explain swarm engineering as:
 			PFSMs \citep{minsky1967computation} are one of the most used methods to create collective behaviours. As the robots need to take decisions based on their readings and current state, they constitute an intuitive choice. Each transition is characterised by a probability to follow that transition. The value can be fixed or variable, in which case it will generally depend on the current state of the system. One example of such a variable value is the \emph{response threshold} found by \citet{granovetter1978threshold} (also \citet{bonabeau1997adaptive}) \todo{Add figures}.
 			
 			\subsubsection{Virtual Physics-Based Design}
+			\label{sec:virtual_physics}
 			
 			The next subcategory takes physics laws as a model to generate behaviours. Robots are assimilated to virtual particles under the influence of virtual potential fields and virtual forces. The robots compute the total force by summing all the forces associated to each influence in the system:
 			$$\overline{F} = \sum_{i}{\overline{f_i}} ~\mbox{, where $\overline{f_i}$ is a virtual force.}$$
@@ -280,12 +281,13 @@ With these definitions in mind, we can explain swarm engineering as:
 	The first step of the thesis is the design of the solution, to imagine how the system will look like and how we will implement it. The first choice faced was the overall behaviour of the swarm. How do the robots move around the human? What shape will they try to respect? This choice is important because it will define the overall look of the system.\\
 	
 	The first shape that intuitively comes in mind is the circle. The circle is the most elementary shape in geometry. It offers the best ratio:
-	$$\frac{\mbox{Surface}}{\mbox{Perimeter}} = \frac{r}{2}~\mbox{, where r is the ray of the circle.}$$
+	$$\frac{\mbox{Surface}}{\mbox{Perimeter}} = \frac{r}{2}~\mbox{, where r is the radius of the circle.}$$
 	
-	That means that fewer robots are needed for the same protected area, and more space for the human with a certain amount of robots.
+	That means that fewer robots are needed for the same protected area, and more space for the human with a certain amount of robots. Luckily, it is also the easiest shape to realise in practice.
 	
 	\begin{figure}[!h]\centering
 	\begin{tikzpicture}
+		\draw [dashed] (0,0) circle [radius=4];
 		\epuck{4}{0}
 		\epuck{2}{3.464}
 		\epuck{-2}{3.464}
@@ -296,15 +298,48 @@ With these definitions in mind, we can explain swarm engineering as:
 		\human{0}{0}
 		%\draw (0,0) node[regular polygon,regular polygon sides=3,minimum height=2cm,minimum width=1cm,line width=1.5pt, draw] {\Huge{H}};
 	\end{tikzpicture}
-	\caption{Circle shape for the swarm to get the widest protected surface a given amount of robots.}
+	\caption{Circle shape for the swarm to get the widest protected surface for a given amount of robots.}
+	\label{fig:circle_shape}
+	\end{figure}
+	
+		The figure \ref{fig:circle_shape} represents the kind of circle that we would like to get for 6 robots and 1 human in the centre.
+		
+	\section{State Machine}
+	
+	\begin{figure}[!h]\centering
+	\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=4cm, semithick]
+		\node[initial,state] (NORMAL)                    {Normal};
+  		\node[state]         (OBS) [below left of=NORMAL] {Obstacle};
+  		\node[state]         (HU) [below of=NORMAL] {Human};
+  		\node[state]         (DEF) [below right of=NORMAL] {Default};
+  		\node[state]         (BLOCK) [above of=NORMAL]       {Blocked};
+  		
+  		\path	(BLOCK)		edge		node		{\color{gray} 1}				(NORMAL)
+  				(NORMAL)		edge		node		{\color{gray} 2}				(OBS)
+  				(NORMAL)		edge		node		{\color{gray} 3}				(HU)
+  				(NORMAL)		edge		node		{\color{gray} 4}				(DEF)
+  				(OBS)		edge		[bend left]	node		{\color{gray} 5}	(BLOCK)
+  				(HU)			edge		[bend right]	node		{}				(NORMAL)
+  				(DEF)		edge		[bend right]	node		{}				(NORMAL);
+	\end{tikzpicture}
+	\caption{State machine of the final behaviour.}
 	\end{figure}
 	
 	\section{Virtual Physics}
-	\section{Potentials}
-		\subsection{Human Potential}
-		\subsection{Gravity Potential}
-		\subsection{Agent Repulsion Potential}
-		\subsection{Default Potential}
+	
+	Section \ref{sec:virtual_physics} explained how the laws of physics can be used to design a behaviour. Intuitively, this method seemed the most appropriate to create a behaviour whose main feature is a \enquote{protection barrier} around a human. When it comes to pattern creation, people usually first consider using repulsive and attractive forces to make the robots automatically adjust their position with respect to others.\\
+	
+	Indeed, the laws of physics force the system to get to a state of minimum energy, i.e., to reach a global minimum of the potential function of the system. Since the force is proportional to the derivative of the corresponding potential, the minimum of the potential function means the disappearance of the forces. For the forces to disappear, every robot needs to be at the desired location.
+	
+	$$\vec{f} = -\vec{grad}~P$$, P being the system's potential. The following sections will explain in detail the different potentials that were implemented to obtain the desired behaviour.
+	
+		\subsection{Potentials}
+		
+		
+			\subsubsection{Human Potential}
+			\subsubsection{Gravity Potential}
+			\subsubsection{Agent Repulsion Potential}
+			\subsubsection{Default Potential}
 		
 	\section{E-pucks}
 	
