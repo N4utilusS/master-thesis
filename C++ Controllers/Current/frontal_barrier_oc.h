@@ -144,6 +144,7 @@ private:
     UInt8 m_unColorCountdownCounter;
 
     std::vector<CVector2> m_vecDirectionVectorsWindow;
+    UInt8 m_unDirectionVectorsWindowSize;
 
 };
 

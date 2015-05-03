@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<camera-configuration>
+    <img_grabber center_x="179" center_y="142" width="352" height="288" radius="114" gain="0" exposure="0" />
+    <red enabled="true" hue_min="5" hue_max="65" sat_min="0" sat_max="36" value_min="224" value_max="255" area_min="20" area_max="33555" />
+    <blue enabled="true" hue_min="100" hue_max="130" sat_min="186" sat_max="216" value_min="240" value_max="255" area_min="9" area_max="10000" />
+    <green enabled="true" hue_min="49" hue_max="109" sat_min="82" sat_max="142" value_min="225" value_max="255" area_min="20" area_max="10000" />
+    <magenta enabled="false" hue_min="110" hue_max="150" sat_min="82" sat_max="122" value_min="234" value_max="255" area_min="10" area_max="10000" />
+    <yellow enabled="false" hue_min="4" hue_max="23" sat_min="95" sat_max="210" value_min="155" value_max="255" area_min="10" area_max="10000" />
+    <cyan enabled="false" hue_min="60" hue_max="120" sat_min="63" sat_max="191" value_min="210" value_max="255" area_min="10" area_max="10000" />
+    <brown enabled="false" hue_min="129" hue_max="171" sat_min="0" sat_max="25" value_min="231" value_max="255" area_min="10" area_max="10000" />
+    <orange enabled="false" hue_min="12" hue_max="22" sat_min="70" sat_max="80" value_min="245" value_max="255" area_min="10" area_max="10000" />
+    <purple enabled="false" hue_min="10" hue_max="120" sat_min="10" sat_max="10" value_min="30" value_max="100" area_min="10" area_max="10000" />
+</camera-configuration>
