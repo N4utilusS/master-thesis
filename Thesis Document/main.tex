@@ -70,7 +70,7 @@
 \newcommand{\quot}[1]{\textit{\enquote{#1}}}
 
 
-\newcommand{\epuck}[3][0] % [angle]{x}{y}
+\newcommand{\epuck}[3][0] % [angle]{x}{y} avec angle optionel
 {
 	\draw [very thick, fill=white] (#2,#3) circle [radius=0.5];
 	\draw [very thick, rotate around={#1:(#2,#3)}] (#2-0.25,#3-0.433) -- (#2,#3+0.45) -- (#2+0.25,#3-0.433);
@@ -90,6 +90,8 @@
 \captionnamefont{\small\sf\bfseries}
 \captiontitlefont{\small\sf}
 \precaption{\rule{\linewidth}{0.4pt}\\}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % THE DOCUMENT
@@ -306,23 +308,71 @@ With these definitions in mind, we can explain swarm engineering as:
 		
 	\section{State Machine}
 	
+	The final implementation is built on 2 layers. The upper layer is the state machine, having for each state a specific behaviour in the lower layer. Figure \ref{fig:state_machine} illustrates the whole structure of the upper layer. Only part of the states rely on virtual physics: \emph{Human} and \emph{Default}. The others simply link the sensor values to the wheels speed.\\
+	
+	The transitions without any number are taken without any condition, right after the corresponding behaviour has been applied (the time step period is over). One could see the 3 lowest states as sub-states of \emph{Normal}. At the beginning of each time step, if the controller is in the \emph{Normal} state, it has to choose between the 3 different sub-states. The conditions are listed with numbers in the figure \ref{fig:state_machine}.
+	
 	\begin{figure}[!h]\centering
-	\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=4cm, semithick]
-		\node[initial,state] (NORMAL)                    {Normal};
-  		\node[state]         (OBS) [below left of=NORMAL] {Obstacle};
-  		\node[state]         (HU) [below of=NORMAL] {Human};
-  		\node[state]         (DEF) [below right of=NORMAL] {Default};
-  		\node[state]         (BLOCK) [above of=NORMAL]       {Blocked};
-  		
-  		\path	(BLOCK)		edge		node		{\color{gray} 1}				(NORMAL)
-  				(NORMAL)		edge		node		{\color{gray} 2}				(OBS)
-  				(NORMAL)		edge		node		{\color{gray} 3}				(HU)
-  				(NORMAL)		edge		node		{\color{gray} 4}				(DEF)
-  				(OBS)		edge		[bend left]	node		{\color{gray} 5}	(BLOCK)
-  				(HU)			edge		[bend right]	node		{}				(NORMAL)
-  				(DEF)		edge		[bend right]	node		{}				(NORMAL);
-	\end{tikzpicture}
-	\caption{State machine of the final behaviour.}
+		\begin{minipage}[c]{.49\textwidth}
+			\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=4cm, semithick]
+				\node[initial,state] (NORMAL)                    {Normal};
+		  		\node[state]         (OBS) [below left of=NORMAL] {Obstacle};
+		  		\node[state]         (HU) [below of=NORMAL] {Human};
+		  		\node[state]         (DEF) [below right of=NORMAL] {Default};
+		  		\node[state]         (BLOCK) [above of=NORMAL]       {Blocked};
+		  		
+		  		\path	(BLOCK)		edge		node					{\color{gray} 1}	(NORMAL)
+		  				(NORMAL)		edge		node[yshift=0.2cm]	{\color{gray} 2}	(OBS)
+		  				(NORMAL)		edge		node					{\color{gray} 3}	(HU)
+		  				(NORMAL)		edge		node	[yshift=-0.2cm]	{\color{gray} 4}	(DEF)
+		  				(OBS)		edge		[bend left]	node		{\color{gray} 5}	(BLOCK)
+		  				(OBS)		edge		[bend right]	node		{}				(NORMAL)
+		  				(HU)			edge		[bend right]	node		{}				(NORMAL)
+		  				(DEF)		edge		[bend right]	node		{}				(NORMAL);
+			\end{tikzpicture}
+%			
+%			\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=4cm, semithick]
+%		  		\node[state]         (OBS)						{Obstacle};
+%		  		\node[state]         (HU) [below of=OBS]	{Human};
+%		  		\node[state]         (DEF) [below of=HU]		{Default};
+%		  		\node[state]         (BLOCK) [right of=HU]{Blocked};
+%		  		
+%		  		\path	(OBS)		edge	[bend left]	node		{\color{gray} 1}	(BLOCK)
+%		  				(OBS)		edge	[bend left]	node[yshift=-1cm]		{\color{gray} 2}				(DEF)
+%		  				(OBS)		edge	[bend left]	node	[left]	{\color{gray} 3}				(HU)
+%		  				(HU)			edge	[bend left]	node[right]		{\color{gray} 4}				(OBS)
+%		  				(HU)			edge	[bend left]	node	[left]	{\color{gray} 2}				(DEF)
+%		  				(DEF)		edge	[bend left]	node[right]		{\color{gray} 3}				(HU)
+%		  				(DEF)		edge	[bend left]	node		{\color{gray} 4}				(OBS)
+%		  				(BLOCK)		edge				node		{\color{gray} 5}				(OBS)
+%		  				(BLOCK)		edge				node		{\color{gray} 6}				(HU)
+%		  				(BLOCK)		edge				node		{\color{gray} 7}				(DEF);
+%			\end{tikzpicture}
+		\end{minipage}
+		\hfill
+		\begin{minipage}[c]{.49\textwidth}
+%			\begin{enumerate}
+%				\item Amount of direction change (left/right) while having an obstacle around reaches a threshold.
+%				\item No human nor obstacle found.
+%				\item Human found around the robot.
+%				\item Obstacle around the robot.
+%				\item No more obstacle in front but obstacle elsewhere.
+%				\item No more obstacle in front \& human found.
+%				\item No more obstacle in front \& no human nor obstacle.
+%
+%			\end{enumerate}
+
+			\begin{enumerate}
+				\item No more obstacle in front.
+				\item Obstacle found around the robot.
+				\item Human found around the robot.
+				\item Neither of the previous criteria met.
+				\item Amount of direction change (left/right) while having an obstacle around reaches a threshold.
+			\end{enumerate}
+		\end{minipage}
+		
+		\caption{State machine of the final behaviour.}
+		\label{fig:state_machine}
 	\end{figure}
 	
 	\section{Virtual Physics}
@@ -331,15 +381,35 @@ With these definitions in mind, we can explain swarm engineering as:
 	
 	Indeed, the laws of physics force the system to get to a state of minimum energy, i.e., to reach a global minimum of the potential function of the system. Since the force is proportional to the derivative of the corresponding potential, the minimum of the potential function means the disappearance of the forces. For the forces to disappear, every robot needs to be at the desired location.
 	
-	$$\vec{f} = -\vec{grad}~P$$, P being the system's potential. The following sections will explain in detail the different potentials that were implemented to obtain the desired behaviour.
+	$$\vec{f} = -\vec{\nabla}P$$, P being the system's potential. The following sections will explain in detail the different potentials that were implemented to obtain the desired behaviour.
 	
 		\subsection{Potentials}
 		
+		In this section, the potentials are grouped by states in which they are used. Since virtual physics are used in only 2 states, we have only 2 groups.
 		
-			\subsubsection{Human Potential}
-			\subsubsection{Gravity Potential}
-			\subsubsection{Agent Repulsion Potential}
-			\subsubsection{Default Potential}
+			\subsubsection{Human}
+			
+			The controller enters the \emph{Human} state at the beginning of the time step only if a human is found nearby. The complete potential for this state is the sum of 3 components: the \emph{human potential}, the \emph{gravity potential} and the \emph{agent repulsion potential}.
+		
+				\paragraph{Human Potential}
+				
+				\begin{figure}[!h]\centering
+					\begin{tikzpicture}[xscale=0.2,yscale=0.2]
+						\draw [<->] (0,5) -- (0,0) -- (70,0);
+						\draw[blue,thick, domain=28:70] plot (\x, {-4*500/\x*((30/\x)^4-(30/\x)^2)});
+						
+						\foreach \x [evaluate=\x as \j using \x*10]in {0,...,6}
+						    \draw (\j cm,5pt) -- (\j cm,-5pt) node[anchor=north] {$\j$};
+						%\foreach \y in {0,1,2,3,4}
+						%    \draw (1pt,\y cm) -- (-1pt,\y cm) node[anchor=east] {$\y$};
+					\end{tikzpicture}
+				\end{figure}
+				
+				
+				\paragraph{Gravity Potential}
+				\paragraph{Agent Repulsion Potential}
+			
+			\subsubsection{Default}
 		
 	\section{E-pucks}
 	
@@ -489,14 +559,15 @@ Never gonna tell a lie and hurt you]
 }
 
 @article{pinciroli2012argos,
-  title={ARGoS: a modular, parallel, multi-engine simulator for multi-robot systems},
-  author={Pinciroli, Carlo and Trianni, Vito and O’Grady, Rehan and Pini, Giovanni and Brutschy, Arne and Brambilla, Manuele and Mathews, Nithin and Ferrante, Eliseo and Di Caro, Gianni and Ducatelle, Frederick and others},
+  title={{ARGoS}: a Modular, Parallel, Multi-Engine Simulator for Multi-Robot Systems},
+  author={Carlo Pinciroli and Vito Trianni and Rehan O'Grady and Giovanni Pini and Arne Brutschy and Manuele Brambilla and Nithin Mathews and Eliseo Ferrante and Gianni {Di Caro} and Frederick Ducatelle and Mauro Birattari and Luca Maria Gambardella and Marco Dorigo},
   journal={Swarm intelligence},
   volume={6},
   number={4},
   pages={271--295},
   year={2012},
-  publisher={Springer}
+  publisher={Springer},
+  address = {Berlin, Germany}
 }
 
 @inproceedings{daily2003world,
