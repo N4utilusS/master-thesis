@@ -13,7 +13,12 @@
   <!-- ****************** -->
   <!-- * Loop functions * -->
   <!-- ****************** -->
-  <loop_functions library="../../build_simepuck/testing/loop_functions/libfrontal_barrier_lp" label="frontal_barrier_lp" />
+  <loop_functions library="../../build_simepuck/testing/loop_functions/libfrontal_barrier_lp" label="frontal_barrier_lp">
+
+    <frontal_barrier_lp dangerAreaCentre="0.0,0.0"
+                        dangerAreaRadius="0.0"/>
+
+  </loop_functions>
 
   <!-- *************** -->
   <!-- * Controllers * -->
