@@ -395,8 +395,13 @@ With these definitions in mind, we can explain swarm engineering as:
 				
 				\begin{figure}[!h]\centering
 					\begin{tikzpicture}[xscale=0.2,yscale=0.2]
-						\draw [<->] (0,5) -- (0,0) -- (40,0);
+						\draw [<->] (0,5) -- (0,0) -- (70,0);
 						\draw[blue,thick, domain=28:70] plot (\x, {-4*500/\x*((30/\x)^4-(30/\x)^2)});
+						
+						\foreach \x [evaluate=\x as \j using \x*10]in {0,...,6}
+						    \draw (\j cm,5pt) -- (\j cm,-5pt) node[anchor=north] {$\j$};
+						%\foreach \y in {0,1,2,3,4}
+						%    \draw (1pt,\y cm) -- (-1pt,\y cm) node[anchor=east] {$\y$};
 					\end{tikzpicture}
 				\end{figure}
 				
@@ -554,14 +559,15 @@ Never gonna tell a lie and hurt you]
 }
 
 @article{pinciroli2012argos,
-  title={ARGoS: a modular, parallel, multi-engine simulator for multi-robot systems},
-  author={Pinciroli, Carlo and Trianni, Vito and O’Grady, Rehan and Pini, Giovanni and Brutschy, Arne and Brambilla, Manuele and Mathews, Nithin and Ferrante, Eliseo and Di Caro, Gianni and Ducatelle, Frederick and others},
+  title={{ARGoS}: a Modular, Parallel, Multi-Engine Simulator for Multi-Robot Systems},
+  author={Carlo Pinciroli and Vito Trianni and Rehan O'Grady and Giovanni Pini and Arne Brutschy and Manuele Brambilla and Nithin Mathews and Eliseo Ferrante and Gianni {Di Caro} and Frederick Ducatelle and Mauro Birattari and Luca Maria Gambardella and Marco Dorigo},
   journal={Swarm intelligence},
   volume={6},
   number={4},
   pages={271--295},
   year={2012},
-  publisher={Springer}
+  publisher={Springer},
+  address = {Berlin, Germany}
 }
 
 @inproceedings{daily2003world,
