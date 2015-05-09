@@ -10,7 +10,7 @@
     <experiment length="0"
       ticks_per_second="10"
       real_time="true"
-      vss_host="10.0.1.93"
+      vss_host="10.0.0.93"
       vss_port="4050"/>
   </framework>
 
@@ -19,8 +19,8 @@
   <!-- ****************** -->
   <loop_functions library="../../build_simepuck/testing/loop_functions/libfrontal_barrier_lp" label="frontal_barrier_lp">
 
-    <frontal_barrier_lp dangerAreaCentre="1.2,0.0"
-                        dangerAreaRadius="1.0"/>
+    <frontal_barrier_lp dangerAreaCentre="0.0,0.0"
+                        dangerAreaRadius="0.05"/>
 
   </loop_functions>
 
@@ -75,7 +75,7 @@
       <sensors>
         <epuck_proximity implementation="default" show_rays="true" noise_level="0.0" calibrated="true" low_level_config="/home/root/gfrancesca/low_level_configuration/proximity_sensor.xml" />
         <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.0" calibrated="true" low_level_config="/home/root/adebruyn/omnidirectional_camera_sensor.xml"/>
-        <virtual_rgb_ground_sensor implementation="default" real_experiment="false"/>
+        <virtual_rgb_ground_sensor implementation="default" real_experiment="true"/>
       </sensors>
       <params defaultSpeed="5" 
       	humanPotentialGain="500" 
@@ -153,7 +153,7 @@
     <box id="bw" size="6, 0.1, 0.2" movable="false">
       <body position="0,3,0" orientation="0,0,0" />
     </box>
-
+<!--
     <e-puck id="human1" >
       <body position="0,0,0" orientation="0,0,0" />
       <controller config="cppHumanLeft"/>
@@ -174,7 +174,7 @@
       </entity> 
     </distribute-->
 
-    <e-puck id="epuck_10_33" omnidirectional_camera_aperture="80">
+    <e-puck id="epuck_1_38" omnidirectional_camera_aperture="80">
       <body position="-1,-0.1,0" orientation="0,0,0" />
       <controller config="cppAgent" /> 
     </e-puck>
@@ -184,8 +184,13 @@
   <!-- * Physics engines * -->
   <!-- ******************* -->
   <physics_engines>
-    <dynamics2d id="dyn2d"/>
-    <!--iridia_tracking_system its_host="164.15.10.153" its_port="4040"/-->
+    <!--dynamics2d id="dyn2d"/-->
+    <iridia_tracking_system 
+      id="its"
+      its_host="164.15.10.153"
+      its_port="4040"
+      translate_x="0.734"
+      translate_y="3.87"/>
   </physics_engines>
 
   <!-- ********* -->
