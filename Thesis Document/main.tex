@@ -1,4 +1,4 @@
-\documentclass[a4paper, 12pt]{report}
+\documentclass[oneside, a4paper, 12pt]{memoir}
 
 \usepackage[utf8]{inputenc}
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
@@ -43,13 +43,13 @@
 
 % Supervision
 \newcommand{\promAa}{\fontColor{Directeur}}
-\newcommand{\promAb}{\fontText{Professeur [Prénom Nom]}}
-\newcommand{\promBa}{\fontColor{Co-Promoteur}}
-\newcommand{\promBb}{\fontText{Professeur [Prénom Nom]}}
+\newcommand{\promAb}{\fontText{Professeur Mauro Birattari}}
+%\newcommand{\promBa}{\fontColor{Co-Promoteur}}
+%\newcommand{\promBb}{\fontText{Professeur [Prénom Nom]}}
 \newcommand{\promCa}{\fontColor{Superviseur}}
-\newcommand{\promCb}{\fontText{[Prénom Nom]}}
+\newcommand{\promCb}{\fontText{Gaëtan Podevijn, AndreaGiovanni Reina}}
 \newcommand{\deptA}{\fontColor{Service}}
-\newcommand{\deptB}{\fontText{[Nom du service]}}
+\newcommand{\deptB}{\fontText{IRIDIA}}
 
 % Année académique
 \newcommand{\yearA}{\fontColor{Année académique}}
@@ -61,9 +61,7 @@
 
 \newcommand{\quoto}[2]{
 \begin{quotation}
-\begin{it}
-\enquote{#1} - #2
-\end{it}
+\textit{\enquote{#1} - #2}
 \end{quotation}
 }
 
@@ -87,17 +85,20 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \captiondelim{ -- }
-\captionnamefont{\small\sf\bfseries}
-\captiontitlefont{\small\sf}
+\captionnamefont{\small\sffamily\bfseries}
+\captiontitlefont{\small\sffamily}
 \precaption{\rule{\linewidth}{0.4pt}\\}
-\setcounter{secnumdepth}{3}
-\setcounter{tocdepth}{3}
+%\setcounter{secnumdepth}{3}
+%\setcounter{tocdepth}{3}
+\maxsecnumdepth{subsubsection}% 'secnumdepth' is reset by \mainmatter. You should use 'maxsecnumdepth'.
+\maxtocdepth{subsubsection}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % THE DOCUMENT
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
+\frontmatter
 
 	\thispagestyle{empty}
 	\newgeometry{top=2.5cm, bottom=1.5cm, left=2.5cm, right=1cm}
@@ -124,8 +125,8 @@
 		
 		\put(8,44){\makebox(80,5)[l]{\promAa}}
 		\put(8,39){\makebox(80,5)[l]{\promAb}}
-		\put(8,31){\makebox(80,5)[l]{\promBa}} % Commenter la ligne si pas nécessaire
-		\put(8,26){\makebox(80,5)[l]{\promBb}} % Commenter la ligne si pas nécessaire
+%		\put(8,31){\makebox(80,5)[l]{\promBa}} % Commenter la ligne si pas nécessaire
+%		\put(8,26){\makebox(80,5)[l]{\promBb}} % Commenter la ligne si pas nécessaire
 		\put(8,18){\makebox(80,5)[l]{\promCa}} % Commenter la ligne si pas nécessaire
 		\put(8,13){\makebox(80,5)[l]{\promCb}} % Commenter la ligne si pas nécessaire
 		\put(8,5){\makebox(80,5)[l]{\deptA}}
@@ -140,25 +141,78 @@
 % Template conçu par Benjamin Vanhemelryck et revu par François Bronchart - Mai 2013
 	
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% TABLE OF CONTENT
+% BEFORE TEXT
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\tableofcontents
-\listoftodos
+\chapter{Acknowledgements}
+
+\begin{figure}
+	\centering\begin{tikzpicture}
+	%Mauro, Gaëtan, Giovanni, Anthony, Brian, Family and friends.
+	\epuck{-5}{15}
+	\epuck{-5}{12}
+	\epuck{-5}{9}
+	\epuck{-5}{6}
+	\epuck{-5}{3}
+	\epuck{-5}{0}
+	\epuck[60]{-2.5}{-4.33}
+	\epuck[120]{2.5}{-4.33}
+	\epuck[180]{5}{0}
 	
+	\draw (-2.9,15) node{Mauro Birattari};
+	\draw (-2.8,12) node{Gaëtan Podevijn};
+	\draw (-2.3,9) node{Andreagiovanni Reina};
+	\draw (-2.8,6) node{Anthony Antoun};
+	\draw (-2.9,3) node{Brian Delhaisse};
+	\draw (-2.8,0) node{Family \& Friends};
+	
+	\end{tikzpicture}
+\end{figure}
+
+\chapter{Résumé}
+\chapter{Summary}
+\tableofcontents
+\listoffigures
+\listoftables
+
+\listoftodos
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TEXT
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\mainmatter
 \chapter{Introduction}
 
-[To write at the end. When I have a global view.]
+\begin{comment}
+INTRO
+Il faut respecter un fil conducteur dans la thèse. D'abord teaser le contenu dans l'introduction : "j'ai fait un super controller qui peut permettre à des robots de protéger un humain. Ca n'avait jamais été fait avant. J'utilise une swarm. J'ai de très bons résultats. On a testé avec des vrais robots, et l'humain est empêché d'accéder à des zones dangereuses.
 
-\chapter{The Problem}
-	\section{Introduction}
+STATE OF THE ART
+Voici ce qui existe dans le domaine human - robot interaction. Rien de tout cela ne me satisfait et répond à mon problème.
+
+Idem pour human - swarm interaction.
+
+Je vais donc essayer de répondre au problème avec une nouvelle solution... Elle est meilleure que les autres pour ce problème car...
+
+SOLUTION
+Pour parvenir à mes fins, j'ai dû implémenter un controller. J'ai choisi virtual physics car ces avantages et inconvénients. C'est ce gars qui l'a inventé, et voici les travaux utilisant cette technique.
+
+\end{comment}
+
+As swarm robotic systems are mostly destined to operate on risky floors, unknown environment, it would seem logical to consider their application in exploration and/or protection missions. However, at the time of writing this thesis, we could not find any study on the subject. Exploration experiments never included a human, or other living organism. The object of this thesis is to address this lack of study by designing and implementing a protective behaviour executed by a robotic swarm.
 	
-	In this section, we will discuss the problem that led to the creation of this thesis by first providing the reader with some general insight in the world of swarm robotics and swarm intelligence. Then we will focus on specific parts of these domains of study: design methods, feedbacks between human and robots' swarm. Eventually, we will conclude with the main problem this thesis is trying to solve.
+	The human operator is here part of the swarm system. The swarm has to protect him by preventing him from going into dangerous areas, in the same way a group of bodyguards protects someone. The swarm has to follow the operator anywhere to ensure permanent protection.\\
 	
+	We believe this work to be important since it could lay the foundations of a new branch in swarm engineering: human protection, escort or swarm turn-by-turn navigation.
+
+\chapter{State of the Art}
+	
+	In this section, we will discuss the problem that led to the creation of this thesis by first providing the reader with some general insight in the world of swarm robotics and swarm intelligence. Then we will focus on specific parts of these domains of study: feedbacks between human and single robot, and human and robots' swarm.
+	
+	\section{Human - Robot Interaction}
+	
+	[Work related to what I do (detect humans, protection, follow person). Conclude on why it cannot be applied to my problem.]
+
 	\section{Swarm Engineering}
 	
 	This section and the next one are largely inspired by~\citet{brambilla2013swarm}, a reviewing article on swarm engineering. For \citet{csahin2005swarm}, swarm robotics is defined as \quot{the study of how large numbers of relatively simple physically embodied agents can be designed such that a desired collective behavior emerges from the local interactions among agents and between the agents and the environment}~\citep{csahin2005swarm}. Swarm robotics can be separated from other robotic studies by the following characteristics \citep{brambilla2013swarm}:
@@ -186,6 +240,8 @@ With these definitions in mind, we can explain swarm engineering as:
 
 \citet{kazadi2000swarm} points out that \quot{to the swarm engineer, the important points in the design of a swarm are that the swarm will do precisely what it is designed to do, and that it will do so reliably and on time} \citep{kazadi2000swarm}.
 	
+\begin{comment}	
+
 	\section{Design Methods}
 	
 	\citet{brambilla2013swarm} did a pretty good job in classifying the different methods to design swarm robotics systems. Design is the period of time that starts at the definition of the requirements and specifications, and ends with the development. They divide the methods into two categories: \emph{behaviour-based design}, and \emph{automatic design}.
@@ -241,11 +297,12 @@ With these definitions in mind, we can explain swarm engineering as:
 		
 		Experiments with real robots allow the developer to assess the performance of the system under real conditions for the sensors and actuators, which are somehow idealised in the simulators or the other models. It should not be used to validate the behaviours in real-world applications, as the arena environment in which the robots evolve is heavily controlled (light intensity, landscape, interferences). Therefore, it should be viewed as a way to include realistic noise patterns in the experiments \citep{brambilla2013swarm}.
 	
-	\section{Human - Robot Interaction}
+\end{comment}	
 	
-	\todo[inline]{Necessary?}
 	
 	\section{Human - Robots Swarm Interaction}
+	
+	[Work related to what I do (detect humans, protection, follow person). Conclude on why it cannot be applied to my problem.]
 	
 	Human - Robotic swarm interaction is the study of how humans can interact with a swarm to control it and receive feedback from it \citep{brambilla2013swarm}. A proper feedback is needed by the operator in order to make the right decisions. Since swarms must ideally be autonomous and make decisions in a distributed way, it is difficult to insert a communication with a human operator in the system to gain control.\\
 	
@@ -259,8 +316,10 @@ With these definitions in mind, we can explain swarm engineering as:
 [Currently, only little research on feedback between human and robots swarms. That research is focused on interaction with an additional layer... Mostly unidirectional communication (human to robots). Need new types of interactions for new applications. Robots to human (guide). Write about article saying self-organised feedback is better.] \todo{Remove}
 \end{comment}
 
-
-	\section{Protection and Exploration}
+	\section{Flocking and Pattern Formation with a Guide}
+	
+		[Work related to what I do. Conclude on why it cannot be applied to my problem. Make connections with this part later in the document.]
+		
 	
 	As swarm robotic systems are mostly destined to operate on risky floors, unknown environment, it would seem logical to consider their application in exploration and/or protection missions. However, at the time of writing this thesis, we could not find any study on the subject. Exploration experiments never included a human, or other living organism. The object of this thesis is to address this lack of study by designing and implementing a protective behaviour executed by a robotic swarm.
 	
@@ -268,45 +327,33 @@ With these definitions in mind, we can explain swarm engineering as:
 	
 	We believe this work to be important since it could lay the foundations of a new branch in swarm engineering: human protection, escort or swarm turn-by-turn navigation.
 
-\chapter{Solution}
+%////////////////////////////////////////////////////////////
+\chapter{The Idea}
+%////////////////////////////////////////////////////////////
 
-	\section{Introduction}
+[Explain the solution independently of the tools used to implement the solution. Make the reader understand that this problem is new.
+
+	\section{The Problem}
 	
+	[Human walking in unknown environment. Team to assist, perceive danger that the human cannot. Graphical example, human goes from A to B with dangers (keep it simple as demo). Write text about an image showing the problem. Mined field, real applications.]
+	
+	\section{Technical Issues}
+	
+	[The problems I will have to solve?]
+
+%////////////////////////////////////////////////////////////
+\chapter{Implementation}
+%////////////////////////////////////////////////////////////
+
 	This section details the solution to the given problem and all the choices that resulted in it. The explanation will take a top-down approach, first reviewing the general and early choices faced (as early choices mean general choices). It will then go deeper in the details.
 	
-	\section{Swarm Robotics}
+	\section{The Software}
 	
-	The first question one could ask is: why swarm robotics for such an application? The answer to that question lays in section \ref{def:robustness_scalability_flexibility}. Robustness, scalability and flexibility are characteristics that make swarms of robots really interesting in unknown environments \citep{brambilla2013swarm}.\todo{Insert justification?} In case one of the agents is broken, we do not want to see the whole system collapse and leave the human unattended. Flexibility guarantees that the solution will work in different conditions, environments, which is an advantage for exploration. In case of loss of robots, scalability would maintain the protection.
+		\subsection{Why a Swarm?}
 	
-	\section{The Shape}
+		The first question one could ask is: why swarm robotics for such an application? The answer to that question lays in section \ref{def:robustness_scalability_flexibility}. Robustness, scalability and flexibility are characteristics that make swarms of robots really interesting in unknown environments \citep{brambilla2013swarm}.\todo{Insert justification?} In case one of the agents is broken, we do not want to see the whole system collapse and leave the human unattended. Flexibility guarantees that the solution will work in different conditions, environments, which is an advantage for exploration. In case of loss of robots, scalability would maintain the protection.
 	
-	The first step of the thesis is the design of the solution, to imagine how the system will look like and how we will implement it. The first choice faced was the overall behaviour of the swarm. How do the robots move around the human? What shape will they try to respect? This choice is important because it will define the overall look of the system.\\
-	
-	The first shape that intuitively comes in mind is the circle. The circle is the most elementary shape in geometry. It offers the best ratio:
-	$$\frac{\mbox{Surface}}{\mbox{Perimeter}} = \frac{r}{2}~\mbox{, where r is the radius of the circle.}$$
-	
-	That means that fewer robots are needed for the same protected area, and more space for the human with a certain amount of robots. Luckily, it is also the easiest shape to realise in practice.
-	
-	\begin{figure}[!h]\centering
-	\begin{tikzpicture}
-		\draw [dashed] (0,0) circle [radius=4];
-		\epuck{4}{0}
-		\epuck{2}{3.464}
-		\epuck{-2}{3.464}
-		\epuck{-4}{0}
-		\epuck{-2}{-3.464}
-		\epuck{2}{-3.464}
-		
-		\human{0}{0}
-		%\draw (0,0) node[regular polygon,regular polygon sides=3,minimum height=2cm,minimum width=1cm,line width=1.5pt, draw] {\Huge{H}};
-	\end{tikzpicture}
-	\caption{Circle shape for the swarm to get the widest protected surface for a given amount of robots.}
-	\label{fig:circle_shape}
-	\end{figure}
-	
-		The figure \ref{fig:circle_shape} represents the kind of circle that we would like to get for 6 robots and 1 human in the centre.
-		
-	\section{State Machine}
+		\subsection{The Global Behaviour (state machine)}
 	
 	The final implementation is built on 2 layers. The upper layer is the state machine, having for each state a specific behaviour in the lower layer. Figure \ref{fig:state_machine} illustrates the whole structure of the upper layer. Only part of the states rely on virtual physics: \emph{Human} and \emph{Default}. The others simply link the sensor values to the wheels speed.\\
 	
@@ -374,8 +421,36 @@ With these definitions in mind, we can explain swarm engineering as:
 		\caption{State machine of the final behaviour.}
 		\label{fig:state_machine}
 	\end{figure}
+		
 	
-	\section{Virtual Physics}
+		\subsection{The Pattern Formation}
+	
+	The first step of the thesis is the design of the solution, to imagine how the system will look like and how we will implement it. The first choice faced was the overall behaviour of the swarm. How do the robots move around the human? What shape will they try to respect? This choice is important because it will define the overall look of the system.\\
+	
+	The first shape that intuitively comes in mind is the circle. The circle is the most elementary shape in geometry. It offers the best ratio:
+	$$\frac{\mbox{Surface}}{\mbox{Perimeter}} = \frac{r}{2}~\mbox{, where r is the radius of the circle.}$$
+	
+	That means that fewer robots are needed for the same protected area, and more space for the human with a certain amount of robots. Luckily, it is also the easiest shape to realise in practice.
+	
+	\begin{figure}[!h]\centering
+	\begin{tikzpicture}
+		\draw [dashed] (0,0) circle [radius=4];
+		\epuck{4}{0}
+		\epuck{2}{3.464}
+		\epuck{-2}{3.464}
+		\epuck{-4}{0}
+		\epuck{-2}{-3.464}
+		\epuck{2}{-3.464}
+		
+		\human{0}{0}
+		%\draw (0,0) node[regular polygon,regular polygon sides=3,minimum height=2cm,minimum width=1cm,line width=1.5pt, draw] {\Huge{H}};
+	\end{tikzpicture}
+	\caption{Circle shape for the swarm to get the widest protected surface for a given amount of robots.}
+	\label{fig:circle_shape}
+	\end{figure}
+	
+		The figure \ref{fig:circle_shape} represents the kind of circle that we would like to get for 6 robots and 1 human in the centre.
+		
 	
 	Section \ref{sec:virtual_physics} explained how the laws of physics can be used to design a behaviour. Intuitively, this method seemed the most appropriate to create a behaviour whose main feature is a \enquote{protection barrier} around a human. When it comes to pattern creation, people usually first consider using repulsive and attractive forces to make the robots automatically adjust their position with respect to others.\\
 	
@@ -383,15 +458,15 @@ With these definitions in mind, we can explain swarm engineering as:
 	
 	$$\vec{f} = -\vec{\nabla}P$$, P being the system's potential. The following sections will explain in detail the different potentials that were implemented to obtain the desired behaviour.
 	
-		\subsection{Potentials}
+		\subsubsection{Potentials (title needed?)}
 		
 		In this section, the potentials are grouped by states in which they are used. Since virtual physics are used in only 2 states, we have only 2 groups.
 		
-			\subsubsection{Human}
+			\paragraph{Human}
 			
 			The controller enters the \emph{Human} state at the beginning of the time step only if a human is found nearby. The complete potential for this state is the sum of 3 components: the \emph{human potential}, the \emph{gravity potential} and the \emph{agent repulsion potential}.
 		
-				\paragraph{Human Potential}
+				\subparagraph{Human Potential}
 				
 				\begin{figure}[!h]\centering
 					\begin{tikzpicture}[xscale=0.2,yscale=0.2]
@@ -406,53 +481,95 @@ With these definitions in mind, we can explain swarm engineering as:
 				\end{figure}
 				
 				
-				\paragraph{Gravity Potential}
-				\paragraph{Agent Repulsion Potential}
+				\subparagraph{Gravity Potential}
+				
+				[Description of the evolution of the gravity potential.]
+				
+				\subparagraph{Agent Repulsion Potential}
+				
+				[Idem for agent repulsion pot.]
 			
-			\subsubsection{Default}
+			\paragraph{Obstacle}
+			
+			[Idem for obstacle case.			
+						
+			\paragraph{Default}
+			
+			[Idem for the default state and potential.]
+			
+			\paragraph{Blocked}
+			
+			[Idem for blocked state.]
 		
-	\section{E-pucks}
-	
-	\section{ARGoS}
-	
-	\section{Range and Bearing Sensor}
-		\subsection{Tests}
-		\subsection{Calibration}
-		\subsection{Conclusions}
-
-	\section{Omnidirectional Camera Sensor}
-		\subsection{Tests}
 
 	\section{The Hardware}
-		\subsection{Objective}
-		\subsection{Choices}
-		\subsection{Blueprints}
-		\subsection{Build Process}
+	
+	[I will in this section describe the need for a device to detect a human and its development. What are the objectives of the hardware? The choices we made to get the final solution. How we built it. Calibration an adaptation process to make the current algorithm compatible with the new hardware.]
 
-\chapter{Assessments}
-	\section{Tracking System}
-	\section{Metrics}
-	\section{More robots ?}
-	\section{Tests Scenarios}
-	\section{Human Travelling Speed ?}
-	\section{Usability Study}
+\chapter{Experiments}
 
-\chapter{Future Works}
-	\section{Other Robots}
-	\section{Human Guidance}
-		\subsection{Zero Visibility Areas or Blind People}
-		\subsection{Human Motion Synchronisation}
-		\subsection{Vehicle Guidance}
+	\section{Tests}
+	[The measurements and the tests on the final behaviour.]
 
-\chapter{Acknowledgements}
+		\subsection{Metrics}
+		
+		[Metrics I will use. Their description. How I will compute them.]
+		
+			\subsubsection{Correct Distance}
+			
+			[Do the robots respect the correct wanted distance?]
+			
+			\subsubsection{Robot Density}
+			
+			[Do the robots surround the human correctly?]
+			
+			\subsubsection{Time}
+			
+			[Do they do that in a relatively low amount of time?]
+			
+		\subsection{Tests Scenarios}
+		
+		[How I am performing my experiments.]
+		
+		\subsection{Analysis}
+		
+		[All the graphs we discussed about. The evolution of the error over time. The analysis of the behaviour on basis of the criteria we defined.]
+		
+	\section{Demonstration}
+	
+	[What demonstration was done with the device. Add pictures. Describe perfectly.]
 
-[Never gonna give you up\\
-Never gonna let you down\\
-Never gonna run around and desert you\\
-Never gonna make you cry\\
-Never gonna say goodbye\\
-Never gonna tell a lie and hurt you]
+\chapter{Conclusion}
 
+	\section{Future Works}
+	[The future works that would be interesting from my point of view.]
+	
+		\subsection{Other Robots}
+		\subsection{Human Guidance}
+			\subsubsection{Zero Visibility Areas or Blind People}
+			\subsubsection{Human Motion Synchronisation}
+			\subsubsection{Vehicle Guidance}
+
+
+\appendix
+
+\chapter{E-puck}
+
+\chapter{ARGoS}
+
+\chapter{Arena Tracking System}
+
+\chapter{Range and Bearing}
+
+\chapter{Omnidirectional Camera}
+
+\chapter{Controller Code}
+
+\chapter{MATLAB Scripts Code}
+
+\chapter{Human Detection Devices Blueprints}
+
+\backmatter
 \newpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
