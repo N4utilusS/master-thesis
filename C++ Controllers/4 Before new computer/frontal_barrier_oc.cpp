@@ -9,14 +9,13 @@ using namespace argos;
 /****************************************/
 
 static const UInt8 BLOCKING_SYSTEM_MAX_COUNT = 20;
-static const std::string DEFAULT_HUMAN_LEFT_COLOR_REF = "red";
-static const std::string DEFAULT_HUMAN_RIGHT_COLOR_REF = "green";
-static const CColor DEFAULT_AGENT_GOOD_COLOR = CColor::BLUE;
-static const CColor DEFAULT_AGENT_BAD_COLOR = CColor::BLACK;
+static const std::string DEFAULT_HUMAN_LEFT_COLOR_REF = "blue";
+static const std::string DEFAULT_HUMAN_RIGHT_COLOR_REF = "magenta";
+static const CColor DEFAULT_AGENT_GOOD_COLOR = CColor::GREEN;
+static const CColor DEFAULT_AGENT_BAD_COLOR = CColor::RED;
 static const std::string DEFAULT_AGENT_GOOD_COLOR_REF = "green";
 static const std::string DEFAULT_AGENT_BAD_COLOR_REF = "red";
-static const Real DISTANCE_CORRECTION_FACTOR = 1.0;//0.538;
-static const Real HUMAN_POTENTIAL_DISTANCE_VARIATION_DELTA = 0.5;
+static const Real DISTANCE_CORRECTION_FACTOR = 0.538;
 
 
 /****************************************/
@@ -26,23 +25,22 @@ CEpuckFrontalBarrierOC::CEpuckFrontalBarrierOC() :
     m_fDefaultWheelsSpeed(0),
     m_fHumanPotentialGain(0),
     m_fHumanPotentialDistance(0),
-    m_cHumanLeftColorRef(CColor::RED),
-    m_cHumanRightColorRef(CColor::GREEN),
+    m_cHumanLeftColorRef(CColor::BLACK),
+    m_cHumanRightColorRef(CColor::BLACK),
     m_fAgentPotentialGain(0),
     m_fAgentPotentialDistance(0),
     m_cAgentGoodColor(DEFAULT_AGENT_GOOD_COLOR),
     m_cAgentBadColor(DEFAULT_AGENT_BAD_COLOR),
-    m_cAgentGoodColorRef(CColor::BLUE),
+    m_cAgentGoodColorRef(CColor::BLACK),
     m_cAgentBadColorRef(CColor::BLACK),
     m_fGravityPotentialGain(0),
     m_pcWheelsActuator(NULL),
     m_pcProximitySensor(NULL),
     m_pcRGBLED(NULL),
-    m_pcVirtualRGBGroundSensor(NULL),
+    m_pcGroundSensor(NULL),
     m_unBSDirection(0),
     m_unBSCount(0),
     m_fHumanPotentialModifiedDistance(0),
-    m_fHumanPotentialDistanceVariationDelta(HUMAN_POTENTIAL_DISTANCE_VARIATION_DELTA),
     m_unColorCountdownCounter(0),
     m_unDirectionVectorsWindowSize(1) {
 
@@ -63,8 +61,6 @@ void CEpuckFrontalBarrierOC::ParseParams(TConfigurationNode& t_node) {
         GetNodeAttributeOrDefault(t_node, "humanPotentialGain", m_fHumanPotentialGain, m_fHumanPotentialGain);
         /* Human potential distance */
         GetNodeAttributeOrDefault(t_node, "humanPotentialDistance", m_fHumanPotentialDistance, m_fHumanPotentialDistance);
-        /* Human potential distance variation delta */
-        GetNodeAttributeOrDefault(t_node, "humanPotentialDistanceVariationDelta", m_fHumanPotentialDistanceVariationDelta, m_fHumanPotentialDistanceVariationDelta);
         /* Human potential gain */
         GetNodeAttributeOrDefault(t_node, "agentPotentialGain", m_fAgentPotentialGain, m_fAgentPotentialGain);
         /* Human potential distance */
@@ -137,8 +133,8 @@ void CEpuckFrontalBarrierOC::Init(TConfigurationNode& t_node) {
         }
     } catch (CARGoSException ex) {}
     try {
-        m_pcVirtualRGBGroundSensor = GetSensor<CCI_VirtualRGBGroundSensor>("virtual_rgb_ground_sensor");
-        if (m_pcVirtualRGBGroundSensor == NULL)
+        m_pcGroundSensor = GetSensor<CCI_EPuckGroundSensor>("epuck_ground");
+        if (m_pcGroundSensor == NULL)
             LOG << "Ground sensor pointer is null in init." << std::endl;
     } catch (CARGoSException ex) {
         LOG << "Pb with ground sensor initialization." << std::endl;
@@ -374,16 +370,16 @@ const CVector2 CEpuckFrontalBarrierOC::HumanPotential() {
                 // 2 CASES: IN DANGER ZONE OR NOT --------------------------
                 // 1 - IN DANGER ZONE:
                 if (IsInDanger()) {
-                    m_fHumanPotentialModifiedDistance = (m_fHumanPotentialModifiedDistance > 15) ? // 15cm is the limit distance from the human.
-                    m_fHumanPotentialModifiedDistance-m_fHumanPotentialDistanceVariationDelta : 
+                    m_fHumanPotentialModifiedDistance = (m_fHumanPotentialModifiedDistance > 15) ? 
+                    m_fHumanPotentialModifiedDistance-0.25 : 
                     15;
                 // 2- NOT IN DANGER ZONE:
                 } else {
                     m_fHumanPotentialModifiedDistance = (m_fHumanPotentialModifiedDistance < m_fHumanPotentialDistance) ? 
-                    m_fHumanPotentialModifiedDistance+m_fHumanPotentialDistanceVariationDelta : 
+                    m_fHumanPotentialModifiedDistance+0.25 : 
                     m_fHumanPotentialDistance;
                 }
-                LOG << m_fHumanPotentialModifiedDistance << std::endl;
+
                 Real fLennardJonesValue = LennardJonesStrongAttraction(blobs[unMinimumIndex]->Distance * DISTANCE_CORRECTION_FACTOR, m_fHumanPotentialGain, m_fHumanPotentialModifiedDistance);
                 vector.FromPolarCoordinates(fLennardJonesValue, blobs[unMinimumIndex]->Angle);
             
@@ -600,9 +596,9 @@ inline const CColor CEpuckFrontalBarrierOC::GetAgentSituationColor(){
 /****************************************/
 
 inline const bool CEpuckFrontalBarrierOC::IsInDanger() const {
-    const CCI_VirtualRGBGroundSensor::CVirtualRGBGroundSensorReading& cReading = m_pcVirtualRGBGroundSensor->GetReading();
+    const CCI_EPuckGroundSensor::SReadings& readings = m_pcGroundSensor->GetReadings();
 
-    return (cReading.R > 122 && cReading.G < 122 && cReading.B < 122);
+    return (readings.Left < 0.5 || readings.Center < 0.5 || readings.Right < 0.5);
 }
 
 /****************************************/

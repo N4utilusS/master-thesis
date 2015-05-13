@@ -26,7 +26,8 @@ namespace argos {
    CColor CFrontalBarrierLP::GetFloorColor(const CVector2& c_pos_on_floor) {
       if ((c_pos_on_floor - m_cDangerZoneCentre).SquareLength() <= m_fDangerZoneRadiusSquared)
          return CColor::RED;
-      return CColor::WHITE;
+      else
+         return CColor::WHITE;
       /*
    	Real l = 4.5;
    	Real rX = c_pos_on_floor.GetX() - l*floor(c_pos_on_floor.GetX()/l);

@@ -24,7 +24,7 @@
 #include <argos3/plugins/robots/e-puck/control_interface/ci_epuck_omnidirectional_camera_sensor.h>
 /* Definition of the e-puck RGB LED actuator */
 #include <argos3/plugins/robots/e-puck/control_interface/ci_epuck_rgb_leds_actuator.h>
-#include <argos3/plugins/robots/generic/control_interface/ci_virtual_rgb_ground_sensor.h>
+#include <argos3/plugins/robots/e-puck/control_interface/ci_epuck_ground_sensor.h>
 #include <argos3/core/utility/math/vector2.h>
 #include <argos3/core/utility/datatypes/color.h>
 #include <vector>
@@ -129,8 +129,8 @@ private:
     CCI_EPuckOmnidirectionalCameraSensor* m_pcOmnidirectionalCameraSensor;
     /* Pointer to the e-puck RGB LED actuator */
     CCI_EPuckRGBLEDsActuator* m_pcRGBLED;
-    /* Pointer to the e-puck virtual RGB ground sensor */
-    CCI_VirtualRGBGroundSensor* m_pcVirtualRGBGroundSensor;
+    /* Pointer to the e-puck ground sensor */
+    CCI_EPuckGroundSensor* m_pcGroundSensor;
 
     /* Blocking System Variables */
     UInt8 m_unBSDirection;
@@ -138,8 +138,7 @@ private:
 
     /* Human potential distance variation variable */
     Real m_fHumanPotentialModifiedDistance;
-    /* Human potential distance variation delta */
-    Real m_fHumanPotentialDistanceVariationDelta;
+
 
     /* Agent color countdown counter */
     UInt8 m_unColorCountdownCounter;
