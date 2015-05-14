@@ -1,4 +1,4 @@
-AMOUNT_OF_ROBOTS = 6;
+AMOUNT_OF_ROBOTS = 1;
 NOMINAL_DISTANCE = 0.3;
 
 % Rectangle properties
@@ -19,24 +19,23 @@ data = data(:,index); % The matrix rows now only contains the needed data: x1,y1
 % Loop
 xIndices = mod(1:AMOUNT_OF_ROBOTS*2, 2) == 0;
 yIndices = mod(1:AMOUNT_OF_ROBOTS*2, 2) == 1;
-results = zeros(1,size(data,1));
 
-for t = 1:size(data,1) % For every time step (to be reduced after!)
+x = data(:, xIndices);
+y = data(:, yIndices);
 
-    x = data(t, xIndices);
-    y = data(t, yIndices);
-    
-    distancesToCenter = sqrt(x.^2 + y.^2); % Distance to center for all robots at time step t.
-    
-    % Compute the distance from the rectangle
-    % http://stackoverflow.com/questions/5254838/calculating-distance-between-a-point-and-a-rectangular-box-nearest-point
-    dx = max([MIN_X - x; zeros(AMOUNT_OF_ROBOTS); x - MAX_X]);
-    dy = max([MIN_Y - y; zeros(AMOUNT_OF_ROBOTS); y - MAX_Y]);
-    distancesToRectangle = sqrt(dx.^2 + dy.^2);
-    
-    % Compute the error value for this time step
-    relErrors = abs((distancesToRectangle - NOMINAL_DISTANCE)/NOMINAL_DISTANCE);
-    results(t) = mean(relErrors);
-end
+distancesToCenter = sqrt(x.^2 + y.^2); % Distance to center for all robots at time step t.
 
-plot(1:size(data,1), results)
+% Compute the distance from the rectangle
+% http://stackoverflow.com/questions/5254838/calculating-distance-between-a-point-and-a-rectangular-box-nearest-point
+dx = cat(3, MIN_X - x, zeros(size(x,1),AMOUNT_OF_ROBOTS), x - MAX_X);
+dy = cat(3, MIN_Y - y, zeros(size(x,1),AMOUNT_OF_ROBOTS), y - MAX_Y);
+
+dx = max(dx, [], 3);
+dy = max(dy, [], 3);
+distancesToRectangle = sqrt(dx.^2 + dy.^2);
+
+% Compute the error value for this time step
+relErrors = abs((distancesToRectangle - NOMINAL_DISTANCE)/NOMINAL_DISTANCE);
+results = mean(relErrors, 2);
+
+plot(1:size(results,1), results)
