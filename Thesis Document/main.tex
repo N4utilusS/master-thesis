@@ -30,10 +30,11 @@
 \newcommand{\fontColor}{\sffamily \selectfont \color{ULBblue}}
 
 % Titre
-\newcommand{\titleA}{\fontTitle{Human - Robots Swarms Interactions}} % Titre identique au titre remis au secrétariat
+\newcommand{\titleA}{\fontTitle{Human - Robots Swarms Interaction}} % Titre identique au titre remis au secrétariat
 %\newcommand{\titleB}{\fontTitle{Deuxième ligne de titre du mémoire}} % (dans la langue de rédaction a priori)
 % Sous-titre
-\newcommand{\subtitle}{\fontSubtitle{Ligne du sous-titre du mémoire}}
+\newcommand{\subtitleA}{\fontSubtitle{An Escorting Robot Swarm that Diverts a Human}}
+\newcommand{\subtitleB}{\fontSubtitle{away from Dangers (s)he cannot perceive.}}
 % Titre du diplôme
 \newcommand{\diplomaA}{\fontText{Mémoire présenté en vue de l’obtention du diplôme}} % A laisser en Français
 \newcommand{\diplomaB}{\fontText{d'Ingénieur Civil en Informatique à finalité Intelligence Computationnelle}}
@@ -44,8 +45,8 @@
 % Supervision
 \newcommand{\promAa}{\fontColor{Directeur}}
 \newcommand{\promAb}{\fontText{Professeur Mauro Birattari}}
-%\newcommand{\promBa}{\fontColor{Co-Promoteur}}
-%\newcommand{\promBb}{\fontText{Professeur [Prénom Nom]}}
+\newcommand{\promBa}{\fontColor{Co-Promoteur}}
+\newcommand{\promBb}{\fontText{Professeur Marco Dorigo}}
 \newcommand{\promCa}{\fontColor{Superviseur}}
 \newcommand{\promCb}{\fontText{Gaëtan Podevijn, AndreaGiovanni Reina}}
 \newcommand{\deptA}{\fontColor{Service}}
@@ -110,23 +111,24 @@
 		
 		\put(8,155){\makebox(150,10)[l]{\titleA}}
 %		\put(8,145){\makebox(150,10)[l]{\titleB}}
-		\put(8,135){\makebox(150,10)[l]{\subtitle}}
+		\put(8,135){\makebox(150,10)[l]{\subtitleA}}
+		\put(8,125){\makebox(150,10)[l]{\subtitleB}}
 		
 		\put(0,75){
 		\begin{tikzpicture}[scale=0.1]
 		\fill [fill=ULBblue](0,0) rectangle (0.8,90);
-		\fill [fill=ULBblue](0,57) rectangle (152,57.8);
+		\fill [fill=ULBblue](0,47) rectangle (152,47.8);
 		\end{tikzpicture}}
 		
-		\put(8,120){\makebox(150,5)[l]{\diplomaA}}
-		\put(8,115){\makebox(150,5)[l]{\diplomaB}}
+		\put(8,110){\makebox(150,5)[l]{\diplomaA}}
+		\put(8,105){\makebox(150,5)[l]{\diplomaB}}
 		
 		\put(8,75){\makebox(150,10)[l]{\selectfont \student}}
 		
 		\put(8,44){\makebox(80,5)[l]{\promAa}}
 		\put(8,39){\makebox(80,5)[l]{\promAb}}
-%		\put(8,31){\makebox(80,5)[l]{\promBa}} % Commenter la ligne si pas nécessaire
-%		\put(8,26){\makebox(80,5)[l]{\promBb}} % Commenter la ligne si pas nécessaire
+		\put(8,31){\makebox(80,5)[l]{\promBa}} % Commenter la ligne si pas nécessaire
+		\put(8,26){\makebox(80,5)[l]{\promBb}} % Commenter la ligne si pas nécessaire
 		\put(8,18){\makebox(80,5)[l]{\promCa}} % Commenter la ligne si pas nécessaire
 		\put(8,13){\makebox(80,5)[l]{\promCb}} % Commenter la ligne si pas nécessaire
 		\put(8,5){\makebox(80,5)[l]{\deptA}}
@@ -148,22 +150,24 @@
 
 \begin{figure}
 	\centering\begin{tikzpicture}
-	%Mauro, Gaëtan, Giovanni, Anthony, Brian, Family and friends.
-	\epuck{-5}{15}
+	%Mauro, Gaëtan, Giovanni, Anthony, Lorenzo, Brian, Family and friends.
 	\epuck{-5}{12}
-	\epuck{-5}{9}
+	\epuck{-5}{10}
+	\epuck{-5}{8}
 	\epuck{-5}{6}
-	\epuck{-5}{3}
+	\epuck{-5}{4}
+	\epuck{-5}{2}
 	\epuck{-5}{0}
 	\epuck[60]{-2.5}{-4.33}
 	\epuck[120]{2.5}{-4.33}
 	\epuck[180]{5}{0}
 	
-	\draw (-2.9,15) node{Mauro Birattari};
-	\draw (-2.8,12) node{Gaëtan Podevijn};
-	\draw (-2.3,9) node{Andreagiovanni Reina};
+	\draw (-2.9,12) node{Mauro Birattari};
+	\draw (-2.8,10) node{Gaëtan Podevijn};
+	\draw (-2.3,8) node{Andreagiovanni Reina};
 	\draw (-2.8,6) node{Anthony Antoun};
-	\draw (-2.9,3) node{Brian Delhaisse};
+	\draw (-2.9,4) node{Brian Delhaisse};
+	\draw (-2.8,2) node{Lorenzo};
 	\draw (-2.8,0) node{Family \& Friends};
 	
 	\end{tikzpicture}
@@ -182,6 +186,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \mainmatter
 \chapter{Introduction}
+
+[I'll do this and this... blah blah blah...]
 
 \begin{comment}
 INTRO
@@ -213,7 +219,9 @@ As swarm robotic systems are mostly destined to operate on risky floors, unknown
 	
 	[Work related to what I do (detect humans, protection, follow person). Conclude on why it cannot be applied to my problem.]
 
-	\section{Swarm Engineering}
+	\section{Swarm Robotics}
+	
+	[Flocking with a guide, and then Pattern Formation with a Guide. Work related to what I do. Conclude on why it cannot be applied to my problem. Make connections with this part later in the document. S'inspirer de Brambilla pour les flock et pattern.]
 	
 	This section and the next one are largely inspired by~\citet{brambilla2013swarm}, a reviewing article on swarm engineering. For \citet{csahin2005swarm}, swarm robotics is defined as \quot{the study of how large numbers of relatively simple physically embodied agents can be designed such that a desired collective behavior emerges from the local interactions among agents and between the agents and the environment}~\citep{csahin2005swarm}. Swarm robotics can be separated from other robotic studies by the following characteristics \citep{brambilla2013swarm}:
 	
@@ -240,67 +248,7 @@ With these definitions in mind, we can explain swarm engineering as:
 
 \citet{kazadi2000swarm} points out that \quot{to the swarm engineer, the important points in the design of a swarm are that the swarm will do precisely what it is designed to do, and that it will do so reliably and on time} \citep{kazadi2000swarm}.
 	
-\begin{comment}	
-
-	\section{Design Methods}
-	
-	\citet{brambilla2013swarm} did a pretty good job in classifying the different methods to design swarm robotics systems. Design is the period of time that starts at the definition of the requirements and specifications, and ends with the development. They divide the methods into two categories: \emph{behaviour-based design}, and \emph{automatic design}.
-	
-		\subsection{Behaviour-based Design}
-		\label{sec:behaviour_based_design}
-		
-		All methods in this group mean developing the solution by hand. No learning or automatic tool was used to arrive at an accepting collective behaviour. This is associated with a trial and error process, and involves a lot of tuning. This is the kind of procedure that people usually implement. \citeauthor{brambilla2013swarm} subdivided this group into 3 categories: \emph{probabilistic finite state machine design}, \emph{virtual physics-based design} and \emph{other design methods}.
-		
-			\subsubsection{Probabilistic Finite State Machine Design}
-			
-			PFSMs \citep{minsky1967computation} are one of the most used methods to create collective behaviours. As the robots need to take decisions based on their readings and current state, they constitute an intuitive choice. Each transition is characterised by a probability to follow that transition. The value can be fixed or variable, in which case it will generally depend on the current state of the system. One example of such a variable value is the \emph{response threshold} found by \citet{granovetter1978threshold} (also \citet{bonabeau1997adaptive}) \todo{Add figures}.
-			
-			\subsubsection{Virtual Physics-Based Design}
-			\label{sec:virtual_physics}
-			
-			The next subcategory takes physics laws as a model to generate behaviours. Robots are assimilated to virtual particles under the influence of virtual potential fields and virtual forces. The robots compute the total force by summing all the forces associated to each influence in the system:
-			$$\overline{F} = \sum_{i}{\overline{f_i}} ~\mbox{, where $\overline{f_i}$ is a virtual force.}$$
-			$\overline{f_i}$ can be expressed in polar coordinates: $$\overline{f_i} = f_i(d_i)e^{j\theta_i}.$$ 
-			One of the most used virtual potentials is the Lennard-Jones potential whose utility is to keep a robot at a certain distance\todo{Figure}: 
-			$$ f(d) = \epsilon \left[ \left(\frac{\sigma}{d}\right)^{12} - 2 \left(\frac{\sigma}{d}\right)^6 \right]$$, where $\epsilon$ is the gain, $\sigma$ is the target distance and $d$ is the current real distance. 
-			This method is very appealing thanks to the absence of multiple rules, states, and tests to decide which actions to execute. Only one mathematical formula translates the inputs into outputs for the actuators, in a smooth and elegant way. Multiple behaviours can be combined by simply summing the corresponding resulting vectors \citep{brambilla2013swarm}. As this method is based on the laws of physics, it is often used when a robot formation is needed.
-			
-			\subsubsection{Other Design Methods}
-		
-			Other methods not belonging to the two previous sections can also be cited. Among them, a scripting language created by \citet{bachrach2010composable}: \emph{Protoswarm}. The language allows one to code for the group, and not for the individual, easing the design of the system.
-		
-		\subsection{Automatic Design}
-		
-		With automatic design, the generation of the behaviours is left to the computer. No real intervention from the developer is needed \citep{brambilla2013swarm}. \citeauthor{brambilla2013swarm} subdivide again the main category into subcategories: reinforcement learning, and evolutionary robotics and others (which we will not talk about).
-		
-			\subsubsection{Reinforcement Learning}
-			
-			Through reinforcement learning, the agent can learn the target behaviour with a trial and error procedure. Positive feedback is returned if the resulting behaviour is close to the target one, and negative feedback is returned if it is far from it. Iteratively, the robot (or agent in a simulation) will come closer to the wanted behaviour (optimal policy) by trying to maximise the rewards received from the environment. Although it may look interesting on paper, designers would need to overcome some difficulties. One of them is called \emph{spatial credit assignment}: since the swarm gets the reward at the end of the experiment, how can we manage to turn it into individual rewards? Indeed, the learning is at the individual level, not at the collective level \citep{wolpert1999introduction}.
-			
-			\subsubsection{Evolutionary Robotics}
-			
-			Evolutionary robotics are based on the Darwinian principle of natural selection and evolution. At the beginning of the learning process, a population of individual behaviours is generated randomly. For each generation of the population, a few experiments are run with each individual behaviour. This means the behaviour is used by the entire group of agents. A fitness is computed on basis of the collective performance. At the end of all the experiments, the best individual behaviours in the population are kept and may undergo some changes, like mutation or cross-over. Generations over generations, the behaviours in the population move towards the target collective behaviour. Most of the time, this method is associated with neural networks whose parameters are iteratively adjusted. This whole learning process is computationally intensive and does not guarantee its convergence. Furthermore, the complexity of the final behaviours is relatively low. Usually the same behaviours can be obtained by using behaviour-based design \citep{brambilla2013swarm}.
-			
-	\section{Analysis}
-	
-	To check that the system verifies certain properties and exhibits the target behaviour, the swarm engineer has to go through the analysis process, usually by means of models. One can classify the models into 2 levels: \emph{the microscopic level}, and \emph{the macroscopic level} \citep{brambilla2013swarm}. The first one considers the individuals constituting the group, and their interactions. The second one focuses on the group itself and its characteristics. Managing to find a model comprising both levels, microscopic and macroscopic, is very challenging \citep{abbott2006emergence}. This is why most of the works only focus on one of the two aspects.
-	
-		\subsection{Microscopic Models}
-		
-		The level considered here describes the entities composing the group, their interactions between one another, and with the environment (their behaviour, see section \ref{sec:behaviour_based_design}) in \emph{simulations}. The amount of detail in the model can vary from representing robots as point-masses to 3D worlds with advanced physics and accurate representation of the sensors and actuators. Most of the simulators for swarm robotics systems do not offer a great scalability, i.e., they do not perform well with very large groups of agents. This is problematic since large numbers are common in this field of study. To address this issue, \citet{pinciroli2012argos} developed a simulator (ARGoS) which allows experiments with more than $10^5$ robots in real time \citep{brambilla2013swarm}.
-		
-		\subsection{Macroscopic Models}
-		
-		The system is here studied at a higher level, not viewing the group as composed of agents, but as a single entity. In this category, works can use \emph{rate or differential equations}, \emph{classical control and stability theory} or other mathematical framework \citep{brambilla2013swarm}.
-		
-		\subsection{Real-robot Analysis}
-		
-		Experiments with real robots allow the developer to assess the performance of the system under real conditions for the sensors and actuators, which are somehow idealised in the simulators or the other models. It should not be used to validate the behaviours in real-world applications, as the arena environment in which the robots evolve is heavily controlled (light intensity, landscape, interferences). Therefore, it should be viewed as a way to include realistic noise patterns in the experiments \citep{brambilla2013swarm}.
-	
-\end{comment}	
-	
-	
-	\section{Human - Robots Swarm Interaction}
+	\subsection{Human - Robots Swarm Interaction}
 	
 	[Work related to what I do (detect humans, protection, follow person). Conclude on why it cannot be applied to my problem.]
 	
@@ -316,9 +264,8 @@ With these definitions in mind, we can explain swarm engineering as:
 [Currently, only little research on feedback between human and robots swarms. That research is focused on interaction with an additional layer... Mostly unidirectional communication (human to robots). Need new types of interactions for new applications. Robots to human (guide). Write about article saying self-organised feedback is better.] \todo{Remove}
 \end{comment}
 
-	\section{Flocking and Pattern Formation with a Guide}
 	
-		[Work related to what I do. Conclude on why it cannot be applied to my problem. Make connections with this part later in the document.]
+		
 		
 	
 	As swarm robotic systems are mostly destined to operate on risky floors, unknown environment, it would seem logical to consider their application in exploration and/or protection missions. However, at the time of writing this thesis, we could not find any study on the subject. Exploration experiments never included a human, or other living organism. The object of this thesis is to address this lack of study by designing and implementing a protective behaviour executed by a robotic swarm.
@@ -328,18 +275,22 @@ With these definitions in mind, we can explain swarm engineering as:
 	We believe this work to be important since it could lay the foundations of a new branch in swarm engineering: human protection, escort or swarm turn-by-turn navigation.
 
 %////////////////////////////////////////////////////////////
-\chapter{The Idea}
+\chapter{An Escorting Swarm}
 %////////////////////////////////////////////////////////////
 
-[Explain the solution independently of the tools used to implement the solution. Make the reader understand that this problem is new.
+[\textcolor{red}{This is the core of the thesis. It must be a standalone. The reader must understand my work through the reading of this part only!} Explain the solution independently of the tools used to implement the solution. Make the reader understand that this problem is new.
+
+On veut protéger un humain qui ne voit rien comme danger. Solution: un swarm de robots perçu par l'humain avec UN WEARABLE DEVICE (en parler après avoir mentionné le challenge correspondant).
+
+Challenges: une fois qu'on connait la solution générale, parler des challenges, genre comment reconnaître un humain?
 
 	\section{The Problem}
 	
 	[Human walking in unknown environment. Team to assist, perceive danger that the human cannot. Graphical example, human goes from A to B with dangers (keep it simple as demo). Write text about an image showing the problem. Mined field, real applications.]
 	
-	\section{Technical Issues}
+	\section{Solution}
 	
-	[The problems I will have to solve?]
+	[Solution at high level and the problems I will have to solve? Faire le lien avec flocking et pattern. \textcolor{red}{The swarm is extending the perception capabilities of the human.} Challenges.]
 
 %////////////////////////////////////////////////////////////
 \chapter{Implementation}
@@ -347,14 +298,19 @@ With these definitions in mind, we can explain swarm engineering as:
 
 	This section details the solution to the given problem and all the choices that resulted in it. The explanation will take a top-down approach, first reviewing the general and early choices faced (as early choices mean general choices). It will then go deeper in the details.
 	
-	\section{The Software}
+	The first question one could ask is: why swarm robotics for such an application? The answer to that question lays in section \ref{def:robustness_scalability_flexibility}. Robustness, scalability and flexibility are characteristics that make swarms of robots really interesting in unknown environments \citep{brambilla2013swarm}.\todo{Insert justification?} In case one of the agents is broken, we do not want to see the whole system collapse and leave the human unattended. Flexibility guarantees that the solution will work in different conditions, environments, which is an advantage for exploration. In case of loss of robots, scalability would maintain the protection.
 	
-		\subsection{Why a Swarm?}
+	\section{The Hardware}
 	
-		The first question one could ask is: why swarm robotics for such an application? The answer to that question lays in section \ref{def:robustness_scalability_flexibility}. Robustness, scalability and flexibility are characteristics that make swarms of robots really interesting in unknown environments \citep{brambilla2013swarm}.\todo{Insert justification?} In case one of the agents is broken, we do not want to see the whole system collapse and leave the human unattended. Flexibility guarantees that the solution will work in different conditions, environments, which is an advantage for exploration. In case of loss of robots, scalability would maintain the protection.
+		\subsection{E-puck}
+		
+		\subsection{E-geta} % Longer text than for e-puck because more important!
 	
-		\subsection{The Global Behaviour (state machine)}
+		[I will in this section describe the need for a device to detect a human and its development. What are the objectives of the hardware? The choices we made to get the final solution. How we built it. Calibration an adaptation process to make the current algorithm compatible with the new hardware. Where does the term come from?]
 	
+	
+	\section{The Robot Behaviour}
+			
 	The final implementation is built on 2 layers. The upper layer is the state machine, having for each state a specific behaviour in the lower layer. Figure \ref{fig:state_machine} illustrates the whole structure of the upper layer. Only part of the states rely on virtual physics: \emph{Human} and \emph{Default}. The others simply link the sensor values to the wheels speed.\\
 	
 	The transitions without any number are taken without any condition, right after the corresponding behaviour has been applied (the time step period is over). One could see the 3 lowest states as sub-states of \emph{Normal}. At the beginning of each time step, if the controller is in the \emph{Normal} state, it has to choose between the 3 different sub-states. The conditions are listed with numbers in the figure \ref{fig:state_machine}.
@@ -423,7 +379,6 @@ With these definitions in mind, we can explain swarm engineering as:
 	\end{figure}
 		
 	
-		\subsection{The Pattern Formation}
 	
 	The first step of the thesis is the design of the solution, to imagine how the system will look like and how we will implement it. The first choice faced was the overall behaviour of the swarm. How do the robots move around the human? What shape will they try to respect? This choice is important because it will define the overall look of the system.\\
 	
@@ -457,38 +412,38 @@ With these definitions in mind, we can explain swarm engineering as:
 	Indeed, the laws of physics force the system to get to a state of minimum energy, i.e., to reach a global minimum of the potential function of the system. Since the force is proportional to the derivative of the corresponding potential, the minimum of the potential function means the disappearance of the forces. For the forces to disappear, every robot needs to be at the desired location.
 	
 	$$\vec{f} = -\vec{\nabla}P$$, P being the system's potential. The following sections will explain in detail the different potentials that were implemented to obtain the desired behaviour.
-	
-		\subsubsection{Potentials (title needed?)}
-		
+			
 		In this section, the potentials are grouped by states in which they are used. Since virtual physics are used in only 2 states, we have only 2 groups.
 		
 			\paragraph{Human}
 			
 			The controller enters the \emph{Human} state at the beginning of the time step only if a human is found nearby. The complete potential for this state is the sum of 3 components: the \emph{human potential}, the \emph{gravity potential} and the \emph{agent repulsion potential}.
-		
-				\subparagraph{Human Potential}
+			
+			\begin{enumerate}
 				
-				\begin{figure}[!h]\centering
-					\begin{tikzpicture}[xscale=0.2,yscale=0.2]
-						\draw [<->] (0,5) -- (0,0) -- (70,0);
-						\draw[blue,thick, domain=28:70] plot (\x, {-4*500/\x*((30/\x)^4-(30/\x)^2)});
-						
-						\foreach \x [evaluate=\x as \j using \x*10]in {0,...,6}
-						    \draw (\j cm,5pt) -- (\j cm,-5pt) node[anchor=north] {$\j$};
-						%\foreach \y in {0,1,2,3,4}
-						%    \draw (1pt,\y cm) -- (-1pt,\y cm) node[anchor=east] {$\y$};
-					\end{tikzpicture}
-				\end{figure}
-				
-				
-				\subparagraph{Gravity Potential}
+				\item Human Potential
+					
+					\begin{figure}[!h]\centering
+						\begin{tikzpicture}[xscale=0.2,yscale=0.2]
+							\draw [<->] (0,5) -- (0,0) -- (70,0);
+							\draw[blue,thick, domain=28:70] plot (\x, {-4*500/\x*((30/\x)^4-(30/\x)^2)});
+							
+							\foreach \x [evaluate=\x as \j using \x*10]in {0,...,6}
+							    \draw (\j cm,5pt) -- (\j cm,-5pt) node[anchor=north] {$\j$};
+							%\foreach \y in {0,1,2,3,4}
+							%    \draw (1pt,\y cm) -- (-1pt,\y cm) node[anchor=east] {$\y$};
+						\end{tikzpicture}
+					\end{figure}
+					
+				\item Gravity Potential
 				
 				[Description of the evolution of the gravity potential.]
 				
-				\subparagraph{Agent Repulsion Potential}
+				\item Agent Repulsion Potential
 				
 				[Idem for agent repulsion pot.]
-			
+			\end{enumerate}
+		
 			\paragraph{Obstacle}
 			
 			[Idem for obstacle case.			
@@ -502,32 +457,30 @@ With these definitions in mind, we can explain swarm engineering as:
 			[Idem for blocked state.]
 		
 
-	\section{The Hardware}
-	
-	[I will in this section describe the need for a device to detect a human and its development. What are the objectives of the hardware? The choices we made to get the final solution. How we built it. Calibration an adaptation process to make the current algorithm compatible with the new hardware.]
-
 \chapter{Experiments}
 
-	\section{Tests}
+[\textcolor{red}{Explain very clearly both types of tests (no human/human.} ]
+
+	\section{Characterisation of the System}
 	[The measurements and the tests on the final behaviour.]
 
 		\subsection{Metrics}
 		
 		[Metrics I will use. Their description. How I will compute them.]
 		
-			\subsubsection{Correct Distance}
+			\paragraph{Correct Distance}
 			
 			[Do the robots respect the correct wanted distance?]
 			
-			\subsubsection{Robot Density}
+			\paragraph{Robot Density}
 			
 			[Do the robots surround the human correctly?]
 			
-			\subsubsection{Time}
+			\paragraph{Time}
 			
 			[Do they do that in a relatively low amount of time?]
 			
-		\subsection{Tests Scenarios}
+		\subsection{Set-up}
 		
 		[How I am performing my experiments.]
 		
@@ -541,14 +494,20 @@ With these definitions in mind, we can explain swarm engineering as:
 
 \chapter{Conclusion}
 
-	\section{Future Works}
+[I've done this, this and this (~1/2 pages). (Intro: "I'll do this, this...) \textcolor{red}{Put sentences of type "so what?". Continuous text.}
+
+	\paragraph{Future Works}
 	[The future works that would be interesting from my point of view.]
 	
-		\subsection{Other Robots}
-		\subsection{Human Guidance}
-			\subsubsection{Zero Visibility Areas or Blind People}
-			\subsubsection{Human Motion Synchronisation}
-			\subsubsection{Vehicle Guidance}
+		\subparagraph{Other Robots}
+		\subparagraph{Guidance}
+			
+			\begin{description}
+				\item[Zero Visibility Areas or Blind People:]
+				\item[Human Motion Synchronisation:]
+				\item[Vehicle Guidance:]
+			\end{description}
+			
 
 
 \appendix
