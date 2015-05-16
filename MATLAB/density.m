@@ -1,10 +1,12 @@
-AMOUNT_OF_ROBOTS = 7;
+clear all
+AMOUNT_OF_ROBOTS = 8;
 DISTANCE_RATIO = 0.43;
 TRANSLATE_X = 0.734;
 TRANSLATE_Y = 3.87;
 
 % Import the data
-data = importdata('results0.txt');
+%data = importdata('results.txt');
+loadData
 data = data(:,2:end);
 
 % Keep only the needed column of the matrix
@@ -37,4 +39,7 @@ relativeAngles = [diff(absoluteAngles, 1, 2) absoluteAngles(:,1)+2*pi-absoluteAn
 relErrors = abs((relativeAngles - refAngle)/refAngle);
 results = mean(relErrors, 2);
 
-plot(1:size(absoluteAngles,1),results)
+plot((1:size(results,1))/10,results)
+title('Density Error')
+xlabel('Time (s)')
+ylabel('Error')

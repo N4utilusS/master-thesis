@@ -300,7 +300,27 @@ This chapter will explore the problem faced, and its solution, with a high level
 			\draw [dashed] (10,10) circle [radius=1];
 			\draw (10,10) node[scale=2]{B};
 			
-			\draw [dashed] (5,5) circle [radius=3];
+			\draw [dashed, fill=red] (5,5) circle [radius=3];
+			\draw (5,5) node[scale=5]{!};
+			
+			\draw [->, very thick, green] (0,1.5) to [out=90,in=180] (8.5,10);
+			\draw [->, very thick, green] (1.5,0) to [out=0,in=270] (10,8.5);
+			\draw [->, very thick, red] (1.5, 1.5) -- (2.5,2.5);
+		\end{tikzpicture}
+	\end{figure}
+	
+	\begin{figure}\centering
+		\begin{tikzpicture}
+			\draw [dashed] (0,0) circle [radius=1];
+			\draw (0,0) node[scale=2]{A};
+			
+			\draw [dashed] (15,10) circle [radius=1];
+			\draw (15,10) node[scale=2]{B};
+			
+			\draw [dashed, fill=red] (3,0) circle [radius=1.5];
+			\draw (3,0) node[scale=5]{!};
+			
+			
 		\end{tikzpicture}
 	\end{figure}
 	
