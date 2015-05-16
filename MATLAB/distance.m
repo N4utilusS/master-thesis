@@ -1,14 +1,19 @@
-AMOUNT_OF_ROBOTS = 1;
-NOMINAL_DISTANCE = 0.3;
+clear all
+AMOUNT_OF_ROBOTS = 8;
+NOMINAL_DISTANCE = 0.35;
+DISTANCE_RATIO = 0.43;
+TRANSLATE_X = 0.734;
+TRANSLATE_Y = 3.87;
 
 % Rectangle properties
-MIN_X = -0.2;
-MIN_Y = -0.2;
-MAX_X = 0.2;
-MAX_Y = 0.2;
+MIN_X = -0.1575;
+MIN_Y = -0.19;
+MAX_X = 0.1575;
+MAX_Y = 0.19;
 
 % Import the data
-data = importdata('experiment.txt');
+%data = importdata('results.txt');
+loadData
 data = data(:,2:end);
 
 % Keep only the needed column of the matrix
@@ -17,11 +22,11 @@ index = mod(index-5,7) == 0 | mod(index-6,7) == 0; % 1 where the column must be 
 data = data(:,index); % The matrix rows now only contains the needed data: x1,y1,x2,y2,...,xn,yn.
 
 % Loop
-xIndices = mod(1:AMOUNT_OF_ROBOTS*2, 2) == 0;
-yIndices = mod(1:AMOUNT_OF_ROBOTS*2, 2) == 1;
+xIndices = mod(1:AMOUNT_OF_ROBOTS*2, 2) == 1;
+yIndices = mod(1:AMOUNT_OF_ROBOTS*2, 2) == 0;
 
-x = data(:, xIndices);
-y = data(:, yIndices);
+x = (data(:, xIndices) - TRANSLATE_X) * DISTANCE_RATIO;
+y = (data(:, yIndices) - TRANSLATE_Y) * DISTANCE_RATIO;
 
 distancesToCenter = sqrt(x.^2 + y.^2); % Distance to center for all robots at time step t.
 
@@ -38,4 +43,7 @@ distancesToRectangle = sqrt(dx.^2 + dy.^2);
 relErrors = abs((distancesToRectangle - NOMINAL_DISTANCE)/NOMINAL_DISTANCE);
 results = mean(relErrors, 2);
 
-plot(1:size(results,1), results)
+plot((1:size(results,1))/10, results)
+title('Distance Error')
+xlabel('Time (s)')
+ylabel('Error')

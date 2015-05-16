@@ -167,7 +167,7 @@
 	\draw (-2.3,8) node{Andreagiovanni Reina};
 	\draw (-2.8,6) node{Anthony Antoun};
 	\draw (-2.9,4) node{Brian Delhaisse};
-	\draw (-2.8,2) node{Lorenzo};
+	\draw (-2.7,2) node{Lorenzo Garattoni};
 	\draw (-2.8,0) node{Family \& Friends};
 	
 	\end{tikzpicture}
@@ -282,11 +282,48 @@ With these definitions in mind, we can explain swarm engineering as:
 
 On veut protéger un humain qui ne voit rien comme danger. Solution: un swarm de robots perçu par l'humain avec UN WEARABLE DEVICE (en parler après avoir mentionné le challenge correspondant).
 
-Challenges: une fois qu'on connait la solution générale, parler des challenges, genre comment reconnaître un humain?
+Challenges: une fois qu'on connait la solution générale, parler des challenges, genre comment reconnaître un humain?]\\
+
+
+
+This chapter will explore the problem faced, and its solution, with a high level of abstraction. The next chapter will go deeper in the details and explain how everything was implemented.
 
 	\section{The Problem}
 	
 	[Human walking in unknown environment. Team to assist, perceive danger that the human cannot. Graphical example, human goes from A to B with dangers (keep it simple as demo). Write text about an image showing the problem. Mined field, real applications.]
+	
+	\begin{figure}\centering
+		\begin{tikzpicture}
+			\draw [dashed] (0,0) circle [radius=1];
+			\draw (0,0) node[scale=2]{A};
+			
+			\draw [dashed] (10,10) circle [radius=1];
+			\draw (10,10) node[scale=2]{B};
+			
+			\draw [dashed, fill=red] (5,5) circle [radius=3];
+			\draw (5,5) node[scale=5]{!};
+			
+			\draw [->, very thick, green] (0,1.5) to [out=90,in=180] (8.5,10);
+			\draw [->, very thick, green] (1.5,0) to [out=0,in=270] (10,8.5);
+			\draw [->, very thick, red] (1.5, 1.5) -- (2.5,2.5);
+		\end{tikzpicture}
+	\end{figure}
+	
+	\begin{figure}\centering
+		\begin{tikzpicture}
+			\draw [dashed] (0,0) circle [radius=1];
+			\draw (0,0) node[scale=2]{A};
+			
+			\draw [dashed] (15,10) circle [radius=1];
+			\draw (15,10) node[scale=2]{B};
+			
+			\draw [dashed, fill=red] (3,0) circle [radius=1.5];
+			\draw (3,0) node[scale=5]{!};
+			
+			
+		\end{tikzpicture}
+	\end{figure}
+	
 	
 	\section{Solution}
 	
