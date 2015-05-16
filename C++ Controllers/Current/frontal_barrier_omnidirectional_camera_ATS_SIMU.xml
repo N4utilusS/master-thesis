@@ -7,10 +7,10 @@
   <framework>
   	<!-- To make ARGoS faster, you can set 'threads' to some number greater than 0 -->
     <system threads="8" />
-    <experiment length="180"
+    <experiment length="0"
       ticks_per_second="10"
       real_time="true"
-      vss_host="10.0.1.200"
+      vss_host="10.0.0.93"
       vss_port="4050"/>
   </framework>
 
@@ -19,8 +19,8 @@
   <!-- ****************** -->
   <loop_functions library="/home/adebruyn/argos3-anthony-controllers/build/controllers/frontal_barrier/libfrontal_barrier_lp" label="frontal_barrier_lp">
 
-    <frontal_barrier_lp dangerAreaCentre="0.0,1.25"
-                        dangerAreaRadius="0.0"/>
+    <frontal_barrier_lp dangerAreaCentre="1.3,0.0"
+                        dangerAreaRadius="1.0"/>
 
   </loop_functions>
 
@@ -41,24 +41,24 @@
         <epuck_rgb_leds implementation="default" medium="leds"/>
       </actuators>
       <sensors>
-        <epuck_proximity implementation="default" show_rays="true" noise_level="0.0" calibrated="true" low_level_config="/home/root/adebruyn/low_level_configuration/proximity_sensor.xml" />
-        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.0" calibrated="true" low_level_config="/home/root/adebruyn/low_level_configuration/omnidirectional_camera_sensor.xml"/>
-        <virtual_rgb_ground_sensor implementation="default" real_experiment="true"/>
+        <epuck_proximity implementation="default" show_rays="true" noise_level="0.0" calibrated="true" low_level_config="/home/root/gfrancesca/low_level_configuration/proximity_sensor.xml" />
+        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.0" calibrated="true" low_level_config="/home/root/adebruyn/omnidirectional_camera_sensor.xml"/>
+        <virtual_rgb_ground_sensor implementation="default" real_experiment="false"/>
       </sensors>
       <params defaultSpeed="5" 
       	humanPotentialGain="500" 
       	humanPotentialDistance="35" 
         humanPotentialDistanceVariationDelta="0.5" 
       	agentPotentialGain="100" 
-      	agentPotentialDistance="50" 
-        gravityPotential="false"
+      	agentPotentialDistance="35" 
+        gravityPotential="true"
         gravityPotentialGain="30"
         humanLeftColorRef="red"
         humanRightColorRef="green"
-        agentGoodColor="0,0,125"
-        agentBadColor="0,0,125"
+        agentGoodColor="0,0,255"
+        agentBadColor="0,0,255"
         agentGoodColorRef="blue"
-        agentBadColorRef="blue"
+        agentBadColorRef="black"
         directionVectorsWindowSize="2"
       />
     </e-puck_frontal_barrier_oc_controller>
@@ -70,14 +70,14 @@
         <epuck_rgb_leds implementation="default" medium="leds"/>
       </actuators>
       <sensors>
-        <epuck_proximity implementation="default" show_rays="true" noise_level="0.0" calibrated="true" low_level_config="/home/root/adebruyn/low_level_configuration/proximity_sensor.xml" />
-        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.1" calibrated="true" low_level_config="/home/root/adebruyn/low_level_configuration/omnidirectional_camera_sensor.xml"/>
+        <epuck_proximity implementation="default" show_rays="true" noise_level="0.0" calibrated="true" low_level_config="/home/root/gfrancesca/low_level_configuration/proximity_sensor.xml" />
+        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.1" calibrated="true" low_level_config="/home/root/adebruyn/omnidirectional_camera_sensor.xml"/>
         <epuck_ground implementation="rot_z_only" noise_level="0.0"/>
       </sensors>
       <params
         leftSpeed="0"
         rightSpeed="0"
-        color="0,0,125"
+        color="255,0,0"
       />
     </e-puck_frontal_barrier_human_oc_controller>
 
@@ -88,8 +88,8 @@
         <epuck_rgb_leds implementation="default" medium="leds" />
       </actuators>
       <sensors>
-        <epuck_proximity implementation="default" show_rays="true" noise_level="0.0" calibrated="true" low_level_config="/home/root/adebruyn/low_level_configuration/proximity_sensor.xml" />
-        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.1" calibrated="true" low_level_config="/home/root/adebruyn/low_level_configuration/omnidirectional_camera_sensor.xml"/>
+        <epuck_proximity implementation="default" show_rays="true" noise_level="0.0" calibrated="true" low_level_config="/home/root/gfrancesca/low_level_configuration/proximity_sensor.xml" />
+        <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.1" calibrated="true" low_level_config="/home/root/adebruyn/omnidirectional_camera_sensor.xml"/>
         <epuck_ground implementation="rot_z_only" noise_level="0.0"/>
       </sensors>
       <params
@@ -123,7 +123,7 @@
       <body position="0,3,0" orientation="0,0,0" />
     </box>
 
-    <!--e-puck id="human1" >
+    <e-puck id="human1" >
       <body position="0,0,0" orientation="0,0,0" />
       <controller config="cppHumanLeft"/>
     </e-puck>
@@ -143,35 +143,7 @@
       </entity> 
     </distribute-->
 
-    <e-puck id="epuck_11_58" omnidirectional_camera_aperture="80">
-      <body position="-1,-0.1,0" orientation="0,0,0" />
-      <controller config="cppAgent" /> 
-    </e-puck>
-    <e-puck id="epuck_4_38" omnidirectional_camera_aperture="80">
-      <body position="-1,-0.1,0" orientation="0,0,0" />
-      <controller config="cppAgent" /> 
-    </e-puck>
-    <e-puck id="epuck_10_61" omnidirectional_camera_aperture="80">
-      <body position="-1,-0.1,0" orientation="0,0,0" />
-      <controller config="cppAgent" /> 
-    </e-puck>
-    <e-puck id="epuck_8_30" omnidirectional_camera_aperture="80">
-      <body position="-1,-0.1,0" orientation="0,0,0" />
-      <controller config="cppAgent" /> 
-    </e-puck>
-    <e-puck id="epuck_7_41" omnidirectional_camera_aperture="80">
-      <body position="-1,-0.1,0" orientation="0,0,0" />
-      <controller config="cppAgent" /> 
-    </e-puck>
-    <e-puck id="epuck_5_33" omnidirectional_camera_aperture="80">
-      <body position="-1,-0.1,0" orientation="0,0,0" />
-      <controller config="cppAgent" /> 
-    </e-puck>
-    <e-puck id="epuck_3_49" omnidirectional_camera_aperture="80">
-      <body position="-1,-0.1,0" orientation="0,0,0" />
-      <controller config="cppAgent" /> 
-    </e-puck>
-    <e-puck id="epuck_6_52" omnidirectional_camera_aperture="80">
+    <e-puck id="epuck_1_38" omnidirectional_camera_aperture="80">
       <body position="-1,-0.1,0" orientation="0,0,0" />
       <controller config="cppAgent" /> 
     </e-puck>
@@ -181,20 +153,21 @@
   <!-- * Physics engines * -->
   <!-- ******************* -->
   <physics_engines>
-    <!--dynamics2d id="dyn2d"/-->
-    <iridia_tracking_system 
+    <dynamics2d id="dyn2d"/>
+    <!--iridia_tracking_system 
       id="its"
       its_host="164.15.10.153"
       its_port="4040"
       translate_x="0.734"
       translate_y="3.87"
-      distance_ratio="0.43"/>
+      distance_ratio="0.43"/-->
   </physics_engines>
 
   <!-- ********* -->
   <!-- * Media * -->
   <!-- ********* -->
   <media>
+    <range_and_bearing id="rab" index="grid" grid_size="1,1,1" />
     <led id="leds" index="grid" grid_size="1,1,1" />
   </media>
 

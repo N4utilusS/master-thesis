@@ -15,7 +15,7 @@ static const CColor DEFAULT_AGENT_GOOD_COLOR = CColor::BLUE;
 static const CColor DEFAULT_AGENT_BAD_COLOR = CColor::BLACK;
 static const std::string DEFAULT_AGENT_GOOD_COLOR_REF = "green";
 static const std::string DEFAULT_AGENT_BAD_COLOR_REF = "red";
-static const Real DISTANCE_CORRECTION_FACTOR = 0.7;
+static const Real DISTANCE_CORRECTION_FACTOR = 1.0;//0.538;
 static const Real HUMAN_POTENTIAL_DISTANCE_VARIATION_DELTA = 0.5;
 
 
@@ -34,7 +34,6 @@ CEpuckFrontalBarrierOC::CEpuckFrontalBarrierOC() :
     m_cAgentBadColor(DEFAULT_AGENT_BAD_COLOR),
     m_cAgentGoodColorRef(CColor::BLUE),
     m_cAgentBadColorRef(CColor::BLACK),
-    m_bGravityPotential(true),
     m_fGravityPotentialGain(0),
     m_pcWheelsActuator(NULL),
     m_pcProximitySensor(NULL),
@@ -70,8 +69,6 @@ void CEpuckFrontalBarrierOC::ParseParams(TConfigurationNode& t_node) {
         GetNodeAttributeOrDefault(t_node, "agentPotentialGain", m_fAgentPotentialGain, m_fAgentPotentialGain);
         /* Human potential distance */
         GetNodeAttributeOrDefault(t_node, "agentPotentialDistance", m_fAgentPotentialDistance, m_fAgentPotentialDistance);
-        /* Gravity potential activation */
-        GetNodeAttributeOrDefault(t_node, "gravityPotential", m_bGravityPotential, m_bGravityPotential);
         /* Gravity potential gain */
         GetNodeAttributeOrDefault(t_node, "gravityPotentialGain", m_fGravityPotentialGain, m_fGravityPotentialGain);
 
@@ -343,8 +340,7 @@ void CEpuckFrontalBarrierOC::NormalMode() {
 void CEpuckFrontalBarrierOC::ComputeDirection(CVector2& c_result_vector) {
     // Add the potentials:
     c_result_vector += HumanPotential(); // Certain distance to human
-    if (m_bGravityPotential)
-        c_result_vector += GravityPotential(); // Move in front of human
+    c_result_vector += GravityPotential(); // Move in front of human
     c_result_vector += AgentRepulsionPotential(); // Repulsion among agents
 }
 
@@ -589,18 +585,11 @@ bool CEpuckFrontalBarrierOC::HumanFound() const {
 
 inline const CColor CEpuckFrontalBarrierOC::GetAgentSituationColor(){
 
-    if (m_unColorCountdownCounter <= 0 && IsInDanger())
+    if (IsInDanger())
         m_unColorCountdownCounter = 20;
 
     if (m_unColorCountdownCounter > 0) {
         m_unColorCountdownCounter--;
-        LOG << "Danger!" << std::endl;
-        // Make the LED blink:
-        if (m_unColorCountdownCounter % 10 < 5){
-            LOG << "Blink!" << std::endl;
-            return CColor::BLACK;
-        }
-
         return m_cAgentBadColor;
     } else {
         return m_cAgentGoodColor;
@@ -612,8 +601,8 @@ inline const CColor CEpuckFrontalBarrierOC::GetAgentSituationColor(){
 
 inline const bool CEpuckFrontalBarrierOC::IsInDanger() const {
     const CCI_VirtualRGBGroundSensor::CVirtualRGBGroundSensorReading& cReading = m_pcVirtualRGBGroundSensor->GetReading();
-    LOG << cReading.R << "," << cReading.G << "," << cReading.B << std::endl;
-    return (cReading.B > 122 && cReading.G < 122 && cReading.R < 122); // R is B and B is R...
+
+    return (cReading.R > 122 && cReading.G < 122 && cReading.B < 122);
 }
 
 /****************************************/

@@ -119,7 +119,6 @@ private:
     CColor m_cAgentGoodColorRef;
     CColor m_cAgentBadColorRef;
 
-    bool m_bGravityPotential;
     Real m_fGravityPotentialGain;
 
     /* Pointer to the differential steering actuator */
