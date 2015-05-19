@@ -87,6 +87,12 @@
 	\draw (#2,#3) node[scale=2, rotate around={#1:(#2,#3)}]{H};
 }
 
+
+\let\oldCaption\caption
+\renewcommand{\caption}[2]{
+\oldCaption[#1]{{\small\sffamily\bfseries #1:} #2}
+}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % NEW STYLES
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -283,6 +289,7 @@ With these definitions in mind, we can explain swarm engineering as:
 %////////////////////////////////////////////////////////////
 \chapter{An Escorting Swarm}
 %////////////////////////////////////////////////////////////
+\label{chap:escorting_swarm}
 
 \begin{comment}
 [\textcolor{red}{This is the core of the thesis. It must be a standalone. The reader must understand my work through the reading of this part only!} Explain the solution independently of the tools used to implement the solution. Make the reader understand that this problem is new.
@@ -346,10 +353,15 @@ This chapter will explore the problem faced, and its solution, with a high level
 			
 			\draw [->,very thick, orange] (0.75,0) to [out=0,in=180] (1.5,0) to [out=90,in=200] (3,2) to [out=120,in=-150] (5,6) to [out=-25, in=-160] (8.75,5.5) to [out=110, in=180] (11.25,8);
 			
-			
+			\draw [very thick] (1,0.433) arc [radius=0.5, start angle=120, end angle=180];
+			\draw [very thick] (1,0.433) arc [radius=0.5, start angle=60, end angle=0];
+			\draw [very thick] (1,0.433) -- (1,0.933);
+			\draw [very thick, fill=white] (1,0.433+0.625) circle [radius=0.125];
+			\draw [very thick] (1,0.433+0.375) arc [radius=0.5, start angle=60, end angle=0];
+			\draw [very thick] (1,0.433+0.375) arc [radius=0.5, start angle=120, end angle=180];
 		\end{tikzpicture}
 		
-		\caption{Unknown environment in which a human must evolve while avoiding invisible dangerous areas. This thesis explores a solution to guarantee safeness in such circumstances. Applications for this type of problems already exist: mine fields, radioactive areas, etc. This figure represents a path to follow from A to B in a dangerous zone.}
+		\caption{Unknown Dangerous Environment}{This image illustrates an unknown environment, observed from above, in which a human must evolve while avoiding invisible dangerous areas. This figure represents a path to follow from \emph{A} to \emph{B} in a dangerous zone to stay safe. \emph{A} is the start location and \emph{B} is the goal. The red circles represent dangerous zones whose size can vary. This thesis explores a solution to guarantee safeness in such circumstances. Applications for this type of problems already exist: mine fields, radioactive areas, etc.}
 		\label{fig:unknown_environment}
 	\end{figure}
 	
@@ -361,10 +373,12 @@ This chapter will explore the problem faced, and its solution, with a high level
 	On a choisit d'utiliser des swarms car... Equidistance par rapport à l'humain. Carac du système. Pb pour détecter l'humain...avec solution. Agent de la swarm doit être capable de détecter le danger. Humain perçoit la swarm qui elle perçoit le danger.]
 	\end{comment}
 	
-	The solution proposed involves the use of a swarm of robots. Swarm robotics seems fit to this kind of application, since it is compatible with unknown environments thanks to its flexible, robust and scalable characteristics \citep{brambilla2013swarm}. In case of failure of one of a few robots, the system would continue to provide sufficient performance thanks to its scalability and robustness.\\
+	The solution proposed involves the use of a swarm of robots. Swarm robotics seems fit to this kind of application, since it is compatible with unknown environments thanks to its flexible, robust and scalable characteristics \citep{brambilla2013swarm}. In case of failure of one or a few robots, the system would continue to provide sufficient performance thanks to its scalability and robustness.\\
 	
-	The swarm ideally forms a round shield around the user to ensure a 360° protection. All the robots try to stay at the same distance from each other and the person. To achieve this, the final solution relies on the pattern formation theory widely used in swarm robotics. If the amount of robots is not high enough to form a complete circle, an arc is formed at the front to always shield the most critical zone.
+	The swarm ideally forms a round shield around the user to ensure a 360° protection. All the robots try to stay at the same distance from each other and the person. To achieve this, the final solution relies on the pattern formation theory widely used in swarm robotics\todo{Parler du flocking et pattern.}. The corresponding techniques will be explained in the next chapter with more details. If the amount of robots is not high enough to form a complete circle, an arc is formed at the front to always shield the most critical zone.\\
 	
+	As seen on figure \ref{fig:swarm_preventing}, the robots in contact with a dangerous zone will reflect the danger through visual communication with the human. Here the robots turn red and stay on the boundary of the zone to prevent the user from getting into it. Since the human cannot see the danger, and only the robots can, we can see that the swarm is increasing the perception capabilities of the user.\\
+		
 	\begin{figure}\centering
 		\begin{tikzpicture}
 		
@@ -377,7 +391,12 @@ This chapter will explore the problem faced, and its solution, with a high level
 			
 			\draw [very thick, dashed, fill=red] (2,6) arc [radius=6, start angle=180, end angle=270];
 			
-			\human{1}{0}
+			\draw [very thick, fill=white] (0,0.5) ellipse (0.25cm and 0.5cm);
+			\draw [very thick, fill=white] (2,0.5) ellipse (0.25cm and 0.5cm);
+			\draw [very thick, fill=white] (1,0) ellipse (1.5cm and 0.75cm);
+			\draw [thick] (0.95,1) -- (1,1.1) -- (1.05,1);
+			\draw [very thick, fill=white] (1,0.5) circle [radius=0.5cm];
+			%\draw (1,-0.2) node [scale=2] {Human};
 			
 			\draw [dashed] (1,0) circle [radius=4];
 			
@@ -396,23 +415,44 @@ This chapter will explore the problem faced, and its solution, with a high level
 					
 		\end{tikzpicture}
 		
-		\caption{Representation of a human (H) helped by a swarm. The swarm tells the human that a dangerous zone is located north-east by visual communication. The swarm stays at the boundary to form a \enquote{shield}. The direction taken by each individual in the swarm is given by the triangle inside (here heading north).}
+		\caption{Swarm Prevention}{This figure is a representation of a human helped by a swarm. The circles with a triangle inside are representations of a robot. The swarm tells the human that a dangerous zone is located at the front right by visual communication (here the robots change their colour to red). The swarm stays at the boundary to form a \enquote{shield}. The direction taken by each individual in the swarm is given by the triangle inside (here heading north).}
 		\label{fig:swarm_preventing}
 	\end{figure}
+	
+	One big issue that had to be resolved was the detection of the human by the robots. As \citet{podevijn2012self} suggested, the interface between the human and the robots swarm should be restricted to the strict minimum because in the field the infrastructure needed to operate the swarm might not be easy to build. The swarm should handle the communication on its own. Furthermore, any centralised control system would break the distributed and robust feature of swarm robotics. We thus imagined a wearable device that would allow the human to be recognised by the robots: a pair of shoes.\\
+	
+	\begin{figure}
+		\begin{minipage}[c]{0.6\textwidth}
+			\includegraphics[trim=200px 300px 140px 300px, clip=true, height=5cm]{images/shoes.jpg}
+		\end{minipage}
+		\hfill
+		\begin{minipage}[c]{0.39\textwidth}
+			\hfill\includegraphics[trim=380px 230px 380px 360px, clip=true, height=5cm]{../Experiments/No_Human/6end.png}
+		\end{minipage}				
+		
+		\caption{The Shoes}{This picture shows a prototype of the shoes viewed from above, and the robots interacting with it. The interaction is realised through the recognition of the colours, one for each shoe, indicating left or right side. This pair of shoes enables the robots to locate the user, allowing them to evolve at the target distance from him/her. On the left image, the robots are still in the process of placing themselves in a correct circle. The right image depicts the situation after a 3 minutes experiment where the robots were initially placed in lines around the shoes. Objects are put on the shoes to close the lights switch.}
+		\label{fig:shoes}
+	\end{figure}
 
+The figure \ref{fig:shoes} illustrates the use of the shoes (no user is wearing them to increase visibility). On the left side, the robots have just recognised the shoes thanks to the LED system inside and begin to move to their target position. The right side is an example of one configuration obtained after 3 minutes, viewed from the ceiling tracking system.\\
 
+This thesis objective was to present an innovative protection using swarm robotics. We consider the final protection robust. The results obtained at the end of the thesis with real robots will be detailed in the chapter \ref{chap:experiments}, but one can already say they are convincing. An article will be written during summertime to expose this research to the rest of the swarm robotics community.
 
 %////////////////////////////////////////////////////////////
 \chapter{Implementation}
 %////////////////////////////////////////////////////////////
 
-	This section details the solution to the given problem and all the choices that resulted in it. The explanation will take a top-down approach, first reviewing the general and early choices faced (as early choices mean general choices). It will then go deeper in the details.
+	This chapter details the solution to the given problem and all the choices that resulted in it. The explanation will take a top-down approach, first reviewing the hardware and the general code architecture. It will then go deeper in the details.\\
 	
-	The first question one could ask is: why swarm robotics for such an application? The answer to that question lays in section \ref{def:robustness_scalability_flexibility}. Robustness, scalability and flexibility are characteristics that make swarms of robots really interesting in unknown environments \citep{brambilla2013swarm}.\todo{Insert justification?} In case one of the agents is broken, we do not want to see the whole system collapse and leave the human unattended. Flexibility guarantees that the solution will work in different conditions, environments, which is an advantage for exploration. In case of loss of robots, scalability would maintain the protection.
+	The first question one could ask is: why swarm robotics for such an application? The answer to that question lays in section \ref{def:robustness_scalability_flexibility}. Robustness, scalability and flexibility are characteristics that make swarms of robots really interesting in unknown environments \citep{brambilla2013swarm}.\todo{Insert more justification?} In case one of the agents is broken, we do not want to see the whole system collapse and leave the human unattended. Flexibility guarantees that the solution will work in different conditions, environments, which is an advantage for exploration and rescue. In case of loss of robots, scalability would maintain the protection performance to an acceptable level.
 	
 	\section{The Hardware}
 	
+	As explained in chapter \ref{chap:escorting_swarm}, one of the main issue was to enhance the robots so they could detect the user and position themselves with respect to him without any large external equipment. Large external equipments are not recommended since in the targeted unknown environment they might not be usable. For example, one might use a tracking system to get the position of the robots in real time and communicate it to the robots for them to adjust their speed. In controlled environment, this may work very well, but in the field it would be difficult to access that knowledge. The following sections will go through the details of the robots we used to conduct our experiments, and the prototype enabling swarm control.
+	
 		\subsection{E-puck}
+		
+		The robotic platform chosen was the e-puck \citep{mondada2009puck}. The robot model was made for educational purposes.
 		
 		\subsection{E-geta} % Longer text than for e-puck because more important!
 	
@@ -428,63 +468,40 @@ This chapter will explore the problem faced, and its solution, with a high level
 	\begin{figure}[!h]\centering
 		\begin{minipage}[c]{.49\textwidth}
 			\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=4cm, semithick]
-				\node[initial,state] (NORMAL)                    {Normal};
-		  		\node[state]         (OBS) [below left of=NORMAL] {Obstacle};
-		  		\node[state]         (HU) [below of=NORMAL] {Human};
-		  		\node[state]         (DEF) [below right of=NORMAL] {Default};
-		  		\node[state]         (BLOCK) [above of=NORMAL]       {Blocked};
+				\node[initial,state] (RW)                    {R.W.};
+		  		\node[state]         (E) [below right of=RW] {Escorting};
+		  		\node[state]         (P) [below left of=RW] {Protection};
 		  		
-		  		\path	(BLOCK)		edge		node					{\color{gray} 1}	(NORMAL)
-		  				(NORMAL)		edge		node[yshift=0.2cm]	{\color{gray} 2}	(OBS)
-		  				(NORMAL)		edge		node					{\color{gray} 3}	(HU)
-		  				(NORMAL)		edge		node	[yshift=-0.2cm]	{\color{gray} 4}	(DEF)
-		  				(OBS)		edge		[bend left]	node		{\color{gray} 5}	(BLOCK)
-		  				(OBS)		edge		[bend right]	node		{}				(NORMAL)
-		  				(HU)			edge		[bend right]	node		{}				(NORMAL)
-		  				(DEF)		edge		[bend right]	node		{}				(NORMAL);
+		  		\path	(RW)	 edge[bend left] node{\color{gray} H} (E)
+		  				(RW)	 edge node{\color{gray} H\&D} (P)
+		  				(E) edge node {\color{gray} NH}	(RW)
+		  				(E) edge[bend left] node {\color{gray} D}	(P)
+		  				(P) edge node {\color{gray} ND}	(E)
+		  				(P) edge[bend left] node[yshift=-0.2cm] {\color{gray} NH}	(RW);
+
 			\end{tikzpicture}
-%			
-%			\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=4cm, semithick]
-%		  		\node[state]         (OBS)						{Obstacle};
-%		  		\node[state]         (HU) [below of=OBS]	{Human};
-%		  		\node[state]         (DEF) [below of=HU]		{Default};
-%		  		\node[state]         (BLOCK) [right of=HU]{Blocked};
-%		  		
-%		  		\path	(OBS)		edge	[bend left]	node		{\color{gray} 1}	(BLOCK)
-%		  				(OBS)		edge	[bend left]	node[yshift=-1cm]		{\color{gray} 2}				(DEF)
-%		  				(OBS)		edge	[bend left]	node	[left]	{\color{gray} 3}				(HU)
-%		  				(HU)			edge	[bend left]	node[right]		{\color{gray} 4}				(OBS)
-%		  				(HU)			edge	[bend left]	node	[left]	{\color{gray} 2}				(DEF)
-%		  				(DEF)		edge	[bend left]	node[right]		{\color{gray} 3}				(HU)
-%		  				(DEF)		edge	[bend left]	node		{\color{gray} 4}				(OBS)
-%		  				(BLOCK)		edge				node		{\color{gray} 5}				(OBS)
-%		  				(BLOCK)		edge				node		{\color{gray} 6}				(HU)
-%		  				(BLOCK)		edge				node		{\color{gray} 7}				(DEF);
-%			\end{tikzpicture}
+			
+%			\resizebox{\textwidth}{!}{%
+		  				
 		\end{minipage}
 		\hfill
 		\begin{minipage}[c]{.49\textwidth}
-%			\begin{enumerate}
-%				\item Amount of direction change (left/right) while having an obstacle around reaches a threshold.
-%				\item No human nor obstacle found.
-%				\item Human found around the robot.
-%				\item Obstacle around the robot.
-%				\item No more obstacle in front but obstacle elsewhere.
-%				\item No more obstacle in front \& human found.
-%				\item No more obstacle in front \& no human nor obstacle.
-%
-%			\end{enumerate}
+		\resizebox{\textwidth}{!}{%
+			\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=4cm, semithick]
+				\node[initial,state] (C)                    {Core};
+		  		\node[state]         (O) [above right of=C] {O.A.};
+		  		\node[state]         (U) [above left of=C] {Unblocking};
+		  		
+		  		\path	(C)	edge[bend right] node[below,xshift=0.1cm]{\color{gray} O} (O)
+		  				(O) edge node[above,xshift=-0.2cm] {\color{gray} NO}	(C)
+		  				(O) edge[bend right] node {\color{gray} T}	(U)
+		  				(U) edge node[below] {\color{gray} NF\&O}	(O)
+		  				(U) edge[bend right] node[yshift=-0.2cm] {\color{gray} NF}	(C);
 
-			\begin{enumerate}
-				\item No more obstacle in front.
-				\item Obstacle found around the robot.
-				\item Human found around the robot.
-				\item Neither of the previous criteria met.
-				\item Amount of direction change (left/right) while having an obstacle around reaches a threshold.
-			\end{enumerate}
+			\end{tikzpicture}}
 		\end{minipage}
 		
-		\caption{State machine of the final behaviour.}
+		\caption{State Machine of the Final Behaviour}{This figure is the visual representation of the state machine of the final behaviour. The left part is what could be called the \enquote{core} of the behaviour, while the right part would be considered as additions to enhance the behaviour. The core part of the state machine is present on the right since it is one of its constituents. The abbreviations R.W. and O.A. respectively mean \enquote{random walking} and \enquote{obstacle avoidance}. The labels next to each transition must be read as follows: H(uman), D(anger), O(bstacle), F(ront obstacle), T(hreshold crossed, stuck for too long and initiating rotation procedure to escape from the obstacles). N stands for the negation, so NH means \enquote{no human found}.}
 		\label{fig:state_machine}
 	\end{figure}
 		
@@ -510,7 +527,7 @@ This chapter will explore the problem faced, and its solution, with a high level
 		\human{0}{0}
 		%\draw (0,0) node[regular polygon,regular polygon sides=3,minimum height=2cm,minimum width=1cm,line width=1.5pt, draw] {\Huge{H}};
 	\end{tikzpicture}
-	\caption{Circle shape for the swarm to get the widest protected surface for a given amount of robots.}
+	\caption{Test}{Circle shape for the swarm to get the widest protected surface for a given amount of robots.}
 	\label{fig:circle_shape}
 	\end{figure}
 	
@@ -568,7 +585,7 @@ This chapter will explore the problem faced, and its solution, with a high level
 		
 
 \chapter{Experiments}
-
+\label{chap:experiments}
 [\textcolor{red}{Explain very clearly both types of tests (no human/human.} ]
 
 	\section{Characterisation of the System}
@@ -621,6 +638,87 @@ This chapter will explore the problem faced, and its solution, with a high level
 
 
 \appendix
+
+\chapter{The Complete State Machine}
+\label{app:complete_state_machine}
+
+\begin{figure}[!h]\centering
+	\begin{minipage}[c]{.49\textwidth}
+%			\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=4cm, semithick]
+%				\node[initial,state] (NORMAL)                    {Normal};
+%		  		\node[state]         (OBS) [below left of=NORMAL] {Obstacle};
+%		  		\node[state]         (HU) [below of=NORMAL] {Human};
+%		  		\node[state]         (DEF) [below right of=NORMAL] {Default};
+%		  		\node[state]         (BLOCK) [above of=NORMAL]       {Blocked};
+%		  		
+%		  		\path	(BLOCK)		edge		node					{\color{gray} 1}	(NORMAL)
+%		  				(NORMAL)		edge		node[yshift=0.2cm]	{\color{gray} 2}	(OBS)
+%		  				(NORMAL)		edge		node					{\color{gray} 3}	(HU)
+%		  				(NORMAL)		edge		node	[yshift=-0.2cm]	{\color{gray} 4}	(DEF)
+%		  				(OBS)		edge		[bend left]	node		{\color{gray} 5}	(BLOCK)
+%		  				(OBS)		edge		[bend right]	node		{}				(NORMAL)
+%		  				(HU)			edge		[bend right]	node		{}				(NORMAL)
+%		  				(DEF)		edge		[bend right]	node		{}				(NORMAL);
+%			\end{tikzpicture}
+%			
+		\resizebox{\textwidth}{!}{%
+		\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=4cm, semithick]
+	  		\node[state]         (OBS)					{Obstacle Avoidance};
+	  		\node[state]         (HU) [below of=OBS]		{Escorting};
+	  		\node[state]         (DEF) [below of=HU]		{Random Walk};
+	  		\node[state]         (BLOCK) [right of=HU]	{Unblocking};
+	  		\node[state]         (DANGER) [left of=HU]	{Protection};
+	  		
+	  		\path	(OBS)		edge	[bend left]	node		{\color{gray} 1}	(BLOCK)
+	  				(OBS)		edge	[bend left]	node[yshift=-1.2cm, xshift=-0.3cm]		{\color{gray} 2}				(DEF)
+	  				(OBS)		edge	[bend left]	node	[left]	{\color{gray} 3}				(HU)
+	  				(HU)			edge	[bend left]	node[right]		{\color{gray} 4}				(OBS)
+	  				(HU)			edge	[bend left]	node	[left]	{\color{gray} 2}				(DEF)
+	  				(DEF)		edge	[bend left]	node[right]		{\color{gray} 3}				(HU)
+	  				(DEF)		edge	[bend left]	node	[right, yshift=0.2cm]	{\color{gray} 4}				(OBS)
+	  				(BLOCK)		edge				node		{\color{gray} 5}				(OBS)
+	  				(BLOCK)		edge				node	[xshift=0.3cm]	{\color{gray} 6}				(HU)
+	  				(BLOCK)		edge	[bend left]			node		{\color{gray} 7}				(DEF)
+	  				(BLOCK)		edge	[bend left, above]	node[yshift=-0.1cm]		{\color{gray} 8}				(DANGER)
+	  				(HU)		edge	[bend left, above]	node		{\color{gray} 9}				(DANGER)
+	  				(DANGER)	 edge[bend left, above] node{\color{gray} 3} (HU)
+	  				(DANGER)	 edge[bend left, above] node{\color{gray} 4} (OBS)
+	  				(OBS)	 edge[above] node{\color{gray} 9} (DANGER)
+	  				(DANGER)	 edge[below] node{\color{gray} 2} (DEF)
+	  				(DEF)	 edge[bend left, below] node{\color{gray} 9} (DANGER);
+	  				
+		\end{tikzpicture}
+		}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[c]{.49\textwidth}
+		\small\sffamily
+		
+		\begin{enumerate}
+			\item Amount of direction change (left/right) while having an obstacle around reaches a threshold.
+			\item No human \& no obstacle.
+			\item No obstacle \& human \& no danger.
+			\item Obstacle.
+			\item No front obstacle \& obstacle elsewhere.
+			\item No front obstacle \& human \& no danger.
+			\item No front obstacle \& no human \& no obstacle.
+			\item No front obstacle \& human \& danger.
+			\item No obstacle \& human \& danger.
+
+			\end{enumerate}
+
+%			\begin{enumerate}
+%				\item No more obstacle in front.
+%				\item Obstacle found around the robot.
+%				\item Human found around the robot.
+%				\item Neither of the previous criteria met.
+%				\item Amount of direction change (left/right) while having an obstacle around reaches a threshold.
+%			\end{enumerate}
+	\end{minipage}
+	
+	\caption{State Machine of the Final Behaviour}{This figure is the visual representation of the state machine of the final behaviour. On the left, the states and their connections are drawn. On the right, the information on the conditions needed to take the transitions are listed.}
+	\label{fig:state_machine}
+\end{figure}
 
 \chapter{E-puck}
 
@@ -782,10 +880,20 @@ This chapter will explore the problem faced, and its solution, with a high level
   year={2006}
 }
 
+@inproceedings{mondada2009puck,
+  title={The e-puck, a robot designed for education in engineering},
+  author={Mondada, Francesco and Bonani, Michael and Raemy, Xavier and Pugh, James and Cianci, Christopher and Klaptocz, Adam and Magnenat, Stephane and Zufferey, Jean-Christophe and Floreano, Dario and Martinoli, Alcherio},
+  booktitle={Proceedings of the 9th conference on autonomous robot systems and competitions},
+  volume={1},
+  number={LIS-CONF-2009-004},
+  pages={59--65},
+  year={2009},
+  organization={IPCB: Instituto Polit{\'e}cnico de Castelo Branco}
+}
 
 \end{filecontents}
 
-\nocite{*}
+%\nocite{*}
 \bibliographystyle{plainnat}
 \bibliography{thesis}
 

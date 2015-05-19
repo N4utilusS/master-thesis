@@ -25,6 +25,17 @@
 	\draw [fill=white, line width=1.5pt, rotate around={#1:(#2,#3)}] (#2,#3+1) -- (#2-0.866,#3-0.5) -- (#2+0.866,#3-0.5) -- cycle;
 	\draw (#2,#3) node[scale=2, rotate around={#1:(#2,#3)}]{H};
 }
+
+\newcommand{\littleman}[2]{
+
+	\draw [very thick] (0,0) arc [radius=1, start angle=120, end angle=180];
+	\draw [very thick] (0,0) arc [radius=1, start angle=60, end angle=0];
+	\draw [very thick] (0,0) -- (0,1);
+	\draw [very thick] (0,1.25) circle [radius=0.25];
+	\draw [very thick] (0,0.75) arc [radius=1, start angle=60, end angle=0];
+	\draw [very thick] (0,0.75) arc [radius=1, start angle=120, end angle=180];
+}
+
 \begin{tikzpicture}
 
 	\foreach \i in {\xMin,...,\xMax} {
@@ -34,29 +45,13 @@
         \draw [very thin,gray] (\xMin,\i) -- (\xMax,\i) node [left] at (\xMin,\i) {$\i$};
     }
 	
-	\draw [very thick, dashed, fill=red] (2,6) arc [radius=6, start angle=180, end angle=270];
-	
-	\draw [very thick, fill=white] (0,0.5) ellipse (0.25cm and 0.5cm);
-	\draw [very thick, fill=white] (2,0.5) ellipse (0.25cm and 0.5cm);
-	\draw [very thick, fill=white] (1,0) ellipse (1.5cm and 0.75cm);
-	\draw [thick] (0.95,1) -- (1,1.1) -- (1.05,1);
-	\draw [very thick, fill=white] (1,0.5) circle [radius=0.5cm];
-	\draw (1,-0.2) node [scale=2] {Human};
-	
-	\draw [dashed] (1,0) circle [radius=4];
-	
-	\epuckred{2.5}{3.5}
-	\epuckred{3.5}{2}
-	\epuckred{4.9}{0.8}
-	\epuck{4.9}{-1}
-	\epuck{4}{-2.5}
-	\epuck{2.5}{-3.6}
-	\epuck{-2.9}{-1}
-	\epuck{-2}{-2.5}
-	\epuck{-0.5}{-3.6}
-	\epuck{-2.9}{1}
-	\epuck{-2}{2.5}
-	\epuck{-0.5}{3.6}
+	\draw [very thick] (0,0) arc [radius=1, start angle=120, end angle=180];
+	\draw [very thick] (0,0) arc [radius=1, start angle=60, end angle=0];
+	\draw [very thick] (0,0) -- (0,1);
+	\draw [very thick] (0,1.25) circle [radius=0.25];
+	\draw [very thick] (0,0.75) arc [radius=1, start angle=60, end angle=0];
+	\draw [very thick] (0,0.75) arc [radius=1, start angle=120, end angle=180];
+
 
 \end{tikzpicture}
 \end{document}
