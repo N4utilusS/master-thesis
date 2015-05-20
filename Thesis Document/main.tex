@@ -430,7 +430,7 @@ This chapter will explore the problem faced, and its solution, with a high level
 			\hfill\includegraphics[trim=380px 230px 380px 360px, clip=true, height=5cm]{../Experiments/No_Human/6end.png}
 		\end{minipage}				
 		
-		\caption{The Shoes}{This picture shows a prototype of the shoes viewed from above, and the robots interacting with it. The interaction is realised through the recognition of the colours, one for each shoe, indicating left or right side. This pair of shoes enables the robots to locate the user, allowing them to evolve at the target distance from him/her. On the left image, the robots are still in the process of placing themselves in a correct circle. The right image depicts the situation after a 3 minutes experiment where the robots were initially placed in lines around the shoes. Objects are put on the shoes to close the lights switch.}
+		\caption{The Shoes}{This picture shows a prototype of the shoes viewed from above, and the robots interacting with it. The interaction is realised through the recognition of the colours, one for each shoe, indicating left or right side. This pair of shoes enables the robots to locate the user, allowing them to evolve at the target distance from him/her. On the left image, the robots are still in the process of placing themselves in a correct circle. The right image depicts the situation after a 3 minutes experiment where the robots were initially placed in lines around the shoes. Objects are put on the shoes to close the lights switch (normally activated by the weight of the user).}
 		\label{fig:shoes}
 	\end{figure}
 
@@ -448,18 +448,35 @@ This thesis objective was to present an innovative protection using swarm roboti
 	
 	\section{The Hardware}
 	
-	As explained in chapter \ref{chap:escorting_swarm}, one of the main issue was to enhance the robots so they could detect the user and position themselves with respect to him without any large external equipment. Large external equipments are not recommended since in the targeted unknown environment they might not be usable. For example, one might use a tracking system to get the position of the robots in real time and communicate it to the robots for them to adjust their speed. In controlled environment, this may work very well, but in the field it would be difficult to access that knowledge. The following sections will go through the details of the robots we used to conduct our experiments, and the prototype enabling swarm control.
+	The following sections will go through the details of the robots we used to conduct our experiments, and the prototype enabling swarm control.
 	
 		\subsection{E-puck}
+		\label{sec:e-puck}
 		
-		The robotic platform chosen was the e-puck \citep{mondada2009puck}. This robot model was made for educational purposes, at university level. Its shape is cylindrical with a diameter of 7.5 cm. It is moved by two diametrically opposed wheels. The figure \todo{Insert picture} shows an e-puck from the laboratory. Several extensions were plugged onto it to increase its capabilities. The important sensors that were utilised are the proximity sensors, the omnidirectional camera sensor and the virtual ground sensor. The proximity sensors are based on 8 infrared emitting pieces that return a value proportional to the proximity of an nearby obstacle. These pieces are almost regularly placed a along the perimeter of the robot. The omnidirectional camera is a vertical camera on top of the apparatus, aiming at a convex mirror to provide a 360° view of the environment. The last sensor is a bit special: it is not real, and not physically present on the board. It is simulated through the ARGoS simulator used to develop the controller of the robot. It returns data created inside the simulator to the robot, computed from the simulated environment. In our case, this \enquote{simulated/false data} contains the colour of the ground, symbolising the presence of danger. We actually simulated red discs on the floor through the simulator to artificially set up dangerous areas that were not visible by the testing user. That way, the conditions of real life application were the closest possible to ours.
+		The robotic platform chosen was the e-puck \citep{mondada2009puck}. This robot model was made for educational purposes, at university level. Its shape is cylindrical with a diameter of 7.5 cm. It is moved by two diametrically opposed wheels. The figure \todo{Insert picture} shows an e-puck from the laboratory. Several extensions were plugged onto it to increase its capabilities. The important sensors that were utilised are the proximity sensors, the omnidirectional camera sensor and the virtual ground sensor. The proximity sensors are based on 8 infrared emitting pieces that return a value proportional to the proximity of an nearby obstacle. These pieces are almost regularly placed a along the perimeter of the robot. The omnidirectional camera is a vertical camera on top of the apparatus, aiming at a convex mirror to provide a 360° view of the environment. The last sensor is a bit special: it is not real, and not physically present on the board. It is simulated through the ARGoS simulator used to develop the controller of the robot. It returns data created inside the simulator to the robot, computed from the simulated environment. In our case, this \enquote{simulated/false data} contains the colour of the ground, symbolising the presence of danger. We actually simulated red discs on the floor through the simulator to artificially set up dangerous areas that were not visible by the testing user. That way, the conditions of real life application were the closest possible to ours. An example of red zone is in figure \ref{fig:e-puck_red_zones}.
+		
+		\begin{figure}
+			\begin{minipage}[c]{0.49\textwidth}
+				\includegraphics[width=\textwidth]{../Experiments/No_Human/red_circle.png}			
+			\end{minipage}
+			
+			\caption{The E-puck and its Virtual Sensor}{}
+			\label{fig:e-puck_red_zones}
+		\end{figure}
 		
 		\subsection{E-geta} % Longer text than for e-puck because more important!
-	
+		\begin{comment}
 		[I will in this section describe the need for a device to detect a human and its development. What are the objectives of the hardware? The choices we made to get the final solution. How we built it. Calibration an adaptation process to make the current algorithm compatible with the new hardware. Where does the term come from?]
+		\end{comment}
+		
+	As explained in chapter \ref{chap:escorting_swarm}, one of the main issue was to enhance the robots so they could detect the user and position themselves with respect to him without any large external equipment. Large external equipments are not recommended since, in the targeted unknown environment, they might not be usable. For example, one might use a tracking system to get the position of the robots in real time and communicate it to the robots for them to adjust their speed. In controlled environment, this may work very well, but in the field it would be difficult to access that knowledge.\\
 	
+	We thus opted for a compact, wearable device that would act as a \enquote{landmark} for the robots: a pair of shoes. In order for the robots to understand on which side of the human they were (to go in front of the user), the two shoes had to emit a different message. The first idea the team had was to make use of the range and bearing sensors of the e-pucks to interact with the shoes. The shoes would have been equipped with infrared emitters. Unfortunately, tests with real robots demonstrated the inability of the range and bearing sensors to evaluate their distance to the human with precision. This method was abandoned for another one, more reliable: LEDs.\\
+	
+	The omnidirectional camera sensor, explained in section \ref{sec:e-puck}, provided more accurate data. After validation of this method by tests on the real robots, the decision was made to create a prototype of a pair of shoes equipped with colour lights. Both shoes had to emit their own colour to give the robot information on the direction of the human. In section \ref{sec:robot_behaviour} we will return on the algorithm used to deduce the direction of the human from the observed colours.
 	
 	\section{The Robot Behaviour}
+	\label{sec:robot_behaviour}
 			
 	The final implementation is built on 2 layers. The upper layer is the state machine, having for each state a specific behaviour in the lower layer. Figure \ref{fig:state_machine} illustrates the whole structure of the upper layer. Only part of the states rely on virtual physics: \emph{Human} and \emph{Default}. The others simply link the sensor values to the wheels speed.\\
 	
