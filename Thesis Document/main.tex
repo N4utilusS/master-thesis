@@ -17,6 +17,8 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows,automata}
 \usepackage{ccaption}
+\usepackage{url}
+\usepackage{flafter}
 
 % Logos
 \newcommand{\ulb}{\includegraphics[scale=1.1]{PageDeGarde_MFE/logo_ULB2.pdf}}
@@ -77,8 +79,8 @@
 
 \newcommand{\epuckred}[3][0] % [angle]{x}{y} avec angle optionel
 {
-	\draw [very thick, fill=white] (#2,#3) circle [radius=0.5];
-	\draw [red, very thick, rotate around={#1:(#2,#3)}] (#2-0.25,#3-0.433) -- (#2,#3+0.45) -- (#2+0.25,#3-0.433);
+	\draw [very thick, fill=orange] (#2,#3) circle [radius=0.5];
+	\draw [very thick, fill=orange, rotate around={#1:(#2,#3)}] (#2-0.25,#3-0.433) -- (#2,#3+0.45) -- (#2+0.25,#3-0.433);
 }
 
 \newcommand{\human}[3][0] % [angle]{x}{y}
@@ -222,6 +224,8 @@ As swarm robotic systems are mostly destined to operate on risky floors, unknown
 	The human operator is here part of the swarm system. The swarm has to protect him by preventing him from going into dangerous areas, in the same way a group of bodyguards protects someone. The swarm has to follow the operator anywhere to ensure permanent protection.\\
 	
 	We believe this work to be important since it could lay the foundations of a new branch in swarm engineering: human protection, escort or swarm turn-by-turn navigation.
+	
+	An article will be written to expose this research to the rest of the swarm robotics community.
 
 \chapter{State of the Art}
 	
@@ -299,8 +303,7 @@ On veut protéger un humain qui ne voit rien comme danger. Solution: un swarm de
 Challenges: une fois qu'on connait la solution générale, parler des challenges, genre comment reconnaître un humain?]\\
 \end{comment}
 
-
-This chapter will explore the problem faced, and its solution, with a high level of abstraction. The next chapter will go deeper in the details and explain how everything was implemented.
+In this chapter, we will explore the investigated problem and the proposed solution at a high level of description. In the next chapter, we will describe the implementation details.
 
 	\section{The Problem}
 	
@@ -308,11 +311,11 @@ This chapter will explore the problem faced, and its solution, with a high level
 	[Human walking in unknown environment. Team to assist, perceive danger that the human cannot. Graphical example, human goes from A to B with dangers (keep it simple as demo). Write text about an image showing the problem. Mined field, real applications.]\\
 	\end{comment}
 	
-	Since the early days, man has tried to explore new territories to expand their control and get a better understanding of the world surrounding them. Among those new landscapes, some were relatively safe and some were dangerous. To address this issue, we have invented armours, shield, and other kinds of protections. This work tries to contribute to the study of these solutions.\\
+	Since the early days, human beings have explored new territories to expand their control and get a better understanding of the world surrounding them. Among those new landscapes, some were relatively safe but some were dangerous. To overcome this, we have invented equipment, suits, and other kinds of protections. We tried, with this work, to contribute to the study of these solutions.\\
 	
-	To get a better insight, let us imagine a world where dangerous areas are circular. The human, as depicted on figure \ref{fig:unknown_environment}, must travel from point \emph{A} to \emph{B} without being hurt. The problem is that the human has no clue where the dangerous areas are. The person cannot perceive them. They could be radioactive areas, mine fields, or any other invisible threats. The protection created should prevent the user from going inside those areas.\\
+	Figure \ref{fig:unknown_environment} shows a graphical representation of a possible scenario. The dangerous areas are the red circles. Those areas could be radioactive areas, mine fields, or any other invisible threats. The human must travel from point \emph{A} to \emph{B} without being hurt by the danger contained in these areas. The human cannot perceive them. The protection created should prevent the user from going inside those areas.\\
 	
-	Exploration is not the only real application that comes into mind. Rescue in disaster areas would also benefit from it (evacuation of people to safe zones, etc). The system created should be able to constantly protect the person using it, and constantly provide feedback. It should be robust and fit to the destination environment.
+	Exploration is not the only real application for the proposed solution that comes into mind. Rescue in disaster areas would also benefit from it (evacuation of people to safe zones, etc). The solution should be able to constantly protect the person using it, and constantly provide feedback. It should be robust and fit to the destination environment.
 	
 %	\begin{figure}\centering
 %		\begin{tikzpicture}
@@ -361,7 +364,7 @@ This chapter will explore the problem faced, and its solution, with a high level
 			\draw [very thick] (1,0.433+0.375) arc [radius=0.5, start angle=120, end angle=180];
 		\end{tikzpicture}
 		
-		\caption{Unknown Dangerous Environment}{This image illustrates an unknown environment, observed from above, in which a human must evolve while avoiding invisible dangerous areas. This figure represents a path to follow from \emph{A} to \emph{B} in a dangerous zone to stay safe. \emph{A} is the start location and \emph{B} is the goal. The red circles represent dangerous zones whose size can vary. This thesis explores a solution to guarantee safeness in such circumstances. Applications for this type of problems already exist: mine fields, radioactive areas, etc.}
+		\caption{Unknown Dangerous Environment}{This image illustrates an environment, observed from above, in which a human must move from point \emph{A} to point \emph{B} while avoiding invisible dangerous areas. \emph{A} is the start location, \emph{B} is the goal ant the red circles represent dangerous zones. We provide in this thesis a solution to guarantee safeness in such circumstances. Possible applications for this type of solutions are: mine fields crossing and cleaning, radioactive areas avoidance,...}
 		\label{fig:unknown_environment}
 	\end{figure}
 	
@@ -373,11 +376,11 @@ This chapter will explore the problem faced, and its solution, with a high level
 	On a choisit d'utiliser des swarms car... Equidistance par rapport à l'humain. Carac du système. Pb pour détecter l'humain...avec solution. Agent de la swarm doit être capable de détecter le danger. Humain perçoit la swarm qui elle perçoit le danger.]
 	\end{comment}
 	
-	The solution proposed involves the use of a swarm of robots. Swarm robotics seems fit to this kind of application, since it is compatible with unknown environments thanks to its flexible, robust and scalable characteristics \citep{brambilla2013swarm}. In case of failure of one or a few robots, the system would continue to provide sufficient performance thanks to its scalability and robustness.\\
+	The solution we propose involves the use of a swarm of robots. Swarm robotics seems fit to this kind of application, since it is compatible with unknown environments thanks to its flexible, robust and scalable characteristics \citep{brambilla2013swarm}. In case of failure of one or a few robots, the system would continue to provide sufficient performance thanks to its scalability and robustness.\\
 	
-	The swarm ideally forms a round shield around the user to ensure a 360° protection. All the robots try to stay at the same distance from each other and the person. To achieve this, the final solution relies on the pattern formation theory widely used in swarm robotics\todo{Parler du flocking et pattern.}. The corresponding techniques will be explained in the next chapter with more details. If the amount of robots is not high enough to form a complete circle, an arc is formed at the front to always shield the most critical zone.\\
+	The swarm of robots forms a round shield around a user. The round shield formed by the swarm enables a 360° protection of the user. All the robots try to stay at the same distance from each other and the human (except when there is a danger). To achieve this, the final solution relies on the pattern formation theory widely used in swarm robotics\todo{Parler du flocking et pattern.}. The corresponding techniques will be explained in the next chapter with more details. If the number of robots is not high enough to form a complete circle, an arc is formed at the front to always shield the most critical zone.\\
 	
-	As seen on figure \ref{fig:swarm_preventing}, the robots in contact with a dangerous zone will reflect the danger through visual communication with the human. Here the robots turn red and stay on the boundary of the zone to prevent the user from getting into it. Since the human cannot see the danger, and only the robots can, we can see that the swarm is increasing the perception capabilities of the user.\\
+	As shown on figure \ref{fig:swarm_preventing}, the robots in contact with a dangerous zone will report the danger through visual communication with the human. Here the robots light on their orange LEDs and stay on the boundary of the zone to prevent the human from getting into it. Since the human cannot see the danger, and only the robots can, we can see that the swarm is increasing the perception capabilities of the human.\\
 		
 	\begin{figure}\centering
 		\begin{tikzpicture}
@@ -415,11 +418,13 @@ This chapter will explore the problem faced, and its solution, with a high level
 					
 		\end{tikzpicture}
 		
-		\caption{Swarm Prevention}{This figure is a representation of a human helped by a swarm. The circles with a triangle inside are representations of a robot. The swarm tells the human that a dangerous zone is located at the front right by visual communication (here the robots change their colour to red). The swarm stays at the boundary to form a \enquote{shield}. The direction taken by each individual in the swarm is given by the triangle inside (here heading north).}
+		\caption{Swarm Prevention}{This figure is a symbolic representation of a human helped by a swarm. The circles with a triangle inside are representations of a robot. The swarm tells the human that a dangerous zone is located at the front right by visual communication (here the robots change their colour to red). The swarm stays at the boundary to form a \enquote{shield}. The direction taken by each individual in the swarm is given by the triangle inside (here heading north).}
 		\label{fig:swarm_preventing}
 	\end{figure}
 	
-	One big issue that had to be resolved was the detection of the human by the robots. As \citet{podevijn2012self} suggested, the interface between the human and the robots swarm should be restricted to the strict minimum because in the field the infrastructure needed to operate the swarm might not be easy to build. The swarm should handle the communication on its own. Furthermore, any centralised control system would break the distributed and robust feature of swarm robotics. We thus imagined a wearable device that would allow the human to be recognised by the robots: a pair of shoes.\\
+	One issue that had to be resolved was the detection of the human by the robots. As \citet{podevijn2012self} suggested, the interface between the human and the robots swarm should be restricted to the strict minimum because in the field the infrastructure needed to operate the swarm might not be easy to build and manipulate. The swarm should handle the communication on its own. Furthermore, any centralised control system would break the distributed and robust feature of swarm robotics. As a big infrastructure such as a tracking system, or any interface of the same kind would have been difficult to use in real life applications, we designed and implemented a compact, wearable device that allows a human to be recognised by the robots: a pair of shoes.\\
+	
+	Figure \ref{fig:shoes} illustrates the use of the shoes (no user is wearing them to not occlude the field of view). In figure \ref{fig:shoes} (left), the robots have just recognised the shoes thanks to the LED system inside and begin to move in order to form a circle around the shoe. n figure \ref{fig:shoes} (right), we show an example of one configuration obtained after 3 minutes, viewed from above.\\
 	
 	\begin{figure}
 		\begin{minipage}[c]{0.6\textwidth}
@@ -434,9 +439,7 @@ This chapter will explore the problem faced, and its solution, with a high level
 		\label{fig:shoes}
 	\end{figure}
 
-The figure \ref{fig:shoes} illustrates the use of the shoes (no user is wearing them to increase visibility). On the left side, the robots have just recognised the shoes thanks to the LED system inside and begin to move to their target position. The right side is an example of one configuration obtained after 3 minutes, viewed from the ceiling tracking system.\\
-
-This thesis objective was to present an innovative protection using swarm robotics. We consider the final protection robust. The results obtained at the end of the thesis with real robots will be detailed in the chapter \ref{chap:experiments}, but one can already say they are convincing. An article will be written during summertime to expose this research to the rest of the swarm robotics community.
+Our objective in this thesis, is to present an innovative protection using swarm robotics. The results obtained with real robots are presented in the chapter \ref{chap:experiments}.
 
 %////////////////////////////////////////////////////////////
 \chapter{Implementation}
@@ -455,7 +458,7 @@ This thesis objective was to present an innovative protection using swarm roboti
 		
 		The robotic platform chosen was the e-puck \citep{mondada2009puck}. This robot model was made for educational purposes, at university level. Its shape is cylindrical with a diameter of 7.5 cm. It is moved by two diametrically opposed wheels. The figure \todo{Insert picture} shows an e-puck from the laboratory. Several extensions were plugged onto it to increase its capabilities. The important sensors that were utilised are the proximity sensors, the omnidirectional camera sensor and the virtual ground sensor. The proximity sensors are based on 8 infrared emitting pieces that return a value proportional to the proximity of an nearby obstacle. These pieces are almost regularly placed a along the perimeter of the robot. The omnidirectional camera is a vertical camera on top of the apparatus, aiming at a convex mirror to provide a 360° view of the environment. The last sensor is a bit special: it is not real, and not physically present on the board. It is simulated through the ARGoS simulator used to develop the controller of the robot. It returns data created inside the simulator to the robot, computed from the simulated environment. In our case, this \enquote{simulated/false data} contains the colour of the ground, symbolising the presence of danger. We actually simulated red discs on the floor through the simulator to artificially set up dangerous areas that were not visible by the testing user. That way, the conditions of real life application were the closest possible to ours. An example of red zone is in figure \ref{fig:e-puck_red_zones}.
 		
-		\begin{figure}
+		\begin{figure}[!h]
 			\begin{minipage}[c]{0.49\textwidth}
 				\includegraphics[width=\textwidth]{../Experiments/No_Human/red_circle.png}			
 			\end{minipage}
@@ -473,7 +476,39 @@ This thesis objective was to present an innovative protection using swarm roboti
 	
 	We thus opted for a compact, wearable device that would act as a \enquote{landmark} for the robots: a pair of shoes. In order for the robots to understand on which side of the human they were (to go in front of the user), the two shoes had to emit a different message. The first idea the team had was to make use of the range and bearing sensors of the e-pucks to interact with the shoes. The shoes would have been equipped with infrared emitters. Unfortunately, tests with real robots demonstrated the inability of the range and bearing sensors to evaluate their distance to the human with precision. This method was abandoned for another one, more reliable: LEDs.\\
 	
-	The omnidirectional camera sensor, explained in section \ref{sec:e-puck}, provided more accurate data. After validation of this method by tests on the real robots, the decision was made to create a prototype of a pair of shoes equipped with colour lights. Both shoes had to emit their own colour to give the robot information on the direction of the human. In section \ref{sec:robot_behaviour} we will return on the algorithm used to deduce the direction of the human from the observed colours.
+	The omnidirectional camera sensor, explained in section \ref{sec:e-puck}, provided more accurate data. After validation of this method by tests on the real robots, the decision was made to create a prototype of a pair of shoes equipped with colour lights. Both shoes had to emit a different colour to give the robot information on the direction of the human. In section \ref{sec:robot_behaviour} we come back on the algorithm used to deduce the direction of the human from the observed colours.\\
+	\begin{comment}
+	[Inspiration des getas. Plan ou modèle 3D. Méthode de construction (laser cut pour les plexi etc). Circuit électronique.]
+	\end{comment}
+	
+	\begin{figure}
+		\begin{minipage}[c]{0.49\textwidth}
+			\includegraphics[width=\textwidth]{images/512px-Geta.jpg}
+		\end{minipage}
+		\hfill
+		\begin{minipage}[c]{0.49\textwidth}
+			Insert nice photo of our shoes
+		\end{minipage}
+		
+		\caption{E-Geta}{Left image by Haragayato [GFDL (http://www.gnu.org/copyleft/fdl.html) or CC-BY-SA-3.0 (http://creativecommons.org/licenses/by-sa/3.0/)], via Wikimedia Commons. Found on \citet{wiki:001}.}
+		\label{fig:e-geta}
+	\end{figure}
+	
+	The laboratory took inspiration from the Japanese \enquote{geta} shoes for the design. Figure \ref{fig:e-geta} shows a picture of a Japanese wooden shoe called geta. The right side of the figure is a picture of our prototype\todo{Nice picture of shoes}. Both have the same overall design. We chose this design in order to slow down the human's speed. Indeed, he speed of the robots is limited to maximum 10 cm/s for per wheel. Another advantage is the simplicity of the structure, and the low number of assembly parts. Figure \ref{fig:e-geta_blueprints} details the blueprints of the prototype.\todo{Insert blueprints}
+	
+	\begin{figure}
+		Insert blueprints
+		
+		\caption{E-Geta Blueprints}{Insert text}
+		\label{fig:e-geta_blueprints}
+	\end{figure}
+	
+	The base of the shoe is made with wood. The surrounding piece covering the LEDs was cut in sheets of semi-opaque plexiglass to diffuse the light. The LEDs are standard strip LEDs (one red strip, and one green). The final electronic circuit is very simple. The 9 volts battery is connected to two variable voltage regulators (step up) in parallel to increase the potential on the output. Each regulator is connected to a shoe LED strip. A separation is necessary since the green LED strip requires more energy than the red one. To get an equivalent luminosity for both shoes, a different voltage had to be applied.
+	
+	\begin{figure}
+		\includegraphics[scale=0.5]{figures/circuit.png}
+		\caption{The Circuit}{The figure shows the final electronic circuit for the shoes. The battery delivers 9 volts to two regulators in parallel, one for each shoe since each one of them need a different energy supply. Indeed, the green LED strip is more power hungry than the red one. The mass is common for all the circuit.}
+	\end{figure}
 	
 	\section{The Robot Behaviour}
 	\label{sec:robot_behaviour}
@@ -907,6 +942,14 @@ This thesis objective was to present an innovative protection using swarm roboti
   year={2009},
   organization={IPCB: Instituto Polit{\'e}cnico de Castelo Branco}
 }
+
+@misc{wiki:001,
+   author = "Wikipedia",
+   title = "Geta (footwear) --- Wikipedia{,} The Free Encyclopedia",
+   year = "2015",
+   url = "\url{http://en.wikipedia.org/w/index.php?title=Geta_(footwear)&oldid=651925222}",
+   note = "[Online; accessed 20-May-2015]"
+ }
 
 \end{filecontents}
 
