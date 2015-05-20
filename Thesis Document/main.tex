@@ -85,8 +85,11 @@
 
 \newcommand{\human}[3][0] % [angle]{x}{y}
 {
-	\draw [line width=1.5pt, rotate around={#1:(#2,#3)}] (#2,#3+1) -- (#2-0.866,#3-0.5) -- (#2+0.866,#3-0.5) -- cycle;
-	\draw (#2,#3) node[scale=2, rotate around={#1:(#2,#3)}]{H};
+	\draw [very thick, fill=white, rotate around={#1:(#2,#3)}] (#2-1,#3+0.5) ellipse (0.25cm and 0.5cm);
+	\draw [very thick, fill=white, rotate around={#1:(#2,#3)}] (#2+1,#3+0.5) ellipse (0.25cm and 0.5cm);
+	\draw [very thick, fill=white, rotate around={#1:(#2,#3)}] (#2,#3) ellipse (1.5cm and 0.75cm);
+	\draw [thick, rotate around={#1:(#2,#3)}] (#2-0.05,#3+1) -- (#2,#3+1.1) -- (#2+0.05,#3+1);
+	\draw [very thick, fill=white, rotate around={#1:(#2,#3)}] (#2,#3+0.5) circle [radius=0.5cm];
 }
 
 
@@ -394,12 +397,7 @@ In this chapter, we will explore the investigated problem and the proposed solut
 			
 			\draw [very thick, dashed, fill=red] (2,6) arc [radius=6, start angle=180, end angle=270];
 			
-			\draw [very thick, fill=white] (0,0.5) ellipse (0.25cm and 0.5cm);
-			\draw [very thick, fill=white] (2,0.5) ellipse (0.25cm and 0.5cm);
-			\draw [very thick, fill=white] (1,0) ellipse (1.5cm and 0.75cm);
-			\draw [thick] (0.95,1) -- (1,1.1) -- (1.05,1);
-			\draw [very thick, fill=white] (1,0.5) circle [radius=0.5cm];
-			%\draw (1,-0.2) node [scale=2] {Human};
+			\human{1}{0}
 			
 			\draw [dashed] (1,0) circle [radius=4];
 			
@@ -477,6 +475,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 	We thus opted for a compact, wearable device that would act as a \enquote{landmark} for the robots: a pair of shoes. In order for the robots to understand on which side of the human they were (to go in front of the user), the two shoes had to emit a different message. The first idea the team had was to make use of the range and bearing sensors of the e-pucks to interact with the shoes. The shoes would have been equipped with infrared emitters. Unfortunately, tests with real robots demonstrated the inability of the range and bearing sensors to evaluate their distance to the human with precision. This method was abandoned for another one, more reliable: LEDs.\\
 	
 	The omnidirectional camera sensor, explained in section \ref{sec:e-puck}, provided more accurate data. After validation of this method by tests on the real robots, the decision was made to create a prototype of a pair of shoes equipped with colour lights. Both shoes had to emit a different colour to give the robot information on the direction of the human. In section \ref{sec:robot_behaviour} we come back on the algorithm used to deduce the direction of the human from the observed colours.\\
+	
 	\begin{comment}
 	[Inspiration des getas. Plan ou modèle 3D. Méthode de construction (laser cut pour les plexi etc). Circuit électronique.]
 	\end{comment}
@@ -505,15 +504,50 @@ Our objective in this thesis, is to present an innovative protection using swarm
 	
 	The base of the shoe is made with wood. The surrounding piece covering the LEDs was cut in sheets of semi-opaque plexiglass to diffuse the light. The LEDs are standard strip LEDs (one red strip, and one green). The final electronic circuit is very simple. The 9 volts battery is connected to two variable voltage regulators (step up) in parallel to increase the potential on the output. Each regulator is connected to a shoe LED strip. A separation is necessary since the green LED strip requires more energy than the red one. To get an equivalent luminosity for both shoes, a different voltage had to be applied.
 	
-	\begin{figure}
+	\begin{figure}\centering
 		\includegraphics[scale=0.5]{figures/circuit.png}
-		\caption{The Circuit}{The figure shows the final electronic circuit for the shoes. The battery delivers 9 volts to two regulators in parallel, one for each shoe since each one of them need a different energy supply. Indeed, the green LED strip is more power hungry than the red one. The mass is common for all the circuit.}
+		\caption{The Circuit}{The figure shows the final electronic circuit for the shoes. The battery delivers 9 volts to two regulators in parallel, one for each shoe since each one of them need a different energy supply. Indeed, the green LED strip is more power hungry than the red one. The mass (black cable) is common for all the circuit.}
 	\end{figure}
 	
 	\section{The Robot Behaviour}
 	\label{sec:robot_behaviour}
-			
-	The final implementation is built on 2 layers. The upper layer is the state machine, having for each state a specific behaviour in the lower layer. Figure \ref{fig:state_machine} illustrates the whole structure of the upper layer. Only part of the states rely on virtual physics: \emph{Human} and \emph{Default}. The others simply link the sensor values to the wheels speed.\\
+	
+	\begin{comment}
+		Pour parvenir à mes fins, j'ai dû implémenter un controller. J'ai choisi virtual physics car ces avantages et inconvénients. C'est ce gars qui l'a inventé, et voici les travaux utilisant cette technique.
+		1) Dois faire un controller en c++, pour la plateforme ARGoS, mais aussi compatible e-puck.
+		2) Design de la state machine.
+		3) Les potentiels pour chaque state, l'idée de l'algorithme derrière, et leur évolution.
+		4) Les paramètres les plus importants ?
+	\end{comment}
+	
+	Implementing a robots swarm behaviour means writing a controller code for its individual components: the robots. The laboratory provides a template in the Lua and the C++ languages for this purpose. The logic of the individual behaviour is added inside callback methods called either by the simulator when performing simulations inside ARGoS \citep{pinciroli2012argos}, or by the robot main method when testing on real robots. The first attempts to build the core of the controller were made in Lua to accelerate the process of trial and error. Indeed, Lua has a simpler syntax, is interpreted by the simulator and does not require any compilation process. Furthermore, the debugging is faster since the simulator includes an editor for the lua controller code. Although Lua is very convenient for quick implementation, it is not supported by the robots. Hence a translation was necessary to port the code to C++ in order to begin the tests on the real robots. After that, the implementation continued exclusively in C++ since the tests on the robots were more frequent. The C++ template developed by the laboratory can be compiled for the ARGoS simulator and cross-compiled for the real robots (e-puck) without any modification. After the compilation, a simple transfer of the binary codes over WiFi allows the operator to store the controller on the robots to launch an experiment.\\
+	
+		The first step of the design of the solution is to imagine how the system will look like and how we will implement it, the overall behaviour of the swarm. How do the robots move around the human? What shape will they try to form? This part is important because it will define the overall look of the system.\\
+	
+	The first shape that intuitively comes in mind is the circle. The circle is the most elementary shape in geometry. It offers the best ratio:
+	$$\frac{\mbox{\textit{Surface}}}{\mbox{\textit{Perimeter}}} = \frac{r}{2}~\mbox{, where r is the radius of the circle.}$$
+	
+	That means that fewer robots are needed for the same protected area, and more space for the human with a certain amount of robots than any other possible shape. Luckily, it is also the easiest shape to realise in practice. The figure \ref{fig:circle_shape} represents the kind of circle that we would like to obtain for 6 robots and 1 human in the centre.\\
+	
+	\begin{figure}[!h]\centering
+	\begin{tikzpicture}
+		\draw [dashed] (0,0) circle [radius=4];
+		\epuck{4}{0}
+		\epuck{2}{3.464}
+		\epuck{-2}{3.464}
+		\epuck{-4}{0}
+		\epuck{-2}{-3.464}
+		\epuck{2}{-3.464}
+		
+		\human{0}{0}
+	\end{tikzpicture}
+	\caption{Test}{Circle shape for the swarm to get the widest protected surface for a given amount of robots.}
+	\label{fig:circle_shape}
+	\end{figure}
+	
+		
+	
+	The final implementation of the controller is built on 2 layers. The upper layer is a deterministic finite state machine, having for each state a specific behaviour in the lower layer. Figure \ref{fig:state_machine} illustrates the whole structure of the upper layer. \\
 	
 	The transitions without any number are taken without any condition, right after the corresponding behaviour has been applied (the time step period is over). One could see the 3 lowest states as sub-states of \emph{Normal}. At the beginning of each time step, if the controller is in the \emph{Normal} state, it has to choose between the 3 different sub-states. The conditions are listed with numbers in the figure \ref{fig:state_machine}.
 	
@@ -559,31 +593,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		
 	
 	
-	The first step of the thesis is the design of the solution, to imagine how the system will look like and how we will implement it. The first choice faced was the overall behaviour of the swarm. How do the robots move around the human? What shape will they try to respect? This choice is important because it will define the overall look of the system.\\
-	
-	The first shape that intuitively comes in mind is the circle. The circle is the most elementary shape in geometry. It offers the best ratio:
-	$$\frac{\mbox{Surface}}{\mbox{Perimeter}} = \frac{r}{2}~\mbox{, where r is the radius of the circle.}$$
-	
-	That means that fewer robots are needed for the same protected area, and more space for the human with a certain amount of robots. Luckily, it is also the easiest shape to realise in practice.
-	
-	\begin{figure}[!h]\centering
-	\begin{tikzpicture}
-		\draw [dashed] (0,0) circle [radius=4];
-		\epuck{4}{0}
-		\epuck{2}{3.464}
-		\epuck{-2}{3.464}
-		\epuck{-4}{0}
-		\epuck{-2}{-3.464}
-		\epuck{2}{-3.464}
-		
-		\human{0}{0}
-		%\draw (0,0) node[regular polygon,regular polygon sides=3,minimum height=2cm,minimum width=1cm,line width=1.5pt, draw] {\Huge{H}};
-	\end{tikzpicture}
-	\caption{Test}{Circle shape for the swarm to get the widest protected surface for a given amount of robots.}
-	\label{fig:circle_shape}
-	\end{figure}
-	
-		The figure \ref{fig:circle_shape} represents the kind of circle that we would like to get for 6 robots and 1 human in the centre.
+
 		
 	
 	Section \ref{sec:virtual_physics} explained how the laws of physics can be used to design a behaviour. Intuitively, this method seemed the most appropriate to create a behaviour whose main feature is a \enquote{protection barrier} around a human. When it comes to pattern creation, people usually first consider using repulsive and attractive forces to make the robots automatically adjust their position with respect to others.\\
@@ -592,7 +602,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 	
 	$$\vec{f} = -\vec{\nabla}P$$, P being the system's potential. The following sections will explain in detail the different potentials that were implemented to obtain the desired behaviour.
 			
-		In this section, the potentials are grouped by states in which they are used. Since virtual physics are used in only 2 states, we have only 2 groups.
+		In this section, the potentials are grouped by states in which they are used. Since virtual physics are used in only 2 states, we have only 2 groups. Only part of the states rely on virtual physics: \emph{Human} and \emph{Default}. The others simply link the sensor values to the wheels speed.
 		
 			\paragraph{Human}
 			
