@@ -19,6 +19,7 @@
 \usepackage{ccaption}
 \usepackage{url}
 \usepackage{flafter}
+\usepackage{pgfplots}
 
 % Logos
 \newcommand{\ulb}{\includegraphics[scale=1.1]{PageDeGarde_MFE/logo_ULB2.pdf}}
@@ -588,15 +589,53 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		\label{fig:state_machine}
 	\end{figure}
 
-	Once the actions the robots have to execute have been defined, we have to implement them, code them in the controller that will be run. So the next step was to find a way to translate those actions into code. Our behaviour is a kind of coordinated motion and pattern formation. Thus the intuitive way of implementing it was to make use of the virtual physics design. Using this framework, each robot is a particle subject to virtual forces exerted by the environment (the other robots, the obstacles, and other elements). \citet{khatib1986real} was among the first to use this method. His goal was to implement an obstacle avoidance swarm behaviour where the obstacles create repulsive forces and the goals attractive forces. The overall resulting potential presented local minima at goals and maxima at obstacles. \citet{reif1999social} introduces \enquote{social potential fields} consisting in virtual forces applied on robots by other robots, obstacles, objectives,... The robot resultant motion is defined by the sum of all the forces applied to it. The individual robots carry out the calculations themselves, so the final control is completely distributed. The laws they used are similar to those found in molecular dynamics (inverse-power laws). For example, a law could favour attraction over long distances and repulsion over short distances. Inverse-power laws, while being extremely simple, can form interesting and elaborate patterns with molecules and plasma gases \citep{reif1999social}. \citet{spears2004distributed} proposed a framework they call \enquote{physicomimetics} to grant distributed control over a large swarm of robots with \enquote{artificial physics}.\\
+	Once the actions the robots have to execute have been defined, we have to implement them, code them in the controller that will be run. So the next step was to find a way to translate those actions into code. Our behaviour is a kind of coordinated motion and pattern formation. Thus the intuitive way of implementing it was to make use of the virtual physics design. Using this framework, each robot is a particle subject to virtual forces exerted by the environment (the other robots, the obstacles, and other elements). \citet{khatib1986real} was among the first to use this method. His goal was to implement an obstacle avoidance swarm behaviour where the obstacles create repulsive forces and the goals attractive forces. The overall resulting potential presented local minima at goals and maxima at obstacles. \citet{reif1999social} introduces \enquote{social potential fields} consisting in virtual forces applied on robots by other robots, obstacles, objectives,... The robot resultant motion is defined by the sum of all the forces applied to it. The individual robots carry out the calculations themselves, so the final control is completely distributed. The laws they used are similar to those found in molecular dynamics (inverse-power laws). For example, a law could favour attraction over long distances and repulsion over short distances. One of these is the Lennard-Jones potential, depicted in figure \ref{fig:lennard-jones_potential}. Inverse-power laws, while being extremely simple, can form interesting and elaborate patterns with molecules and plasma gases \citep{reif1999social}. \citet{spears2004distributed} proposed a framework they call \enquote{physicomimetics} to grant distributed control over a large swarm of robots with \enquote{artificial physics}.\\
 	
+	\begin{figure}
+	\begin{minipage}[c]{0.6\textwidth}
+		\begin{tikzpicture}
+			\begin{axis}[
+			    samples=100,
+			    domain=0:1, xmax=1,
+			    restrict y to domain=-4:10,
+			    axis lines=left,
+			    y=1cm/2,
+			    x=10cm,
+			    grid=both,
+			    xtick={0,0.1,...,1},
+			    ytick={-4,-2,...,10},
+			    compat=newest,
+			    xlabel=$d$, xlabel style={at={(1,0)}, anchor=west},
+			    ylabel=$f$, ylabel style={rotate=-90,at={(0,1)}, anchor=south}
+			]
+			\addplot [red, thick] {2.5*((0.3/x)^12 - 2*(0.3/x)^6)};
+			\end{axis}
+		\end{tikzpicture}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[c]{0.4\textwidth}
+		$$ y = f(d) = \epsilon \left[ \left(\frac{\sigma}{d}\right)^{12} - 2 \left(\frac{\sigma}{d}\right)^6 \right]$$
+		$$\epsilon = 2.5$$
+		$$\sigma = 0.3$$
+	\end{minipage}
+		
+		\caption{The Lennard-Jones Potential}{This figure shows a graph of one of the most used virtual potentials in virtual physics, the Lennard-Jones potential, where $\epsilon$ is the gain, $\sigma$ is the target distance and $d$ is the current real distance.}
+		\label{fig:lennard-jones_potential}
+	\end{figure}
 	
-
-	Section \ref{sec:virtual_physics} explained how the laws of physics can be used to design a behaviour. Intuitively, this method seemed the most appropriate to create a behaviour whose main feature is a \enquote{protection barrier} around a human. When it comes to pattern creation, people usually first consider using repulsive and attractive forces to make the robots automatically adjust their position with respect to others.\\
+	Using virtual physics offers some advantages over the other methods \citep{brambilla2013swarm}:
 	
-	Indeed, the laws of physics force the system to get to a state of minimum energy, i.e., to reach a global minimum of the potential function of the system. Since the force is proportional to the derivative of the corresponding potential, the minimum of the potential function means the disappearance of the forces. For the forces to disappear, every robot needs to be at the desired location.
+	\begin{enumerate}
+		\item Only one mathematical formula fluently and elegantly converts all the inputs into outputs for the actuators. It removes the need for multiple rules and behaviours.
+		$$f:\mathbb{R}^m \rightarrow \mathbb{R}^n:x_1,x_2,...,x_m \rightarrow y_1,y_2,...,y_n = f(x_1,x_2,...,x_m)\mbox{,}$$ where $m$ is the number of inputs, $n$ is the number of outputs and $f$ is the translating function.
+		
+		\item Multiple behaviours can be combined by simply summing the corresponding resulting vectors.
+		$$y_1,y_2,...,y_n = g(x_1,x_2,...,x_m) = \sum_{i=0}^{s}{f_i(x_1,x_2,...,x_m)}\mbox{,}$$ where $s$ is the number of behaviour components.
+	\end{enumerate}
 	
-	$$\vec{f} = -\vec{\nabla}P$$, P being the system's potential. The following sections will explain in detail the different potentials that were implemented to obtain the desired behaviour.
+	The laws of physics force a system to get to a state of minimum energy, i.e., to reach a global minimum of the potential function of the system. Since the force is proportional to the derivative of the corresponding potential, the minimum of the potential function means the disappearance of the forces. For the forces to disappear, every robot needs to be at the desired location.
+	
+	$$\vec{f} = -\vec{\nabla}P,$$, P being the system's potential. The following sections will explain in detail the different potentials that were implemented to obtain the desired behaviour.
 			
 		In this section, the potentials are grouped by states in which they are used. Since virtual physics are used in only 2 states, we have only 2 groups. Only part of the states rely on virtual physics: \emph{Human} and \emph{Default}. The others simply link the sensor values to the wheels speed.
 		
