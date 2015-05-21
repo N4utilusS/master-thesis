@@ -616,7 +616,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 	\end{minipage}
 	\hfill
 	\begin{minipage}[c]{0.4\textwidth}
-		$$ y = f(d) = \epsilon \left[ \left(\frac{\sigma}{d}\right)^{12} - 2 \left(\frac{\sigma}{d}\right)^6 \right]$$
+		$$f(d) = \epsilon \left[ \left(\frac{\sigma}{d}\right)^{12} - 2 \left(\frac{\sigma}{d}\right)^6 \right]$$
 		$$\epsilon = 2.5$$
 		$$\sigma = 0.3$$
 	\end{minipage}
@@ -643,7 +643,41 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		
 			\paragraph{Searching}
 			
-				When no human nor obstacle is around, the robot enters in \emph{searching} mode in which it tries to stay at a constant distance from a 
+				When no human nor obstacle is around, the robot enters in the \emph{Searching} mode. It tries to stay at a constant distance from a detected colour blob, whatever colour it is. Since robots in \emph{Escorting} or \emph{Protecting} mode light their LEDs in blue, the searching robots always stay around the robots helping the human, whom they will detect at some point. This measure prevents the robots from going away too far from the human. This sub-behaviour is implemented through a sum of simplified Lennard-Jones virtual forces, one for each colour blob. The term simplified is used because the force is not the real derivative of the Lennard-Jones potential, but a simplified version with lower exponents on the fractions\todo{Why a simplified version? Put the development.}:
+				\begin{equation}
+					f(d) = \frac{-4\epsilon}{d} \left[ \left(\frac{\sigma}{d}\right)^{4} - \left(\frac{\sigma}{d}\right)^2 \right]
+					\label{eq:lennard-jones_force_simplified}
+				\end{equation}
+				
+				The original version is:
+				\begin{equation}
+					f(d) = \frac{-12\epsilon}{d} \left[ \left(\frac{\sigma}{d}\right)^{12} - \left(\frac{\sigma}{d}\right)^6 \right]
+				\end{equation}
+				 The simplified version is exposed in figure \ref{fig:lennard-jones_force_simplified}. If no blob is detected, the robot goes forward with a speed of 5 cm/s.
+				
+				\begin{figure}\centering
+					\begin{tikzpicture}
+						\begin{axis}[
+						    samples=50,
+						    domain=0:150, xmax=142, ymax=2.5,
+						    restrict y to domain=-10:30,
+						    axis lines=left,
+						    y=1cm/3,
+						    x=1cm/10,
+						    grid=both,
+						    xtick={0,10,...,150},
+						    ytick={-10,-8,...,30},
+						    compat=newest,
+						    xlabel=$d$ (cm), xlabel style={at={(1,0)}, anchor=west},
+						    ylabel=$f$, ylabel style={rotate=-90,at={(0,1)}, anchor=south}
+						]
+						\addplot [red, thick] {-400/x*((50/x)^4-(50/x)^2)};
+						\end{axis}
+					\end{tikzpicture}
+					
+					\caption{The Simplified Lennard-Jones Virtual Force}{This figure exposes a simplified version of the Lennard-Jones force derivated from the corresponding potential. Its expression is given by equation \ref{eq:lennard-jones_force_simplified}. The term \enquote{simplified} is used because the force is not the real derivative of the Lennard-Jones potential, but a simplified version with lower exponents on the fractions. The parameters values are: $\epsilon=100$ and $\sigma=50$, and are conform to those used with robots. One can observe the root at 50 corresponding to the state of minimum energy in the system. Above 50, the force is positive, so the robot is attracted towards the source applying the force. Below 50, it is negative, so the robot is repulsed from the source of the force.}
+					\label{fig:lennard-jones_force_simplified}
+				\end{figure}
 			
 			\paragraph{Escorting}
 			
