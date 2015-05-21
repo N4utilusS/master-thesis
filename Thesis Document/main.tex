@@ -506,7 +506,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 	
 	\begin{figure}\centering
 		\includegraphics[scale=0.5]{figures/circuit.png}
-		\caption{The Circuit}{The figure shows the final electronic circuit for the shoes. The battery delivers 9 volts to two regulators in parallel, one for each shoe since each one of them need a different energy supply. Indeed, the green LED strip is more power hungry than the red one. The mass (black cable) is common for all the circuit.}
+		\caption{The Circuit}{The figure shows a sketch of the final electronic circuit for the shoes. The battery delivers 9 volts to two regulators in parallel, one for each shoe since each one of them need a different energy supply. Indeed, the green LED strip is more power hungry than the red one. The mass (black cable) is common for all the circuit.}
 	\end{figure}
 	
 	\section{The Robot Behaviour}
@@ -514,20 +514,19 @@ Our objective in this thesis, is to present an innovative protection using swarm
 	
 	\begin{comment}
 		Pour parvenir à mes fins, j'ai dû implémenter un controller. J'ai choisi virtual physics car ces avantages et inconvénients. C'est ce gars qui l'a inventé, et voici les travaux utilisant cette technique.
+		0) Aspect solution avec cercle.
 		1) Dois faire un controller en c++, pour la plateforme ARGoS, mais aussi compatible e-puck.
 		2) Design de la state machine.
 		3) Les potentiels pour chaque state, l'idée de l'algorithme derrière, et leur évolution.
 		4) Les paramètres les plus importants ?
 	\end{comment}
 	
-	Implementing a robots swarm behaviour means writing a controller code for its individual components: the robots. The laboratory provides a template in the Lua and the C++ languages for this purpose. The logic of the individual behaviour is added inside callback methods called either by the simulator when performing simulations inside ARGoS \citep{pinciroli2012argos}, or by the robot main method when testing on real robots. The first attempts to build the core of the controller were made in Lua to accelerate the process of trial and error. Indeed, Lua has a simpler syntax, is interpreted by the simulator and does not require any compilation process. Furthermore, the debugging is faster since the simulator includes an editor for the lua controller code. Although Lua is very convenient for quick implementation, it is not supported by the robots. Hence a translation was necessary to port the code to C++ in order to begin the tests on the real robots. After that, the implementation continued exclusively in C++ since the tests on the robots were more frequent. The C++ template developed by the laboratory can be compiled for the ARGoS simulator and cross-compiled for the real robots (e-puck) without any modification. After the compilation, a simple transfer of the binary codes over WiFi allows the operator to store the controller on the robots to launch an experiment.\\
-	
-		The first step of the design of the solution is to imagine how the system will look like and how we will implement it, the overall behaviour of the swarm. How do the robots move around the human? What shape will they try to form? This part is important because it will define the overall look of the system.\\
+	The first step of the design of the solution is to imagine how the system will look like and how we will implement it, the overall behaviour of the swarm. How do the robots move around the human? What shape will they try to form? This part is important because it will define the overall look and performance of the system.\\
 	
 	The first shape that intuitively comes in mind is the circle. The circle is the most elementary shape in geometry. It offers the best ratio:
-	$$\frac{\mbox{\textit{Surface}}}{\mbox{\textit{Perimeter}}} = \frac{r}{2}~\mbox{, where r is the radius of the circle.}$$
+	$$\frac{\mbox{\textit{Surface}}}{\mbox{\textit{Perimeter}}} = \frac{\pi r^2}{2\pi r} = \frac{r}{2}~\mbox{, where r is the radius of the circle.}$$
 	
-	That means that fewer robots are needed for the same protected area, and more space for the human with a certain amount of robots than any other possible shape. Luckily, it is also the easiest shape to realise in practice. The figure \ref{fig:circle_shape} represents the kind of circle that we would like to obtain for 6 robots and 1 human in the centre.\\
+	That means that fewer robots are needed for the same protected area, and more space for the human with a certain amount of robots than any other possible shape. Luckily, it is also the easiest shape to realise in practice. The figure \ref{fig:circle_shape} represents the kind of circle that we would like to obtain for 6 robots and 1 human in the centre. All the robots are equally distanced from each other and the human. The human is protected in all directions. In presence of danger, the robots in contact with it should report it to the human and prevent him from going towards it, as seen on figure \ref{fig:swarm_preventing}. In that case, the conditions concerning the target distance from the human and between robot may not be respected.\\
 	
 	\begin{figure}[!h]\centering
 	\begin{tikzpicture}
@@ -541,15 +540,13 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		
 		\human{0}{0}
 	\end{tikzpicture}
-	\caption{Test}{Circle shape for the swarm to get the widest protected surface for a given amount of robots.}
+	\caption{Ideal Behaviour in Absence of Danger}{This figure symbolises the ideal behaviour required in absence of danger. The swarm forms a circle to cover the widest protected surface for a given amount of robots. All the robots are equally distanced from each other and the human. The human is protected in all directions. In presence of danger, the robots in contact with it should report it to the human and prevent him from going towards it, as seen on figure \ref{fig:swarm_preventing}. In that case, the conditions concerning the target distance from the human and between robot may not be respected.}
 	\label{fig:circle_shape}
-	\end{figure}
+	\end{figure}	
 	
-		
+	Implementing a robots swarm behaviour means writing a controller code for its individual components: the robots. The laboratory provides a template in the Lua and the C++ languages for this purpose. The logic of the individual behaviour is added inside callback methods called either by the simulator when performing simulations inside ARGoS \citep{pinciroli2012argos}, or by the robot main method when testing on real robots. The first attempts to build the core of the controller were made in Lua to accelerate the process of trial and error. Indeed, Lua has a simpler syntax, is interpreted by the simulator and does not require any compilation process. Furthermore, the debugging is faster since the simulator includes an editor for the lua controller code. Although Lua is very convenient for quick implementation, it is not supported by the robots. Hence a translation was necessary to port the code to C++ in order to begin the tests on the real robots. After that, the implementation continued exclusively in C++ since the tests on the robots were more frequent. The C++ template developed by the laboratory can be compiled for the ARGoS simulator and cross-compiled for the real robots (e-puck) without any modification. After the compilation, a simple transfer of the binary codes over WiFi allows the operator to store the controller on the robots to launch an experiment.\\
 	
-	The final implementation of the controller is built on 2 layers. The upper layer is a deterministic finite state machine, having for each state a specific behaviour in the lower layer. Figure \ref{fig:state_machine} illustrates the whole structure of the upper layer. \\
-	
-	The transitions without any number are taken without any condition, right after the corresponding behaviour has been applied (the time step period is over). One could see the 3 lowest states as sub-states of \emph{Normal}. At the beginning of each time step, if the controller is in the \emph{Normal} state, it has to choose between the 3 different sub-states. The conditions are listed with numbers in the figure \ref{fig:state_machine}.
+	The final implementation of the controller is built on 2 layers. The upper layer is a deterministic finite state machine, containing for each state a specific behaviour in the lower layer. Figure \ref{fig:state_machine} illustrates the whole structure of the upper layer. Figure \ref{fig:state_machine} (left) is what could be called the \enquote{core} of the behaviour, while fig. \ref{fig:state_machine} (right) would be considered as additions to enhance the behaviour. The core part of the state machine is present on fig. \ref{fig:state_machine} (right) since it is one of its constituents. One can only limit himself to core part to understand the behaviour. It is composed of 3 states: \emph{R.W. (Random Walking)} when the robots do not detect any human nor obstacle, \emph{Escorting} when a human is detected, and \emph{Protection} when a human is detected and there is a danger nearby. If an obstacle is detected by a robot, the latter escapes from the core behaviour of the state machine and enters the \emph{O.A. (Obstacle Avoidance} state. If the robot is blocked for too long, another state takes over to unblock it: \emph{Unblocking}. When no more obstacle is in front of the robot, it can go back to its obstacle avoidance if any obstacle remains close. If none, it switches back to its core actions. The labels next to each transition must be read as follows: \emph{H(uman)}, \emph{D(anger)}, \emph{O(bstacle)}, \emph{F(ront obstacle)}, \emph{T(hreshold crossed, stuck for too long and initiating rotation procedure to escape from the obstacles)}. \emph{N} stands for the negation, so \emph{NH} means \enquote{no human found}. A complete state machine gathering all the states can be found in \ref{app:complete_state_machine}. Although the complete state machine is containing all the aspects of the behaviour, it does not allow to grasp the idea quickly. Dividing the final behaviour into several connected sub-behaviours modularises the solution. Adding a new state, a new sub-behaviour is easy.\\
 	
 	\begin{figure}[!h]\centering
 		\begin{minipage}[c]{.49\textwidth}
@@ -587,15 +584,14 @@ Our objective in this thesis, is to present an innovative protection using swarm
 			\end{tikzpicture}}
 		\end{minipage}
 		
-		\caption{State Machine of the Final Behaviour}{This figure is the visual representation of the state machine of the final behaviour. The left part is what could be called the \enquote{core} of the behaviour, while the right part would be considered as additions to enhance the behaviour. The core part of the state machine is present on the right since it is one of its constituents. The abbreviations R.W. and O.A. respectively mean \enquote{random walking} and \enquote{obstacle avoidance}. The labels next to each transition must be read as follows: H(uman), D(anger), O(bstacle), F(ront obstacle), T(hreshold crossed, stuck for too long and initiating rotation procedure to escape from the obstacles). N stands for the negation, so NH means \enquote{no human found}.}
+		\caption{State Machine of the Final Behaviour}{This figure is the visual representation of the state machine of the final behaviour. Figure \ref{fig:state_machine} (left) is what could be called the \enquote{core} of the behaviour, while fig. \ref{fig:state_machine} (right) would be considered as additions to enhance the behaviour. The core part of the state machine is present on fig. \ref{fig:state_machine} (right) since it is one of its constituents. The abbreviations R.W. and O.A. respectively mean \enquote{random walking} and \enquote{obstacle avoidance}. The labels next to each transition must be read as follows: H(uman), D(anger), O(bstacle), F(ront obstacle), T(hreshold crossed, stuck for too long and initiating rotation procedure to escape from the obstacles). N stands for the negation, so NH means \enquote{no human found}.}
 		\label{fig:state_machine}
 	\end{figure}
-		
+
+	Once the actions the robots have to execute have been defined, we have to implement them, code them in the controller that will be run. So the next step was to find a way to translate those actions into code. Our behaviour is a kind of coordinated motion and pattern formation. Thus the intuitive way of implementing it was to make use of the virtual physics design. Using this framework, each robot is a particle subject to virtual forces exerted by the environment (the other robots, the obstacles, and other elements). \citet{khatib1986real} was among the first to use this method. His goal was to implement an obstacle avoidance swarm behaviour where the obstacles create repulsive forces and the goals attractive forces. The overall resulting potential presented local minima at goals and maxima at obstacles. \citet{reif1999social} introduces \enquote{social potential fields} consisting in virtual forces applied on robots by other robots, obstacles, objectives,... The robot resultant motion is defined by the sum of all the forces applied to it. The individual robots carry out the calculations themselves, so the final control is completely distributed. The laws they used are similar to those found in molecular dynamics (inverse-power laws). For example, a law could favour attraction over long distances and repulsion over short distances. Inverse-power laws, while being extremely simple, can form interesting and elaborate patterns with molecules and plasma gases \citep{reif1999social}. \citet{spears2004distributed} proposed a framework they call \enquote{physicomimetics} to grant distributed control over a large swarm of robots with \enquote{artificial physics}.\\
 	
 	
 
-		
-	
 	Section \ref{sec:virtual_physics} explained how the laws of physics can be used to design a behaviour. Intuitively, this method seemed the most appropriate to create a behaviour whose main feature is a \enquote{protection barrier} around a human. When it comes to pattern creation, people usually first consider using repulsive and attractive forces to make the robots automatically adjust their position with respect to others.\\
 	
 	Indeed, the laws of physics force the system to get to a state of minimum energy, i.e., to reach a global minimum of the potential function of the system. Since the force is proportional to the derivative of the corresponding potential, the minimum of the potential function means the disappearance of the forces. For the forces to disappear, every robot needs to be at the desired location.
@@ -960,6 +956,39 @@ Our objective in this thesis, is to present an innovative protection using swarm
    url = "\url{http://en.wikipedia.org/w/index.php?title=Geta_(footwear)&oldid=651925222}",
    note = "[Online; accessed 20-May-2015]"
  }
+ 
+ @article{khatib1986real,
+  title={Real-time obstacle avoidance for manipulators and mobile robots},
+  author={Khatib, Oussama},
+  journal={The international journal of robotics research},
+  volume={5},
+  number={1},
+  pages={90--98},
+  year={1986},
+  publisher={Sage Publications}
+}
+
+@article{reif1999social,
+  title={Social potential fields: A distributed behavioral control for autonomous robots},
+  author={Reif, John H and Wang, Hongyan},
+  journal={Robotics and Autonomous Systems},
+  volume={27},
+  number={3},
+  pages={171--194},
+  year={1999},
+  publisher={Elsevier}
+}
+
+@article{spears2004distributed,
+  title={Distributed, physics-based control of swarms of vehicles},
+  author={Spears, William M and Spears, Diana F and Hamann, Jerry C and Heil, Rodney},
+  journal={Autonomous Robots},
+  volume={17},
+  number={2-3},
+  pages={137--162},
+  year={2004},
+  publisher={Springer}
+}
 
 \end{filecontents}
 
