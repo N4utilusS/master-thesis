@@ -455,7 +455,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		\subsection{E-puck}
 		\label{sec:e-puck}
 		
-		The robotic platform chosen was the e-puck \citep{mondada2009puck}. This robot model was made for educational purposes, at university level. Its shape is cylindrical with a diameter of 7.5 cm. It is moved by two diametrically opposed wheels. The figure \todo{Insert picture} shows an e-puck from the laboratory. Several extensions were plugged onto it to increase its capabilities. The important sensors that were utilised are the proximity sensors, the omnidirectional camera sensor and the virtual ground sensor. The proximity sensors are based on 8 infrared emitting pieces that return a value proportional to the proximity of an nearby obstacle. These pieces are almost regularly placed a along the perimeter of the robot. The omnidirectional camera is a vertical camera on top of the apparatus, aiming at a convex mirror to provide a 360° view of the environment. The last sensor is a bit special: it is not real, and not physically present on the board. It is simulated through the ARGoS simulator used to develop the controller of the robot. It returns data created inside the simulator to the robot, computed from the simulated environment. In our case, this \enquote{simulated/false data} contains the colour of the ground, symbolising the presence of danger. We actually simulated red discs on the floor through the simulator to artificially set up dangerous areas that were not visible by the testing user. That way, the conditions of real life application were the closest possible to ours. An example of red zone is in figure \ref{fig:e-puck_red_zones}.
+		The robotic platform chosen was the e-puck \citep{mondada2009puck}. This robot model was made for educational purposes, at university level. Its shape is cylindrical with a diameter of 7.5 cm. It is moved by two diametrically opposed wheels. The figure \todo{Insert picture} shows an e-puck from the laboratory. Several extensions were plugged onto it to increase its capabilities. The important sensors that were utilised are the proximity sensors, the omnidirectional camera sensor and the virtual ground sensor. The proximity sensors are based on 8 infrared emitting pieces that return a value proportional to the proximity of an nearby obstacle in the $[O;1]$ interval. These pieces are almost regularly placed a along the perimeter of the robot. The omnidirectional camera is a vertical camera on top of the apparatus, aiming at a convex mirror to provide a 360° view of the environment. It translates this view into a list of colour blobs. A colour blob is a cluster of pixels presenting close colour characteristics, that is, almost being of the same colour (the degree of similarity can be tuned during calibration). During the calibration, among other parameters, one can tune the degree of similarity, the minimum size of the cluster, and the recognised colours. The last sensor is a bit special: it is not real, and not physically present on the board. It is simulated through the ARGoS simulator used to develop the controller of the robot. It returns data created inside the simulator to the robot, computed from the simulated environment. In our case, this \enquote{simulated/false data} contains the colour of the ground, symbolising the presence of danger. We actually simulated red discs on the floor through the simulator to artificially set up dangerous areas that were not visible by the testing user. That way, the conditions of real life application were the closest possible to ours. An example of red zone is in figure \ref{fig:e-puck_red_zones}.
 		
 		\begin{figure}[!h]
 			\begin{minipage}[c]{0.49\textwidth}
@@ -518,7 +518,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		0) Aspect solution avec cercle.
 		1) Dois faire un controller en c++, pour la plateforme ARGoS, mais aussi compatible e-puck.
 		2) Design de la state machine.
-		3) Les potentiels pour chaque state, l'idée de l'algorithme derrière, et leur évolution.
+		3) Virtual physics. Les forces pour chaque state, l'idée de l'algorithme derrière, et leur évolution.
 		4) Les paramètres les plus importants ?
 	\end{comment}
 	
@@ -547,12 +547,12 @@ Our objective in this thesis, is to present an innovative protection using swarm
 	
 	Implementing a robots swarm behaviour means writing a controller code for its individual components: the robots. The laboratory provides a template in the Lua and the C++ languages for this purpose. The logic of the individual behaviour is added inside callback methods called either by the simulator when performing simulations inside ARGoS \citep{pinciroli2012argos}, or by the robot main method when testing on real robots. The first attempts to build the core of the controller were made in Lua to accelerate the process of trial and error. Indeed, Lua has a simpler syntax, is interpreted by the simulator and does not require any compilation process. Furthermore, the debugging is faster since the simulator includes an editor for the lua controller code. Although Lua is very convenient for quick implementation, it is not supported by the robots. Hence a translation was necessary to port the code to C++ in order to begin the tests on the real robots. After that, the implementation continued exclusively in C++ since the tests on the robots were more frequent. The C++ template developed by the laboratory can be compiled for the ARGoS simulator and cross-compiled for the real robots (e-puck) without any modification. After the compilation, a simple transfer of the binary codes over WiFi allows the operator to store the controller on the robots to launch an experiment.\\
 	
-	The final implementation of the controller is built on 2 layers. The upper layer is a deterministic finite state machine, containing for each state a specific behaviour in the lower layer. Figure \ref{fig:state_machine} illustrates the whole structure of the upper layer. Figure \ref{fig:state_machine} (left) is what could be called the \enquote{core} of the behaviour, while fig. \ref{fig:state_machine} (right) would be considered as additions to enhance the behaviour. The core part of the state machine is present on fig. \ref{fig:state_machine} (right) since it is one of its constituents. One can only limit himself to core part to understand the behaviour. It is composed of 3 states: \emph{R.W. (Random Walking)} when the robots do not detect any human nor obstacle, \emph{Escorting} when a human is detected, and \emph{Protection} when a human is detected and there is a danger nearby. If an obstacle is detected by a robot, the latter escapes from the core behaviour of the state machine and enters the \emph{O.A. (Obstacle Avoidance} state. If the robot is blocked for too long, another state takes over to unblock it: \emph{Unblocking}. When no more obstacle is in front of the robot, it can go back to its obstacle avoidance if any obstacle remains close. If none, it switches back to its core actions. The labels next to each transition must be read as follows: \emph{H(uman)}, \emph{D(anger)}, \emph{O(bstacle)}, \emph{F(ront obstacle)}, \emph{T(hreshold crossed, stuck for too long and initiating rotation procedure to escape from the obstacles)}. \emph{N} stands for the negation, so \emph{NH} means \enquote{no human found}. A complete state machine gathering all the states can be found in \ref{app:complete_state_machine}. Although the complete state machine is containing all the aspects of the behaviour, it does not allow to grasp the idea quickly. Dividing the final behaviour into several connected sub-behaviours modularises the solution. Adding a new state, a new sub-behaviour is easy.\\
+	The final implementation of the controller is built on 2 layers. The upper layer is a deterministic finite state machine, containing for each state a specific behaviour in the lower layer. Figure \ref{fig:state_machine} illustrates the whole structure of the upper layer. Figure \ref{fig:state_machine} (left) is what could be called the \enquote{core} of the behaviour, while fig. \ref{fig:state_machine} (right) would be considered as additions to enhance the behaviour. The core part of the state machine is present on fig. \ref{fig:state_machine} (right) since it is one of its constituents. One can only limit himself to core part to understand the behaviour. It is composed of 3 states: \emph{Searching} when the robots do not detect any human nor obstacle, \emph{Escorting} when a human is detected, and \emph{Protection} when a human is detected and there is a danger nearby. If an obstacle is detected by a robot, the latter escapes from the core behaviour of the state machine and enters the \emph{O.A. (Obstacle Avoidance} state. If the robot is blocked for too long, another state takes over to unblock it: \emph{Unblocking}. When no more obstacle is in front of the robot, it can go back to its obstacle avoidance if any obstacle remains close. If none, it switches back to its core actions. The labels next to each transition must be read as follows: \emph{H(uman)}, \emph{D(anger)}, \emph{O(bstacle)}, \emph{F(ront obstacle)}, \emph{T(hreshold crossed, stuck for too long and initiating rotation procedure to escape from the obstacles)}. \emph{N} stands for the negation, so \emph{NH} means \enquote{no human found}. A complete state machine gathering all the states can be found in appendix \ref{app:complete_state_machine}. Although the complete state machine is containing all the aspects of the behaviour, it does not allow to grasp the idea quickly. Dividing the final behaviour into several connected sub-behaviours modularises the solution. Adding a new state, a new sub-behaviour is easy.\\
 	
 	\begin{figure}[!h]\centering
 		\begin{minipage}[c]{.49\textwidth}
 			\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=4cm, semithick]
-				\node[initial,state] (RW)                    {R.W.};
+				\node[initial,state] (RW)                    {Searching};
 		  		\node[state]         (E) [below right of=RW] {Escorting};
 		  		\node[state]         (P) [below left of=RW] {Protection};
 		  		
@@ -585,11 +585,13 @@ Our objective in this thesis, is to present an innovative protection using swarm
 			\end{tikzpicture}}
 		\end{minipage}
 		
-		\caption{State Machine of the Final Behaviour}{This figure is the visual representation of the state machine of the final behaviour. Figure \ref{fig:state_machine} (left) is what could be called the \enquote{core} of the behaviour, while fig. \ref{fig:state_machine} (right) would be considered as additions to enhance the behaviour. The core part of the state machine is present on fig. \ref{fig:state_machine} (right) since it is one of its constituents. The abbreviations R.W. and O.A. respectively mean \enquote{random walking} and \enquote{obstacle avoidance}. The labels next to each transition must be read as follows: H(uman), D(anger), O(bstacle), F(ront obstacle), T(hreshold crossed, stuck for too long and initiating rotation procedure to escape from the obstacles). N stands for the negation, so NH means \enquote{no human found}.}
+		\caption{State Machine of the Final Behaviour}{This figure is the visual representation of the state machine of the final behaviour. Figure \ref{fig:state_machine} (left) is what could be called the \enquote{core} of the behaviour, while fig. \ref{fig:state_machine} (right) would be considered as additions to enhance the behaviour. The core part of the state machine is present on fig. \ref{fig:state_machine} (right) since it is one of its constituents. The abbreviation O.A. means \enquote{obstacle avoidance}. The labels next to each transition must be read as follows: H(uman), D(anger), O(bstacle), F(ront obstacle), T(hreshold crossed, stuck for too long and initiating rotation procedure to escape from the obstacles). N stands for the negation, so NH means \enquote{no human found}.}
 		\label{fig:state_machine}
 	\end{figure}
 
-	Once the actions the robots have to execute have been defined, we have to implement them, code them in the controller that will be run. So the next step was to find a way to translate those actions into code. Our behaviour is a kind of coordinated motion and pattern formation. Thus the intuitive way of implementing it was to make use of the virtual physics design. Using this framework, each robot is a particle subject to virtual forces exerted by the environment (the other robots, the obstacles, and other elements). \citet{khatib1986real} was among the first to use this method. His goal was to implement an obstacle avoidance swarm behaviour where the obstacles create repulsive forces and the goals attractive forces. The overall resulting potential presented local minima at goals and maxima at obstacles. \citet{reif1999social} introduces \enquote{social potential fields} consisting in virtual forces applied on robots by other robots, obstacles, objectives,... The robot resultant motion is defined by the sum of all the forces applied to it. The individual robots carry out the calculations themselves, so the final control is completely distributed. The laws they used are similar to those found in molecular dynamics (inverse-power laws). For example, a law could favour attraction over long distances and repulsion over short distances. One of these is the Lennard-Jones potential, depicted in figure \ref{fig:lennard-jones_potential}. Inverse-power laws, while being extremely simple, can form interesting and elaborate patterns with molecules and plasma gases \citep{reif1999social}. \citet{spears2004distributed} proposed a framework they call \enquote{physicomimetics} to grant distributed control over a large swarm of robots with \enquote{artificial physics}.\\
+	Once the actions the robots have to execute have been defined, we have to implement them, code them in the controller that will be run. So the next step was to find a way to translate those actions into code. Our behaviour is a kind of coordinated motion and pattern formation. Thus the intuitive way of implementing it was to make use of the virtual physics design. Using this framework, each robot is a particle subject to virtual forces exerted by the environment (the other robots, the obstacles, and other elements). \citet{khatib1986real} was among the first to use this method. His goal was to implement an obstacle avoidance swarm behaviour where the obstacles create repulsive forces and the goals attractive forces. The overall resulting potential presented local minima at goals and maxima at obstacles. \citet{reif1999social} introduces \enquote{social potential fields} consisting in virtual forces applied on robots by other robots, obstacles, objectives,... The robot resultant motion is defined by the sum of all the forces applied to it. The individual robots carry out the calculations themselves, so the final control is completely distributed. The laws they used are similar to those found in molecular dynamics (inverse-power laws). For example, a law could favour attraction over long distances and repulsion over short distances. One of these is the Lennard-Jones potential, depicted in figure \ref{fig:lennard-jones_potential}. Inverse-power laws, while being extremely simple, can form interesting and elaborate patterns with molecules and plasma gases \citep{reif1999social}. \citet{spears2004distributed} proposed a framework they call \enquote{physicomimetics} to grant distributed control over a large swarm of robots with \enquote{artificial physics}.\todo{More works on virtual physics?}\\
+	
+	The laws of physics force a system to go to a state of minimum energy, i.e., to reach a minimum of the potential function of the system. Since the force exerted on the system is proportional to the derivative of the corresponding potential -- $$\vec{f} = -\vec{\nabla}P\mbox{,}$$ with $\vec{\nabla}$ being the nabla operator for the gradient computation, $P$ the potential and $\vec{f}$ the force -- the minimum of the potential function means the disappearance of the forces. For every robot to be at the desired location, the forces need to disappear. In this thesis, we only consider forces and not the virtual potentials associated to them. The implemented behaviour is expressed by in terms of virtual forces.\\
 	
 	\begin{figure}
 	\begin{minipage}[c]{0.6\textwidth}
@@ -619,7 +621,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		$$\sigma = 0.3$$
 	\end{minipage}
 		
-		\caption{The Lennard-Jones Potential}{This figure shows a graph of one of the most used virtual potentials in virtual physics, the Lennard-Jones potential, where $\epsilon$ is the gain, $\sigma$ is the target distance and $d$ is the current real distance.}
+		\caption{The Lennard-Jones Potential}{This figure shows a graph of one of the most used virtual potentials in virtual physics, the Lennard-Jones potential, where $\epsilon$ is the gain, $\sigma$ is the target distance and $d$ is the current real distance. The equilibrium is reached at the global minimum at $0.3$.}
 		\label{fig:lennard-jones_potential}
 	\end{figure}
 	
@@ -633,13 +635,17 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		$$y_1,y_2,...,y_n = g(x_1,x_2,...,x_m) = \sum_{i=0}^{s}{f_i(x_1,x_2,...,x_m)}\mbox{,}$$ where $s$ is the number of behaviour components.
 	\end{enumerate}
 	
-	The laws of physics force a system to get to a state of minimum energy, i.e., to reach a global minimum of the potential function of the system. Since the force is proportional to the derivative of the corresponding potential, the minimum of the potential function means the disappearance of the forces. For the forces to disappear, every robot needs to be at the desired location.
+	One disadvantage is that it might be difficult to find an expression that implements perfectly the behaviour we want.\\
 	
-	$$\vec{f} = -\vec{\nabla}P,$$, P being the system's potential. The following sections will explain in detail the different potentials that were implemented to obtain the desired behaviour.
-			
-		In this section, the potentials are grouped by states in which they are used. Since virtual physics are used in only 2 states, we have only 2 groups. Only part of the states rely on virtual physics: \emph{Human} and \emph{Default}. The others simply link the sensor values to the wheels speed.
+	As written above, the robots need inputs to compute the values to send to the actuators, i.e., the wheels. The two types of inputs are the \emph{colour blobs} and the \emph{proximity sensor values}, respectively provided by the omnidirectional camera and the proximity sensors. Both are explained in section \ref{sec:e-puck}. 3 blob colours are used for our solution: red, green and blue, the three basic components of every colour in computer graphics. It was decided to a low number of colours to ease the calibration process and lower the amount of errors when detecting the blobs (wrong colour). To each blob is associated a distance - angle couple. The angle is taken from the front of the robot in radians. With these two value, the robot is able to situate all the blobs and use them as attractive or repulsive points. The proximity values are a list of 8 angle - value couples, where the angle is the position of the sensor on the perimeter of the robot. The whole perimeter of the robot is covered to detect any nearby obstacle. The value is comprised between 0 and 1, inversely proportional to the distance to the obstacle.\\
+	
+	The following paragraphs explain in details the various forces that were implemented to obtain the desired behaviour from the fed inputs. They are grouped by states of the state machine in which they are used (see fig. \ref{fig:state_machine}). As explained earlier, each state in the upper layer of the general behaviour (the state machine) contains a sub-behaviour (a particular action) executed by means of virtual physics.
 		
-			\paragraph{Human}
+			\paragraph{Searching}
+			
+				When no human nor obstacle is around, the robot enters in \emph{searching} mode in which it tries to stay at a constant distance from a 
+			
+			\paragraph{Escorting}
 			
 			The controller enters the \emph{Human} state at the beginning of the time step only if a human is found nearby. The complete potential for this state is the sum of 3 components: the \emph{human potential}, the \emph{gravity potential} and the \emph{agent repulsion potential}.
 			
@@ -668,17 +674,16 @@ Our objective in this thesis, is to present an innovative protection using swarm
 				[Idem for agent repulsion pot.]
 			\end{enumerate}
 		
-			\paragraph{Obstacle}
+			\paragraph{Protection}
 			
 			[Idem for obstacle case.			
 						
-			\paragraph{Default}
 			
-			[Idem for the default state and potential.]
-			
-			\paragraph{Blocked}
+			\paragraph{Obstacle Avoidance}
 			
 			[Idem for blocked state.]
+			
+			\paragraph{Unblocking}
 		
 
 \chapter{Experiments}
@@ -762,7 +767,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=4cm, semithick]
 	  		\node[state]         (OBS)					{Obstacle Avoidance};
 	  		\node[state]         (HU) [below of=OBS]		{Escorting};
-	  		\node[state]         (DEF) [below of=HU]		{Random Walk};
+	  		\node[state]         (DEF) [below of=HU]		{Searching};
 	  		\node[state]         (BLOCK) [right of=HU]	{Unblocking};
 	  		\node[state]         (DANGER) [left of=HU]	{Protection};
 	  		
@@ -814,7 +819,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 	\end{minipage}
 	
 	\caption{State Machine of the Final Behaviour}{This figure is the visual representation of the state machine of the final behaviour. On the left, the states and their connections are drawn. On the right, the information on the conditions needed to take the transitions are listed.}
-	\label{fig:state_machine}
+	\label{fig:state_machine_complete}
 \end{figure}
 
 \chapter{E-puck}
