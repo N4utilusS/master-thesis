@@ -84,6 +84,12 @@
 	\draw [very thick, fill=orange, rotate around={#1:(#2,#3)}] (#2-0.25,#3-0.433) -- (#2,#3+0.45) -- (#2+0.25,#3-0.433);
 }
 
+\newcommand{\epuckblue}[3][0] % [angle]{x}{y} avec angle optionel
+{
+	\draw [very thick, fill=RoyalBlue] (#2,#3) circle [radius=0.5];
+	\draw [very thick, fill=RoyalBlue, rotate around={#1:(#2,#3)}] (#2-0.25,#3-0.433) -- (#2,#3+0.45) -- (#2+0.25,#3-0.433);
+}
+
 \newcommand{\human}[3][0] % [angle]{x}{y}
 {
 	\draw [very thick, fill=white, rotate around={#1:(#2,#3)}] (#2-1,#3+0.5) ellipse (0.25cm and 0.5cm);
@@ -718,12 +724,12 @@ Our objective in this thesis, is to present an innovative protection using swarm
 							\end{axis}
 						\end{tikzpicture}
 						
-						\caption{he Stronger Lennard-Jones Virtual Force}{This figure exposes a stronger version of the Lennard-Jones force derivated from the corresponding potential. Its expression is given by equation \ref{eq:lennard-jones_force_stronger}. The force is stronger in the attraction part, hence the name. The repulsion part is unchanged because of the more interesting asymptotic behaviour at $d=0$, increasing the norm of the force quicker than the linear attraction replacement (in gray). The parameters values are: $\epsilon=500$ and $\sigma=35$, and are conform to those used with robots. One can observe the root at 35 corresponding to the state of minimum energy in the system. Above 35, the force is positive, so the robot is attracted by the source applying the force. Below 35, it is negative, so the robot is repulsed from the source of the force.}
+						\caption{The Stronger Lennard-Jones Virtual Force}{This figure exposes a stronger version of the Lennard-Jones force derivated from the corresponding potential. Its expression is given by equation \ref{eq:lennard-jones_force_stronger}. The force is stronger in the attraction part, hence the name. The repulsion part is unchanged because of the more interesting asymptotic behaviour at $d=0$, increasing the norm of the force quicker than the linear attraction replacement (in gray). The parameters values are: $\epsilon=500$ and $\sigma=35$, and are conform to those used with robots. One can observe the root at 35 corresponding to the state of minimum energy in the system. Above 35, the force is positive, so the robot is attracted by the source applying the force. Below 35, it is negative, so the robot is repulsed from the source of the force.}
 						\label{fig:lennard-jones_force_stronger}
 					\end{figure}
 				
 				\item The \emph{robot repulsion force} maintains a fixed distance between the robots escorting or protecting a human (those with LEDs lit in blue). The simplified Lennard-Jones force is used, given by equation \ref{eq:lennard-jones_force_simplified} and figure \ref{fig:lennard-jones_force_simplified}.
-				\item The \emph{gravity force} is the only force that can be deactivated via the experiment configuration file. The closest human colour blob to the human is taken as reference (the closest shoe). Then depending on colour of the blob (shoe), two different things can happen: the blob is red and the robot turns clockwise around it, or the blob is green and the it turns anti-clockwise. The goal is to go in front of the human, hence the name \enquote{gravity}. The floor is \enquote{sloped down} to the front of the human. Figure \ref{fig:gravity_force_idea} illustrates the idea of the gravity force. Two robots are both on the opposite side of the human. The left one sees the red shoe as the closest one and turns clockwise heading for the front. The right robot does the opposite with the same intention. This force is expressed in polar coordinates:
+				\item The \emph{gravity force} is the only force that can be deactivated via the experiment configuration file. The closest human colour blob to the human is taken as reference (the closest shoe). Then depending on colour of the blob (shoe), two different things can happen: the blob is red and the robot turns clockwise around it, or the blob is green and the it turns anti-clockwise. The goal is to go in front of the human like if the floor was \enquote{sloped down} to the front of the human, hence the name. Figure \ref{fig:gravity_force_idea} illustrates the idea of the gravity force and figure \ref{fig:gravity_force} its norm. Two robots are both on the opposite side of the human. The left one sees the red shoe as the closest one and turns clockwise heading for the front. The right robot does the opposite with the same intention. This force is expressed in polar coordinates:
 				
 				\begin{equation}
 					\vec{f}(\alpha) = \left\{ \begin{array}{rcl}
@@ -732,7 +738,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 						\end{array}\right.
 				\end{equation}
 				
-				$\vec{1_\theta}$ is the standard axis in polar coordinates ($\vec{1_r},\vec{1_\theta}$), the origin is the centre of the human.
+				$\vec{1_\theta}$ is the standard axis in polar coordinates ($\vec{1_r},\vec{1_\theta}$) where the origin is the centre of the human. $\epsilon$ is the norm of the force.
 				
 				\begin{figure}\centering
 					\begin{tikzpicture}						
@@ -742,13 +748,13 @@ Our objective in this thesis, is to present an innovative protection using swarm
 						\draw[<-, very thick, rotate around={5:(0,0)}] (0,2) arc (90:250:2cm);
 						\draw[<-, very thick, rotate around={-5:(0,0)}] (0,2) arc (90:-70:2cm);
 						
-						\epuck[30]{2.6}{1.5}
-						\epuck[30]{-2.6}{-1.5}
+						\epuckblue[30]{2.6}{1.5}
+						\epuckblue[30]{-2.6}{-1.5}
 						
 						\human{0}{0}
 					\end{tikzpicture}
 					
-					\caption{The Gravity Virtual Force Idea}{This figure illustrates the idea of the gravity virtual force, the only force that can be disabled in the configuration of the experiment. }
+					\caption{The Gravity Virtual Force Idea}{This figure illustrates the idea of the gravity virtual force, the only force that can be disabled in the configuration of the experiment. The closest human colour blob to the human is taken as reference (the closest shoe). Then depending on colour of the blob (shoe), two different things can happen: the blob is red and the robot turns clockwise around it, or the blob is green and the it turns anti-clockwise. The goal is to go in front of the human like if the floor was \enquote{sloped down} to the front of the human, hence the name. Two robots are both on the opposite side of the human. The left one sees the red shoe as the closest one and turns clockwise heading for the front. The right robot does the opposite with the same intention.}
 					\label{fig:gravity_force_idea}
 				\end{figure}
 				
@@ -765,7 +771,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 						    xtick={-180,-150,...,180},
 						    ytick={-40,-20,...,40},
 						    compat=newest,
-						    xlabel=$degrees$, xlabel style={at={(1,0)}, anchor=west},
+						    xlabel=degrees, xlabel style={at={(1,0)}, anchor=west},
 						    ylabel=$f$, ylabel style={rotate=-90,at={(0,1)}, anchor=south}
 						]
 						\addplot [red, thick, domain=-180:0] {30};
@@ -773,6 +779,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 						\end{axis}
 					\end{tikzpicture}
 					
+					\caption{The Gravity Virtual Force}{This depicts the norm of the gravity virtual force with respect to the angle from the front of the human. Any angle outside this domain can fall back in the $[-180;180]$ interval by normalising it. An angle of 0° means that the robot is in front of the human. The angle increases by turning anti-clockwise.}
 					\label{fig:gravity_force}
 				\end{figure}
 			\end{itemize}
