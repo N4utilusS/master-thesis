@@ -37,7 +37,7 @@
 %\newcommand{\titleB}{\fontTitle{Deuxième ligne de titre du mémoire}} % (dans la langue de rédaction a priori)
 % Sous-titre
 \newcommand{\subtitleA}{\fontSubtitle{An Escorting Robot Swarm that Diverts a Human}}
-\newcommand{\subtitleB}{\fontSubtitle{away from Dangers (s)he cannot perceive.}}
+\newcommand{\subtitleB}{\fontSubtitle{away from Dangers one cannot perceive.}}
 % Titre du diplôme
 \newcommand{\diplomaA}{\fontText{Mémoire présenté en vue de l’obtention du diplôme}} % A laisser en Français
 \newcommand{\diplomaB}{\fontText{d'Ingénieur Civil en Informatique à finalité Intelligence Computationnelle}}
@@ -51,7 +51,7 @@
 \newcommand{\promBa}{\fontColor{Co-Promoteur}}
 \newcommand{\promBb}{\fontText{Professeur Marco Dorigo}}
 \newcommand{\promCa}{\fontColor{Superviseur}}
-\newcommand{\promCb}{\fontText{Gaëtan Podevijn, AndreaGiovanni Reina}}
+\newcommand{\promCb}{\fontText{Gaëtan Podevijn, Andreagiovanni Reina}}
 \newcommand{\deptA}{\fontColor{Service}}
 \newcommand{\deptB}{\fontText{IRIDIA}}
 
@@ -89,7 +89,7 @@
 	\draw [very thick, fill=white, rotate around={#1:(#2,#3)}] (#2-1,#3+0.5) ellipse (0.25cm and 0.5cm);
 	\draw [very thick, fill=white, rotate around={#1:(#2,#3)}] (#2+1,#3+0.5) ellipse (0.25cm and 0.5cm);
 	\draw [very thick, fill=white, rotate around={#1:(#2,#3)}] (#2,#3) ellipse (1.5cm and 0.75cm);
-	\draw [thick, rotate around={#1:(#2,#3)}] (#2-0.05,#3+1) -- (#2,#3+1.1) -- (#2+0.05,#3+1);
+	\draw [thick, fill=white, rotate around={#1:(#2,#3)}] (#2-0.05,#3+1) -- (#2,#3+1.1) -- (#2+0.05,#3+1);
 	\draw [very thick, fill=white, rotate around={#1:(#2,#3)}] (#2,#3+0.5) circle [radius=0.5cm];
 }
 
@@ -519,7 +519,8 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		1) Dois faire un controller en c++, pour la plateforme ARGoS, mais aussi compatible e-puck.
 		2) Design de la state machine.
 		3) Virtual physics. Les forces pour chaque state, l'idée de l'algorithme derrière, et leur évolution.
-		4) Les paramètres les plus importants ?
+		4) Les paramètres les plus importants ? Le fait qu'on peut les changer.
+		5) Comment traduire le vecteur de direction en vitesse de roue.
 	\end{comment}
 	
 	The first step of the design of the solution is to imagine how the system will look like and how we will implement it, the overall behaviour of the swarm. How do the robots move around the human? What shape will they try to form? This part is important because it will define the overall look and performance of the system.\\
@@ -643,7 +644,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		
 			\paragraph{Searching}
 			
-				When no human nor obstacle is around, the robot enters in the \emph{Searching} mode. It tries to stay at a constant distance from a detected colour blob, whatever colour it is. Since robots in \emph{Escorting} or \emph{Protecting} mode light their LEDs in blue, the searching robots always stay around the robots helping the human, whom they will detect at some point. This measure prevents the robots from going away too far from the human. This sub-behaviour is implemented through a sum of simplified Lennard-Jones virtual forces, one for each colour blob. The term simplified is used because the force is not the real derivative of the Lennard-Jones potential, but a simplified version with lower exponents on the fractions\todo{Why a simplified version? Put the development.}:
+				When no human nor obstacle is around, the robot enters in the \emph{Searching} mode with its LED off. It tries to stay at a constant distance from a detected colour blob, whatever colour it is. Since robots in \emph{Escorting} or \emph{Protecting} mode light their LEDs in blue, the searching robots always stay around the robots helping the human, whom they will detect at some point. This measure prevents the robots from going away too far from the human. This sub-behaviour is implemented through a sum of simplified Lennard-Jones virtual forces, one for each colour blob detected. The term \enquote{simplified} is used because the force is not the real derivative of the Lennard-Jones potential, but a simplified version with lower exponents on the fractions\todo{Why a simplified version? Put the development.}:
 				\begin{equation}
 					f(d) = \frac{-4\epsilon}{d} \left[ \left(\frac{\sigma}{d}\right)^{4} - \left(\frac{\sigma}{d}\right)^2 \right]
 					\label{eq:lennard-jones_force_simplified}
@@ -675,38 +676,73 @@ Our objective in this thesis, is to present an innovative protection using swarm
 						\end{axis}
 					\end{tikzpicture}
 					
-					\caption{The Simplified Lennard-Jones Virtual Force}{This figure exposes a simplified version of the Lennard-Jones force derivated from the corresponding potential. Its expression is given by equation \ref{eq:lennard-jones_force_simplified}. The term \enquote{simplified} is used because the force is not the real derivative of the Lennard-Jones potential, but a simplified version with lower exponents on the fractions. The parameters values are: $\epsilon=100$ and $\sigma=50$, and are conform to those used with robots. One can observe the root at 50 corresponding to the state of minimum energy in the system. Above 50, the force is positive, so the robot is attracted towards the source applying the force. Below 50, it is negative, so the robot is repulsed from the source of the force.}
+					\caption{The Simplified Lennard-Jones Virtual Force}{This figure exposes a simplified version of the Lennard-Jones force derivated from the corresponding potential. Its expression is given by equation \ref{eq:lennard-jones_force_simplified}. The term \enquote{simplified} is used because the force is not the real derivative of the Lennard-Jones potential, but a simplified version with lower exponents on the fractions. The parameters values are: $\epsilon=100$ and $\sigma=50$, and are conform to those used with robots. One can observe the root at 50 corresponding to the state of minimum energy in the system. Above 50, the force is positive, so the robot is attracted by the source applying the force. Below 50, it is negative, so the robot is repulsed from the source of the force.}
 					\label{fig:lennard-jones_force_simplified}
 				\end{figure}
 			
 			\paragraph{Escorting}
 			
-			The controller enters the \emph{Human} state at the beginning of the time step only if a human is found nearby. The complete potential for this state is the sum of 3 components: the \emph{human potential}, the \emph{gravity potential} and the \emph{agent repulsion potential}.
+			If a human is found nearby and no danger is around, the controller enters into the \emph{Escorting} state. The robot then tries to stay at a fixed distance from the human and other robots. If all the robots around the human follow the same pattern formation rules, a circle appears encircling him/her. The complete virtual force for this state is the sum of 3 components: the \emph{human force}, the \emph{robot repulsion force} and the \emph{gravity force}. All three components are fed with the detected colour blobs as inputs to evaluate the distances and angles.
 			
-			\begin{enumerate}
+			\begin{itemize}
+				\item The \emph{human force} uses a stronger version of the Lennard-Jones force to keep the robot at a certain distance from the human (see figure \ref{fig:lennard-jones_force_stronger}). The force is stronger in the attraction part, hence the name. The repulsion part is unchanged because of the more interesting asymptotic behaviour at $d=0$, increasing the norm of the force quicker than the linear attraction replacement (in gray). Its expression is given by equation \ref{eq:lennard-jones_force_stronger}. Only the closest human colour blob is fed to the force computation.
 				
-				\item Human Potential
-					
-					\begin{figure}[!h]\centering
-						\begin{tikzpicture}[xscale=0.2,yscale=0.2]
-							\draw [<->] (0,5) -- (0,0) -- (70,0);
-							\draw[blue,thick, domain=28:70] plot (\x, {-4*500/\x*((30/\x)^4-(30/\x)^2)});
-							
-							\foreach \x [evaluate=\x as \j using \x*10]in {0,...,6}
-							    \draw (\j cm,5pt) -- (\j cm,-5pt) node[anchor=north] {$\j$};
-							%\foreach \y in {0,1,2,3,4}
-							%    \draw (1pt,\y cm) -- (-1pt,\y cm) node[anchor=east] {$\y$};
+					\begin{equation}
+						f(d) = \left\{ \begin{array}{rcl}
+						\frac{-4\epsilon}{d} \left[ \left(\frac{\sigma}{d}\right)^{4} - \left(\frac{\sigma}{d}\right)^2 \right] & \mbox{for} & d < \sigma \\
+						15(d - \sigma ) & \mbox{for} & d \geq \sigma
+						\end{array}\right.
+						\label{eq:lennard-jones_force_stronger}
+					\end{equation}
+				
+					\begin{figure}\centering
+						\begin{tikzpicture}
+							\begin{axis}[
+							    samples=40,
+							    domain=30:140, xmax=142, xmin=30, ymax=14.2,
+							    restrict y to domain=-10:30,
+							    axis lines=left,
+							    y=1cm/5,
+							    x=1cm/10,
+							    grid=both,
+							    xtick={30,40,...,150},
+							    ytick={-10,-5,...,30},
+							    compat=newest,
+							    xlabel=$d$ (cm), xlabel style={at={(1,0)}, anchor=west},
+							    ylabel=$f$, ylabel style={rotate=-90,at={(0,1)}, anchor=south}
+							]
+							\addplot [gray, thick, domain=35:140] {-2000/x*((35/x)^4-(35/x)^2)};
+							\addplot [gray, thick, domain=30:35] {(x - 35)*15};
+							\addplot [red, thick, domain=30:35] {-2000/x*((35/x)^4-(35/x)^2)};
+							\addplot [red, thick, domain=35:40] {(x - 35)*15};
+							\end{axis}
 						\end{tikzpicture}
+						
+						\caption{he Stronger Lennard-Jones Virtual Force}{This figure exposes a stronger version of the Lennard-Jones force derivated from the corresponding potential. Its expression is given by equation \ref{eq:lennard-jones_force_stronger}. The force is stronger in the attraction part, hence the name. The repulsion part is unchanged because of the more interesting asymptotic behaviour at $d=0$, increasing the norm of the force quicker than the linear attraction replacement (in gray). The parameters values are: $\epsilon=500$ and $\sigma=35$, and are conform to those used with robots. One can observe the root at 35 corresponding to the state of minimum energy in the system. Above 35, the force is positive, so the robot is attracted by the source applying the force. Below 35, it is negative, so the robot is repulsed from the source of the force.}
+						\label{fig:lennard-jones_force_stronger}
 					\end{figure}
+				
+				\item The \emph{robot repulsion force} maintains a fixed distance between the robots escorting or protecting a human (those with LEDs lit in blue). The simplified Lennard-Jones force is used, given by equation \ref{eq:lennard-jones_force_simplified} and figure \ref{fig:lennard-jones_force_simplified}.
+				\item The \emph{gravity force} is the only force that can be deactivated via the experiment configuration file. The closest human colour blob to the human is taken as reference. Then depending on colour of the blob, two different things can happen: the blob is red and the robot turns clockwise around it, or the blob is green and the it turns anti-clockwise. The goal is to go in front of the human, hence the name \enquote{gravity}.
+				
+				\begin{figure}\centering
+					\begin{tikzpicture}						
+						\draw[red, fill] (0,3) arc (90:270:3cm);	
+						\draw[LimeGreen, fill] (0,3) arc (90:-90:3cm);
+						
+						\draw[<-, very thick, rotate around={5:(0,0)}] (0,2) arc (90:250:2cm);
+						\draw[<-, very thick, rotate around={-5:(0,0)}] (0,2) arc (90:-70:2cm);
+						
+						\epuck[30]{2.6}{1.5}
+						\epuck[30]{-2.6}{-1.5}
+						
+						\human{0}{0}
+					\end{tikzpicture}
 					
-				\item Gravity Potential
-				
-				[Description of the evolution of the gravity potential.]
-				
-				\item Agent Repulsion Potential
-				
-				[Idem for agent repulsion pot.]
-			\end{enumerate}
+					\caption{The Disco Docking Station}{Herp derp}
+				\end{figure}
+			\end{itemize}
+			
 		
 			\paragraph{Protection}
 			
