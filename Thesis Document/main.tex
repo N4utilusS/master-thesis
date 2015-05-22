@@ -646,15 +646,15 @@ Our objective in this thesis, is to present an innovative protection using swarm
 			
 				When no human nor obstacle is around, the robot enters in the \emph{Searching} mode with its LED off. It tries to stay at a constant distance from a detected colour blob, whatever colour it is. Since robots in \emph{Escorting} or \emph{Protecting} mode light their LEDs in blue, the searching robots always stay around the robots helping the human, whom they will detect at some point. This measure prevents the robots from going away too far from the human. This sub-behaviour is implemented through a sum of simplified Lennard-Jones virtual forces, one for each colour blob detected. The term \enquote{simplified} is used because the force is not the real derivative of the Lennard-Jones potential, but a simplified version with lower exponents on the fractions\todo{Why a simplified version? Put the development.}:
 				\begin{equation}
-					f(d) = \frac{-4\epsilon}{d} \left[ \left(\frac{\sigma}{d}\right)^{4} - \left(\frac{\sigma}{d}\right)^2 \right]
+					\vec{f}(d) = \frac{-4\epsilon}{d} \left[ \left(\frac{\sigma}{d}\right)^{4} - \left(\frac{\sigma}{d}\right)^2 \right] ~\vec{1_s}
 					\label{eq:lennard-jones_force_simplified}
 				\end{equation}
 				
 				The original version is:
 				\begin{equation}
-					f(d) = \frac{-12\epsilon}{d} \left[ \left(\frac{\sigma}{d}\right)^{12} - \left(\frac{\sigma}{d}\right)^6 \right]
+					\vec{f}(d) = \frac{-12\epsilon}{d} \left[ \left(\frac{\sigma}{d}\right)^{12} - \left(\frac{\sigma}{d}\right)^6 \right] ~\vec{1_s}
 				\end{equation}
-				 The simplified version is exposed in figure \ref{fig:lennard-jones_force_simplified}. If no blob is detected, the robot goes forward with a speed of 5 cm/s.
+				 The simplified version is exposed in figure \ref{fig:lennard-jones_force_simplified}. If no blob is detected, the robot goes forward with a speed of 5 cm/s. The unit vector $\vec{1_s}$ is heading towards the source of the force (the applier).
 				
 				\begin{figure}\centering
 					\begin{tikzpicture}
@@ -688,9 +688,9 @@ Our objective in this thesis, is to present an innovative protection using swarm
 				\item The \emph{human force} uses a stronger version of the Lennard-Jones force to keep the robot at a certain distance from the human (see figure \ref{fig:lennard-jones_force_stronger}). The force is stronger in the attraction part, hence the name. The repulsion part is unchanged because of the more interesting asymptotic behaviour at $d=0$, increasing the norm of the force quicker than the linear attraction replacement (in gray). Its expression is given by equation \ref{eq:lennard-jones_force_stronger}. Only the closest human colour blob is fed to the force computation.
 				
 					\begin{equation}
-						f(d) = \left\{ \begin{array}{rcl}
-						\frac{-4\epsilon}{d} \left[ \left(\frac{\sigma}{d}\right)^{4} - \left(\frac{\sigma}{d}\right)^2 \right] & \mbox{for} & d < \sigma \\
-						15(d - \sigma ) & \mbox{for} & d \geq \sigma
+						\vec{f}(d) = \left\{ \begin{array}{rcl}
+						\frac{-4\epsilon}{d} \left[ \left(\frac{\sigma}{d}\right)^{4} - \left(\frac{\sigma}{d}\right)^2 \right] ~\vec{1_s} & \mbox{for} & d < \sigma \\
+						15(d - \sigma ) ~\vec{1_s} & \mbox{for} & d \geq \sigma
 						\end{array}\right.
 						\label{eq:lennard-jones_force_stronger}
 					\end{equation}
@@ -723,7 +723,14 @@ Our objective in this thesis, is to present an innovative protection using swarm
 					\end{figure}
 				
 				\item The \emph{robot repulsion force} maintains a fixed distance between the robots escorting or protecting a human (those with LEDs lit in blue). The simplified Lennard-Jones force is used, given by equation \ref{eq:lennard-jones_force_simplified} and figure \ref{fig:lennard-jones_force_simplified}.
-				\item The \emph{gravity force} is the only force that can be deactivated via the experiment configuration file. The closest human colour blob to the human is taken as reference. Then depending on colour of the blob, two different things can happen: the blob is red and the robot turns clockwise around it, or the blob is green and the it turns anti-clockwise. The goal is to go in front of the human, hence the name \enquote{gravity}.
+				\item The \emph{gravity force} is the only force that can be deactivated via the experiment configuration file. The closest human colour blob to the human is taken as reference (the closest shoe). Then depending on colour of the blob (shoe), two different things can happen: the blob is red and the robot turns clockwise around it, or the blob is green and the it turns anti-clockwise. The goal is to go in front of the human, hence the name \enquote{gravity}. The floor is sloped down to the front of the human. Figure \ref{fig:gravity_force_idea} illustrates the idea of the gravity force. Two robots are both on the opposite side of the human. The left one sees the red shoe as the closest one and turns clockwise heading for the front. The right robot does the opposite with the same intention. This force is expressed in polar coordinates:
+				
+				\begin{equation}
+					\vec{f}(\alpha) = \left\{ \begin{array}{rcl}
+						\epsilon ~\vec{1}_\theta & \mbox{for} & \alpha < 0 \\
+						-\epsilon ~\vec{1}_\theta & \mbox{for} & \alpha \geq 0
+						\end{array}\right.
+				\end{equation}
 				
 				\begin{figure}\centering
 					\begin{tikzpicture}						
@@ -739,7 +746,32 @@ Our objective in this thesis, is to present an innovative protection using swarm
 						\human{0}{0}
 					\end{tikzpicture}
 					
-					\caption{The Disco Docking Station}{Herp derp}
+					\caption{The Gravity Virtual Force Idea}{Herp derp}
+					\label{fig:gravity_force_idea}
+				\end{figure}
+				
+				\begin{figure}\centering
+					\begin{tikzpicture}
+						\begin{axis}[
+						    samples=40,
+						    domain=-180:180, xmax=180, ymax=40,ymin=-40,
+						    restrict y to domain=-40:40,
+						    axis lines=left,
+						    y=1cm/20,
+						    x=1cm/30,
+						    grid=both,
+						    xtick={-180,-150,...,180},
+						    ytick={-40,-20,...,40},
+						    compat=newest,
+						    xlabel=$degrees$, xlabel style={at={(1,0)}, anchor=west},
+						    ylabel=$f$, ylabel style={rotate=-90,at={(0,1)}, anchor=south}
+						]
+						\addplot [red, thick, domain=-180:0] {30};
+						\addplot [red, thick, domain=0:180] {-30};
+						\end{axis}
+					\end{tikzpicture}
+					
+					\label{fig:gravity_force}
 				\end{figure}
 			\end{itemize}
 			
