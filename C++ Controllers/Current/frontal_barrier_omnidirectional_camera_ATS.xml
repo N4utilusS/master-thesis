@@ -7,7 +7,7 @@
   <framework>
   	<!-- To make ARGoS faster, you can set 'threads' to some number greater than 0 -->
     <system threads="8" />
-    <experiment length="180"
+    <experiment length="0"
       ticks_per_second="10"
       real_time="true"
       vss_host="10.0.1.200"
@@ -19,8 +19,8 @@
   <!-- ****************** -->
   <loop_functions library="/home/adebruyn/argos3-anthony-controllers/build/controllers/frontal_barrier/libfrontal_barrier_lp" label="frontal_barrier_lp">
 
-    <frontal_barrier_lp dangerAreaCentre="0.0,1.25"
-                        dangerAreaRadius="0.0"/>
+    <frontal_barrier_lp dangerAreaCentre="0.0,0.0"
+                        dangerAreaRadius="0.50"/>
 
   </loop_functions>
 
@@ -51,8 +51,8 @@
         humanPotentialDistanceVariationDelta="0.5" 
       	agentPotentialGain="100" 
       	agentPotentialDistance="50" 
-        gravityPotential="false"
-        gravityPotentialGain="30"
+        gravityPotential="true"
+        gravityPotentialGain="5"
         humanLeftColorRef="red"
         humanRightColorRef="green"
         agentGoodColor="0,0,125"
@@ -109,7 +109,7 @@
     <!-- Floor -->
     <floor id="floor" source="loop_functions" pixels_per_meter="100" />
 
-    <!-- Walls -->
+    <!-- Walls >
     <box id="bn" size="0.1, 6, 0.2" movable="false">
       <body position="3,0,0" orientation="0,0,0" />
     </box>
@@ -121,7 +121,7 @@
     </box>
     <box id="bw" size="6, 0.1, 0.2" movable="false">
       <body position="0,3,0" orientation="0,0,0" />
-    </box>
+    </box-->
 
     <!--e-puck id="human1" >
       <body position="0,0,0" orientation="0,0,0" />
@@ -143,35 +143,35 @@
       </entity> 
     </distribute-->
 
-    <e-puck id="epuck_11_58" omnidirectional_camera_aperture="80">
+    <e-puck id="epuck_8_55" omnidirectional_camera_aperture="80">
       <body position="-1,-0.1,0" orientation="0,0,0" />
       <controller config="cppAgent" /> 
     </e-puck>
-    <e-puck id="epuck_4_38" omnidirectional_camera_aperture="80">
+    <e-puck id="epuck_9_38" omnidirectional_camera_aperture="80">
       <body position="-1,-0.1,0" orientation="0,0,0" />
       <controller config="cppAgent" /> 
     </e-puck>
-    <e-puck id="epuck_10_61" omnidirectional_camera_aperture="80">
+    <e-puck id="epuck_3_61" omnidirectional_camera_aperture="80">
       <body position="-1,-0.1,0" orientation="0,0,0" />
       <controller config="cppAgent" /> 
     </e-puck>
-    <e-puck id="epuck_8_30" omnidirectional_camera_aperture="80">
+    <e-puck id="epuck_2_30" omnidirectional_camera_aperture="80">
       <body position="-1,-0.1,0" orientation="0,0,0" />
       <controller config="cppAgent" /> 
     </e-puck>
-    <e-puck id="epuck_7_41" omnidirectional_camera_aperture="80">
+    <e-puck id="epuck_6_41" omnidirectional_camera_aperture="80">
       <body position="-1,-0.1,0" orientation="0,0,0" />
       <controller config="cppAgent" /> 
     </e-puck>
-    <e-puck id="epuck_5_33" omnidirectional_camera_aperture="80">
+    <e-puck id="epuck_4_33" omnidirectional_camera_aperture="80">
       <body position="-1,-0.1,0" orientation="0,0,0" />
       <controller config="cppAgent" /> 
     </e-puck>
-    <e-puck id="epuck_3_49" omnidirectional_camera_aperture="80">
+    <e-puck id="epuck_5_49" omnidirectional_camera_aperture="80">
       <body position="-1,-0.1,0" orientation="0,0,0" />
       <controller config="cppAgent" /> 
     </e-puck>
-    <e-puck id="epuck_6_52" omnidirectional_camera_aperture="80">
+    <e-puck id="epuck_7_52" omnidirectional_camera_aperture="80">
       <body position="-1,-0.1,0" orientation="0,0,0" />
       <controller config="cppAgent" /> 
     </e-puck>
