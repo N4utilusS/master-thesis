@@ -19,6 +19,7 @@
 \usepackage{url}
 \usepackage{flafter}
 \usepackage{pgfplots}
+\usepackage[figure]{algorithm2e}
 
 % Logos
 \newcommand{\ulb}{\includegraphics[scale=1.1]{PageDeGarde_MFE/logo_ULB2.pdf}}
@@ -460,14 +461,17 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		\subsection{E-puck}
 		\label{sec:e-puck}
 		
-		The robotic platform chosen was the e-puck \citep{mondada2009puck}. This robot model was made for educational purposes, at university level. Its shape is cylindrical with a diameter of 7.5 cm. It is moved by two diametrically opposed wheels. The figure \todo{Insert picture} shows an e-puck from the laboratory. Several extensions were plugged onto it to increase its capabilities. The important sensors that were utilised are the proximity sensors, the omnidirectional camera sensor and the virtual ground sensor. The proximity sensors are based on 8 infrared emitting pieces that return a value proportional to the proximity of an nearby obstacle in the $[O;1]$ interval. These pieces are almost regularly placed a along the perimeter of the robot. The omnidirectional camera is a vertical camera on top of the apparatus, aiming at a convex mirror to provide a 360° view of the environment. It translates this view into a list of colour blobs. A colour blob is a cluster of pixels presenting close colour characteristics, that is, almost being of the same colour (the degree of similarity can be tuned during calibration). During the calibration, among other parameters, one can tune the degree of similarity, the minimum size of the cluster, and the recognised colours. The last sensor is a bit special: it is not real, and not physically present on the board. It is simulated through the ARGoS simulator used to develop the controller of the robot. It returns data created inside the simulator to the robot, computed from the simulated environment. In our case, this \enquote{simulated/false data} contains the colour of the ground, symbolising the presence of danger. We actually simulated red discs on the floor through the simulator to artificially set up dangerous areas that were not visible by the testing user. That way, the conditions of real life application were the closest possible to ours. An example of red zone is in figure \ref{fig:e-puck_red_zones}.
+		The robotic platform chosen was the e-puck \citep{mondada2009puck}. This robot model was made for educational purposes, at university level. Its shape is cylindrical with a diameter of 7.5 cm. It is moved by two diametrically opposed wheels. The figure shows an e-puck from the laboratory. Several extensions were plugged onto it to increase its capabilities. The important sensors that were utilised are the proximity sensors, the omnidirectional camera sensor and the virtual ground sensor. The proximity sensors are based on 8 infrared emitting pieces that return a value proportional to the proximity of an nearby obstacle in the $[O;1]$ interval. These pieces are almost regularly placed a along the perimeter of the robot. The omnidirectional camera is a vertical camera on top of the apparatus, aiming at a convex mirror to provide a 360° view of the environment. It translates this view into a list of colour blobs. A colour blob is a cluster of pixels presenting close colour characteristics, that is, almost being of the same colour (the degree of similarity can be tuned during calibration). During the calibration, among other parameters, one can tune the degree of similarity, the minimum size of the cluster, and the recognised colours. The last sensor is a bit special: it is not real, and not physically present on the board. It is simulated through the ARGoS simulator used to develop the controller of the robot. It sends data created inside the simulator to the robot, from the simulated environment. In our case, this \enquote{simulated/false data} contains the colour of the ground, symbolising the presence of danger. We actually simulated red discs on the floor through the simulator to artificially set up dangerous areas that were not visible by the testing user. That way, the conditions of real life application were the closest possible to ours. An example of red zone is in figure \ref{fig:e-puck_red_zones}.
 		
 		\begin{figure}[!h]
+			\begin{minipage}[c]{0.49\textwidth}
+				\includegraphics[height=7cm]{images/e-puck.jpg}			
+			\end{minipage}
 			\begin{minipage}[c]{0.49\textwidth}
 				\includegraphics[width=\textwidth]{../Experiments/No_Human/red_circle.png}			
 			\end{minipage}
 			
-			\caption{The E-puck and its Virtual Sensor}{}
+			\caption{The E-puck and its Virtual Sensor}{On the left, one can see a picture of the robotic platform we used: the E-puck. Our swarm is composed of several robot like this one. On the right is a screen capture of the ARGoS simulator \citep{pinciroli2012argos} where the danger virtual sensor is used. Virtual means that it is not real, not physically present on the board. It is simulated through the ARGoS simulator. It sends data created inside the simulator to the robot, from the simulated environment. It augments the robot sensing capabilities. In our case, this \enquote{simulated/false data} contains the colour of the ground, symbolising the presence of danger. The red circle represents a danger zone in which no human can go. No human can see it though. The small dots are representations of the real robots inside the simulator.}
 			\label{fig:e-puck_red_zones}
 		\end{figure}
 		
@@ -492,14 +496,14 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		\end{minipage}
 		\hfill
 		\begin{minipage}[c]{0.49\textwidth}
-			Insert nice photo of our shoes
+			\includegraphics[width=\textwidth]{images/shoes2.jpg}
 		\end{minipage}
 		
-		\caption{E-Geta}{Left image by Haragayato [GFDL (http://www.gnu.org/copyleft/fdl.html) or CC-BY-SA-3.0 (http://creativecommons.org/licenses/by-sa/3.0/)], via Wikimedia Commons. Found on \citet{wiki:001}.}
+		\caption{E-Geta}{Left image by Haragayato [GFDL (http://www.gnu.org/copyleft/fdl.html) or CC-BY-SA-3.0 (http://creativecommons.org/licenses/by-sa/3.0/)], via Wikimedia Commons. Found on \citet{wiki:001}. On the right is a picture of our prototype shoes, connected to their battery through voltage regulators. See figure \ref{fig:circuit} for the circuit.}
 		\label{fig:e-geta}
 	\end{figure}
 	
-	The laboratory took inspiration from the Japanese \enquote{geta} shoes for the design. Figure \ref{fig:e-geta} shows a picture of a Japanese wooden shoe called geta. The right side of the figure is a picture of our prototype\todo{Nice picture of shoes}. Both have the same overall design. We chose this design in order to slow down the human's speed. Indeed, he speed of the robots is limited to maximum 10 cm/s for per wheel. Another advantage is the simplicity of the structure, and the low number of assembly parts. Figure \ref{fig:e-geta_blueprints} details the blueprints of the prototype.\todo{Insert blueprints}
+	The laboratory took inspiration from the Japanese \enquote{geta} shoes for the design. Figure \ref{fig:e-geta} shows a picture of a Japanese wooden shoe called geta. The right side of the figure is a picture of our prototype. Both have the same overall design. We chose this design in order to slow down the human's speed. Indeed, he speed of the robots is limited to maximum 10 cm/s for per wheel. Another advantage is the simplicity of the structure, and the low number of assembly parts. Figure \ref{fig:e-geta_blueprints} details the blueprints of the prototype.\todo{Insert blueprints}
 	
 	\begin{figure}
 		Insert blueprints
@@ -513,6 +517,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 	\begin{figure}\centering
 		\includegraphics[scale=0.5]{figures/circuit.png}
 		\caption{The Circuit}{The figure shows a sketch of the final electronic circuit for the shoes. The battery delivers 9 volts to two regulators in parallel, one for each shoe since each one of them need a different energy supply. Indeed, the green LED strip is more power hungry than the red one. The mass (black cable) is common for all the circuit.}
+		\label{fig:circuit}
 	\end{figure}
 	
 	\section{The Robot Behaviour}
@@ -890,10 +895,73 @@ Our objective in this thesis, is to present an innovative protection using swarm
 				\label{fig:unblocking}
 			\end{figure}
 		
+	All the parameters presented until now can be tuned by the human to ensure the best performance. Here is a list of the important parameters available inside the configuration file:
+		
+	\begin{description}
+		\item[Human Force Gain:] The factor $\epsilon$ multiplying the force in expression \ref{eq:lennard-jones_force_stronger}. Increasing it strengthens the force the human exerts on the robots.
+		\item[Human Force Distance:] The target distance to the human for all the robot escorting him/her.
+		\item[Human Force Distance Variation Delta:] The value added or subtracted to the target distance to run the dynamic target distance mechanism.
+		\item[Agent Force Gain:] The factor $\epsilon$ multiplying the force in expression \ref{eq:lennard-jones_force_simplified}. Increasing it strengthens the force robots exert on each other.
+		\item[Agent Force Distance:] The target distance all the robots must keep between each other.
+		\item[Gravity Force:] A boolean activating the \emph{gravity force} that pushes robots in front of the human.
+		\item[Gravity Force Gain:] The norm of the force that pushes the robots in front of the human.
+		\item[Direction Vector Window Size:] The direction vector sent to the wheels is computed by averaging a number of direction vectors: the one returned from the forces exerted on the robot at this time step, and a number of previous vectors sent to the wheels. The parameter gives the amount of vectors used for the average. Increasing it makes the motion smoother.
+	\end{description}
+	
+	Once the direction vector has been computed by the robot, it still has to translate it into wheel speeds. The robotic platform we used is the E-puck. As mentioned in section \ref{sec:e-puck}, it only has two diametrically opposed wheels. Figure \ref{fig:direction_vector_wheel_speeds_translation} exposes in pseudo code the algorithm behind the conversion.
+	
+		\begin{algorithm}
+			\textcolor{gray}{\tcc{Get the direction values:}}
+			\emph{angle} $:=$ angle of the direction vector with respect to the front of the robot\;
+			\emph{speed} $:=$ norm of the direction vector\;
+			
+			\BlankLine
+	
+			\textcolor{gray}{\tcc{Check if speed is not too high for the robot:}}
+			\If{speed > 10}{
+				\emph{speed} = 10\;
+			}
+			
+			\BlankLine
+			
+			\textcolor{gray}{\tcc{Multiply angle by 3 to accelerate the robot rotations:}}
+			\emph{angle} = $3~\cdot$ \emph{angle}\;
+	
+			\BlankLine
+			
+			\textcolor{gray}{\tcc{Check if angle is still correct:}}
+			\If{angle > $\pi$}{
+				\emph{angle} = $\pi$\;
+			}
+			\If{angle < $-\pi$}{
+				\emph{angle} = $-\pi$\;
+			}
+			
+			\BlankLine
+			
+			\textcolor{gray}{\tcc{Assign wheels speed:}}
+			\eIf{0 < angle < $\pi$}{
+				\emph{leftWheelSpeed} = \emph{speed} $\cdot\cos($\emph{angle}$)$\;
+				\emph{rightWheelSpeed} = \emph{speed}\;
+			}{
+				\emph{leftWheelSpeed} = \emph{speed}\;
+				\emph{rightWheelSpeed} = \emph{speed} $\cdot\cos($\emph{angle}$)$\;
+			}
+			
+					\caption{The Direction Vector to Wheel Speeds Translation}{This pseudo code explains how the computed direction vector is translated into the robot wheel speeds.}
+		\label{fig:direction_vector_wheel_speeds_translation}
+		\end{algorithm}
+		
+
+	
+
 
 \chapter{Experiments}
 \label{chap:experiments}
-[\textcolor{red}{Explain very clearly both types of tests (no human/human.} ]
+\begin{comment}
+[\textcolor{red}{Explain very clearly both types of tests (no human/human).}]
+\end{comment}
+
 
 	\section{Characterisation of the System}
 	[The measurements and the tests on the final behaviour.]
