@@ -761,24 +761,24 @@ Our objective in this thesis, is to present an innovative protection using swarm
 					\begin{tikzpicture}
 						\begin{axis}[
 						    samples=40,
-						    domain=-180:180, xmax=180, ymax=40,ymin=-40,
-						    restrict y to domain=-40:40,
+						    domain=-180:180, xmax=180, ymax=10,ymin=-10,
+						    restrict y to domain=-10:10,
 						    axis lines=left,
-						    y=1cm/20,
+						    y=1cm/5,
 						    x=1cm/30,
 						    grid=both,
 						    xtick={-180,-150,...,180},
-						    ytick={-40,-20,...,40},
+						    ytick={-10,-5,...,10},
 						    compat=newest,
 						    xlabel=degrees, xlabel style={at={(1,0)}, anchor=west},
 						    ylabel=$f$, ylabel style={rotate=-90,at={(0,1)}, anchor=south}
 						]
-						\addplot [red, thick, domain=-180:0] {30};
-						\addplot [red, thick, domain=0:180] {-30};
+						\addplot [red, thick, domain=-180:0] {5};
+						\addplot [red, thick, domain=0:180] {-5};
 						\end{axis}
 					\end{tikzpicture}
 					
-					\caption{The Gravity Virtual Force}{This depicts the norm of the gravity virtual force with respect to the angle from the front of the human. Any angle outside this domain can fall back in the $[-180;180]$ interval by normalising it. An angle of 0° means that the robot is in front of the human. The angle increases by turning anti-clockwise.}
+					\caption{The Gravity Virtual Force}{This depicts the adopted value for the gravity virtual force with respect to the angle from the front of the human. Any angle outside this domain can fall back in the $[-180;180]$ interval by normalising it. An angle of 0° means that the robot is in front of the human. The angle increases by turning anti-clockwise.}
 					\label{fig:gravity_force}
 				\end{figure}
 			\end{itemize}
@@ -786,85 +786,65 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		
 			\paragraph{Protection}
 			
-			The \emph{Protection} is reached when the robot detects a human and a danger. It makes its blue LEDs blink and stays at the border of the encountered danger area while maintaining the escorting formation. Hence this sub-behaviour is based on the one from the \emph{Escorting} state. The only difference is in the \emph{human virtual force}. Since everything stays the same as in \emph{Escorting}, except the fact that the robot must not cross the danger border, we just modify the target distance from the human. In presence of a danger, $\sigma$ (the target distance) will be decreased incrementally until no danger is detected any more. As a result, the robot gets closer to the human like seen on figure \ref{fig:swarm_preventing} at page \pageref{fig:swarm_preventing}. We speak about \emph{dynamic target distance}. Figure \ref{fig:dynamic_target_distance} illustrates the concept. On the figure, the same robot is represented at two different time steps. On the right, the robot is inside the dangerous area after the human took a step towards it. The robot enters \emph{protection mode} and blinks. Its human target distance starts decreasing incrementally at each time steps by a user-defined amount.
+			The \emph{Protection} is reached when the robot detects a human and a danger. It makes its blue LEDs blink and stays at the border of the encountered danger area while maintaining the escorting formation. Hence this sub-behaviour is based on the one from the \emph{Escorting} state. The only difference is in the \emph{human virtual force}. Since everything stays the same as in \emph{Escorting}, except the fact that the robot must not cross the danger border, we just modify the target distance from the human. In presence of a danger, $\sigma$ (the target distance) will be decreased incrementally until no danger is detected any more. As a result, the robot gets closer to the human like seen on figure \ref{fig:swarm_preventing} at page \pageref{fig:swarm_preventing}. We speak about \emph{dynamic target distance}. Figure \ref{fig:dynamic_target_distance} illustrates the concept. On the figure, the same robot is represented at two different time steps. On the right, the robot is inside the dangerous area after the human took a step towards it. The robot enters \emph{protection mode} and starts blinking. Its human target distance begins to decrease incrementally at each time step by a user-defined amount. As a consequence, it comes closer to the human. When it crosses the border of the danger zone, it goes back to \emph{Escorting} mode (the danger is not detected any more) and raises its target distance again. At some point, it will re-enter in the area and the whole process will start over. To avoid human confusion regarding the presence of danger, there is a delay before the robot stops blinking. That way, when the robot oscillates around the border, it keeps blinking to report the close danger.
 			
 			\begin{figure}\centering
 				\begin{tikzpicture}
-				
-				%	\foreach \i in {\xMin,...,\xMax} {
-				%        \draw [very thin,gray] (\i,\yMin) -- (\i,\yMax)  node [below] at (\i,\yMin) {$\i$};
-				%    }
-				%    \foreach \i in {\yMin,...,\yMax} {
-				%        \draw [very thin,gray] (\xMin,\i) -- (\xMax,\i) node [left] at (\xMin,\i) {$\i$};
-				%    }
 					
-						\draw[white, fill] (0,0) rectangle (4,3);
-						\draw[red, fill] (4,0) rectangle (8,3);
-						
-						\draw[->, very thick] (1,2) -- (3.5,2);
-						\draw[<-, very thick] (4.5,1) -- (7,1);
-						
-						\draw (2,1) node[scale=2]{+};
-						\draw (6,2) node[scale=2]{-};
-						
-						\draw[dashed, LightGray] (4,3) -- (0,3) -- (0,0) -- (4,0);
-
-						\draw[dashed, very thick] (4,-0.5) -- (4,3.5);
-						
-						\draw (4.5,3.5) node[scale=1, anchor=west]{\textsc{Danger}};
-						\draw (3.5,3.5) node[scale=1, anchor=east]{\textsc{Safe}};
-						
-						\human[-90]{-1}{1.5}
-						\epuckblue[-90]{2}{-1}
-						\epuckblue[90]{6}{-1}
-						
-						\foreach \i in {0,30,...,330} {
-					        \draw [very thick, RoyalBlue, rotate around={\i:(6,-1)}] (6.6,-1) -- (6.9,-1);
-					    }
-					    
-					    \draw[->, thick] (3,-1) -- (3.75,-1);
-						\draw[<-, thick] (4.25,-1) -- (5,-1);
+					\draw[white, fill] (0,-1) rectangle (4,3);
+					\draw[red, fill] (4,-1) rectangle (8,3);
+					
+					\draw[->, very thick] (1,2.5) -- (3.5,2.5);
+					\draw[<-, very thick] (4.5,2.5) -- (7,2.5);
+					
+					\draw (2,-0.5) node[scale=1]{Target $\nearrow$};
+					\draw (6,-0.5) node[scale=1]{Target $\searrow$};
+					
+					\draw[dashed, LightGray] (4,3) -- (0,3) -- (0,-1) -- (4,-1);
+				
+								\draw[dashed, very thick] (4,-1.5) -- (4,3.5);
+					
+					\draw (4.5,3.5) node[scale=1, anchor=west]{\textsc{Danger}};
+					\draw (3.5,3.5) node[scale=1, anchor=east]{\textsc{Safe}};
+					
+					
+					\human[-90]{-1}{1}
+					\epuckblue[-90]{2}{1}
+					\epuckblue[90]{6}{1}
+					
+					\draw (4,1) node[scale=2, anchor=east]{$\leadsto$};
+					\draw (4,1) node[scale=2, anchor=east, rotate=180]{$\leadsto$};
+					
+					\foreach \i in {15,45,...,345} {
+				        \draw [very thick, white, rotate around={\i:(6,1)}] (6.6,1) -- (6.9,1);
+				    }
+								
 				\end{tikzpicture}
 				
-				\caption{The Dynamic Target Distance}{}
+				\caption{The Dynamic Target Distance}{The concept of dynamic target distance is explained in this drawing. On the figure, the same robot is represented at two different time steps. On the right, the robot is inside the red dangerous area after the human took a step towards it. The robot enters \emph{protection mode} and starts blinking. Its human target distance begins to decrease incrementally at each time step by a user-defined amount. As a consequence, it comes closer to the human. When it crosses the border of the danger zone, it goes back to \emph{Escorting} mode (the danger is not detected any more) and raises its target distance again. At some point, it will re-enter in the area and the whole process will start over. To avoid human confusion regarding the presence of danger, there is a delay before the robot stops blinking. That way, when the robot oscillates around the border, it keeps blinking to report the close danger.}
 				\label{fig:dynamic_target_distance}
-			\end{figure}
-			
-			\begin{figure}\centering
-			\begin{tikzpicture}
-			
-				
-				\draw[white, fill] (0,-1) rectangle (4,3);
-				\draw[red, fill] (4,-1) rectangle (8,3);
-				
-				\draw[->, very thick] (1,2.5) -- (3.5,2.5);
-				\draw[<-, very thick] (4.5,2.5) -- (7,2.5);
-				
-				\draw (2,-0.5) node[scale=2]{+};
-				\draw (6,-0.5) node[scale=2]{-};
-				
-				\draw[dashed, LightGray] (4,3) -- (0,3) -- (0,-1) -- (4,-1);
-
-				\draw[dashed, very thick] (4,-1.5) -- (4,3.5);
-				
-				\draw (4.5,3.5) node[scale=1, anchor=west]{\textsc{Danger}};
-				\draw (3.5,3.5) node[scale=1, anchor=east]{\textsc{Safe}};
-				
-				
-				\human[-90]{-1}{1}
-				\epuckblue[-90]{2}{1}
-				\epuckblue[90]{6}{1}
-				
-				\foreach \i in {0,30,...,330} {
-			        \draw [very thick, RoyalBlue, rotate around={\i:(6,1)}] (6.6,1) -- (6.9,1);
-			    }
-			
-			\end{tikzpicture}
 			\end{figure}
 			
 			\paragraph{Obstacle Avoidance}
 			
-			[Idem for blocked state.]
+			The \emph{Obstacle Avoidance} is activated when the robot encounters an object. Since the robot cannot go back, only the front sensors are used. Figure \ref{fig:obstacle_avoidance} shows the four sensors that are taken into account. Each sensor is seen as a force pushing the robot whose intensity is inversely proportional to the distance to the sensed object. If the sum of the four forces returns a resultant whose norm is over a threshold, the robot goes into \emph{Obstacle Avoidance} and uses the resultant as direction vector.
+			
+			\begin{figure}\centering
+				\begin{tikzpicture}
+					
+					\draw [very thick, fill=white] (0,0) circle [radius=1.5];
+					\draw [very thick] (-0.75,-3*0.433) -- (0,1.45) -- (0.75,-3*0.433);
+					
+					\draw [<-,very thick,red,rotate around={157.5:(0,0)}] (1.5,0) -- (2.5,0) node [left] {$\vec{f_1}$};
+					\draw [<-,very thick,red,rotate around={112.5:(0,0)}] (1.5,0) -- (2.5,0) node [above] {$\vec{f_2}$};
+					\draw [<-,very thick,red,rotate around={67.5:(0,0)}] (1.5,0) -- (2.5,0) node [above] {$\vec{f_3}$};
+					\draw [<-,very thick,red,rotate around={22.5:(0,0)}] (1.5,0) -- (2.5,0) node [right] {$\vec{f_4}$};
+				
+				\end{tikzpicture}
+				
+				\caption{The Obstacle Avoidance Concept}{This figure shows the four sensors that are taken into account to detect a nearby object. Each sensor is seen as a force pushing the robot whose intensity is inversely proportional to the distance to the sensed object. If the sum of the four forces returns a resultant whose norm is over a threshold, the robot goes into \emph{Obstacle Avoidance} and uses the resultant as direction vector.}
+				\label{fig:obstacle_avoidance}
+				\end{figure}
 			
 			\paragraph{Unblocking}
 		

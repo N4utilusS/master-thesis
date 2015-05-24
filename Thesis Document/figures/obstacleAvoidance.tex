@@ -20,9 +20,9 @@
 \usepackage{pgfplots}
 \begin{document}
 
-\newcommand*{\xMin}{-1}%
+\newcommand*{\xMin}{-4}%
 \newcommand*{\xMax}{8}%
-\newcommand*{\yMin}{-3}%
+\newcommand*{\yMin}{-4}%
 \newcommand*{\yMax}{6}%
 
 
@@ -62,33 +62,13 @@
         \draw [very thin,gray] (\xMin,\i) -- (\xMax,\i) node [left] at (\xMin,\i) {$\i$};
     }
 	
-	\draw[white, fill] (0,-1) rectangle (4,3);
-	\draw[red, fill] (4,-1) rectangle (8,3);
+	\draw [very thick, fill=white] (0,0) circle [radius=1.5];
+	\draw [very thick] (-0.75,-3*0.433) -- (0,1.45) -- (0.75,-3*0.433);
 	
-	\draw[->, very thick] (1,2.5) -- (3.5,2.5);
-	\draw[<-, very thick] (4.5,2.5) -- (7,2.5);
-	
-	\draw (2,-0.5) node[scale=1]{Target $\nearrow$};
-	\draw (6,-0.5) node[scale=1]{Target $\searrow$};
-	
-	\draw[dashed, LightGray] (4,3) -- (0,3) -- (0,-1) -- (4,-1);
-
-				\draw[dashed, very thick] (4,-1.5) -- (4,3.5);
-	
-	\draw (4.5,3.5) node[scale=1, anchor=west]{\textsc{Danger}};
-	\draw (3.5,3.5) node[scale=1, anchor=east]{\textsc{Safe}};
-	
-	
-	\human[-90]{-1}{1}
-	\epuckblue[-90]{2}{1}
-	\epuckblue[90]{6}{1}
-	
-	\draw (4,1) node[scale=2, anchor=east]{$\leadsto$};
-	\draw (4,1) node[scale=2, anchor=east, rotate=180]{$\leadsto$};
-	
-	\foreach \i in {0,30,...,330} {
-        \draw [very thick, white, rotate around={\i:(6,1)}] (6.6,1) -- (6.9,1);
-    }
+	\draw [<-,very thick,red,rotate around={157.5:(0,0)}] (1.5,0) -- (2.5,0) node [left] {$\vec{f_1}$};
+	\draw [<-,very thick,red,rotate around={112.5:(0,0)}] (1.5,0) -- (2.5,0) node [above] {$\vec{f_2}$};
+	\draw [<-,very thick,red,rotate around={67.5:(0,0)}] (1.5,0) -- (2.5,0) node [above] {$\vec{f_3}$};
+	\draw [<-,very thick,red,rotate around={22.5:(0,0)}] (1.5,0) -- (2.5,0) node [right] {$\vec{f_4}$};
 
 \end{tikzpicture}
 \end{figure}
