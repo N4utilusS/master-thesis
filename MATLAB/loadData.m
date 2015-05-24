@@ -1,6 +1,6 @@
 %http://www.mathworks.com/matlabcentral/answers/54068-how-to-read-data-file-with-rows-of-different-length
 %AMOUNT_OF_ROBOTS = 8;
-fid = fopen('results6.txt');
+fid = fopen('myFile.txt');
 textLine = fgets(fid); % Read first line.
 lineCounter = 1;
 
