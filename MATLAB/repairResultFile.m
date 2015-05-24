@@ -1,7 +1,7 @@
 clear all
 AMOUNT_OF_ROBOTS = 8;
 SMOOTH = true;
-SMOOTH_INTENSITY = 5;
+SMOOTH_INTENSITY = 7;
 TAGS = [8 9 3 2 6 4 5 7];
 TAGS = sort(TAGS);
 
@@ -22,12 +22,12 @@ end
 
 if SMOOTH
     display('==> Smoothing data')
-    for t = SMOOTH_INTENSITY:size(data,1)
-        data(t,:) = mean(data(t-SMOOTH_INTENSITY+1:t,:),1);
+    for t = 1:size(data,1)
+        data(t,:) = mean(data(max(t-SMOOTH_INTENSITY+1,1):t,:),1);
     end
 end
 
 display('==> Saving data')
-dlmwrite('myFile.txt',data,'delimiter',' ')
+dlmwrite('output.txt',data,'delimiter',' ')
 
 display('==> DONE')
