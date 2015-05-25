@@ -977,11 +977,11 @@ In this chapter, we introduce the different experiments we conducted with the re
 			[Metrics I will use. Their description. How I will compute them.]
 		\end{comment}
 		
-		In order to evaluate the performance of our solution, we needed to create metrics to put numbers on the behaviour observed. We defined three metrics which we think correspond the most to what we want to capture from the observations:
+		In order to evaluate the performance of our solution, we needed to create metrics to put numbers on the behaviour observed (how we compute the performance of our solution). We defined three metrics which we think correspond the most to what we want to capture from the observations:
 		
 		\begin{enumerate}
 			\item Correct Distance. This metric measures to what extent the robotic swarm respects the target distance to the human.
-			\item Robot Density. It measures how regularly spaced the robots are around the human. The more regularly spaced they are, the best it is.
+			\item Robot Density. It measures how regularly spaced the robots are around the human. The more regularly spaced they are, the best it is. It checks if the human is protected from all directions.
 			\item Time. It measures how long it takes for the swarm to reach a configuration such that the \emph{Correct Distance} and \emph{Robot Density} metrics go under a given threshold.
 		\end{enumerate}
 		
