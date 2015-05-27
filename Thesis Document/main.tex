@@ -980,19 +980,125 @@ In this chapter, we introduce the different experiments we conducted with the re
 		In order to evaluate the performance of our solution, we needed to create metrics to put numbers on the behaviour observed (how we compute the performance of our solution). We defined three metrics which we think correspond the most to what we want to capture from the observations:
 		
 		\begin{enumerate}
-			\item Correct Distance. This metric measures to what extent the robotic swarm respects the target distance to the human.
-			\item Robot Density. It measures how regularly spaced the robots are around the human. The more regularly spaced they are, the best it is. It checks if the human is protected from all directions.
-			\item Time. It measures how long it takes for the swarm to reach a configuration such that the \emph{Correct Distance} and \emph{Robot Density} metrics go under a given threshold.
+			\item \emph{Correct Distance}. This metric measures to what extent the robotic swarm respects the target distance to the human.
+			\item \emph{Robot Density}. It measures how regularly spaced the robots are around the human. The more regularly spaced they are, the best it is. It checks if the human is protected from all directions.
+			\item \emph{Time}. It measures how long it takes for the swarm to reach a configuration such that the \emph{Correct Distance} and \emph{Robot Density} metrics go under a given threshold.
 		\end{enumerate}
 		
 			\paragraph{Correct Distance}
-			
-			[Do the robots respect the correct wanted distance?]
+				\begin{comment}
+					[Do the robots respect the correct wanted distance?]
+				\end{comment}
+				
+				To measure the error related to the distance human-robot, we consider the distance from every robot to the rectangle formed by the two shoes (see Figure \ref{fig:distance_metric}). Once we have these distances, we use the next formula to compute an error for every time step:
+				
+				\begin{equation}
+					\mbox{error}_t = \frac{1}{N} \sum_{i=1}^N \frac{|d_{ti} - \overline{d}|}{\overline{d}},
+					\label{eq:distance_metric}
+				\end{equation}
+				
+				 where $t$ is the number of the time step, $N$ is the number of robots, $d_{ti}$ is the distance human-robot for robot $i$ at time step $t$, and $\overline{d}$ is the target distance. Since the detected colour blob on the shoe might not always be the nearest point to the robot in the rectangle, this error measure is not perfect. Indeed, the robot adjusts its distance based on the closest human colour blob, not on the closest point of the shoe (perimeter of the rectangle).
+				
+				\begin{figure}\centering
+					\begin{tikzpicture}
+					
+					%	\foreach \i in {\xMin,...,\xMax} {
+					%        \draw [very thin,gray] (\i,\yMin) -- (\i,\yMax)  node [below] at (\i,\yMin) {$\i$};
+					%    }
+					%    \foreach \i in {\yMin,...,\yMax} {
+					%        \draw [very thin,gray] (\xMin,\i) -- (\xMax,\i) node [left] at (\xMin,\i) {$\i$};
+					%    }
+					
+						\draw[red, fill] (-0.5,-2) rectangle (-2.35,2);
+						\draw[LimeGreen, fill] (0.5,-2) rectangle (2.35,2);
+						
+						\draw[BurlyWood, fill] (-0.73,-1.77) rectangle (-2.12,1.77);
+						\draw[BurlyWood, fill] (0.73,-1.77) rectangle (2.12,1.77);
+						
+					%	\draw[dashed, very thick] (-2.35,5) -- (2.35,5);
+					%	\draw[dashed, very thick] (-2.35,-5) -- (2.35,-5);
+					%	\draw[dashed, very thick] (-5.35,2) -- (-5.35,-2);
+					%	\draw[dashed, very thick] (5.35,2) -- (5.35,-2);
+					%	\draw[dashed, very thick] (-5.35,2) arc (180:90:3);
+					%	\draw[dashed, very thick] (5.35,2) arc (0:90:3);
+					%	\draw[dashed, very thick] (-5.35,-2) arc (180:270:3);
+					%	\draw[dashed, very thick] (5.35,-2) arc (0:-90:3);
+					
+						\draw[dashed, very thick, LightGray] (-2.37, 5) -- (-2.37, -5);
+						\draw[dashed, very thick, LightGray] (2.37, 5) -- (2.37, -5);
+						\draw[dashed, very thick, LightGray] (-5.35, 2.02) -- (5.35, 2.02);
+						\draw[dashed, very thick, LightGray] (-5.35, -2.02) -- (5.35, -2.02);
+					
+						
+						\draw [dashed, very thick, orange] (2.35,5) to [out=0,in=90] (5.35,2) to [out=270,in=90] (5.35,-2) to [out=270, in=0] (2.35,-5) to [out=180, in=0] (-2.35,-5) to [out=180, in=270] (-5.35,-2) to [out=90, in=270] (-5.35,2) to [out=90, in=180] (-2.35,5) -- cycle;
+					
+						%\draw[dashed, LightGray] (-2.37,-2.02) rectangle (2.37,2.02);
+						
+						\draw[<->, very thick] (0,2.02) -- (0,5) node [right] at (0,3.5) {\textsc{Target Distance}};
+						\draw[<->, very thick] (-2.37,-2.02) -- (-4.47,-4.12);
+						\draw[<->, very thick] (2.37,-2.02) -- (4.47,-4.12);
+						
+						\epuckblue{0}{-5}
+						\epuckblue{-4.49}{4.14}
+						\epuckblue{4.49}{4.14}
+					\end{tikzpicture}
+					
+					\caption{The distance metric}{This figure represents the algorithm used to compute the first metric evaluating our solution. The red and green shoes in the middle form a rectangle. The position of all robots is obtained thanks to the arena tracking system (see Appendix \ref{app:arena_tracking_system}). The distance of all robots to the rectangle is computed. We compare every distance to the target human distance (we take absolute value of the difference). Then we divide by the human target distance to normalise. We normalise since an error of 10 cm for a target distance of 30 cm is not the same as an error of 10 cm for a target distance of 100 cm. The average of all those divisions is the error of the current time step. See expression \ref{eq:distance_metric}.}
+					\label{fig:distance_metric}
+				\end{figure}
 			
 			\paragraph{Robot Density}
-			
-			[Do the robots surround the human correctly?]
-			
+				\begin{comment}
+					[Do the robots surround the human correctly?]
+				\end{comment}
+				
+				The error on the angular density of robots is computed as follows. The positions of all the robots are captured, and the angle between each consecutive pair of robots is calculated. This list of angles is fed to the next formula to return the error for the current timestep:
+				\begin{equation}
+					\mbox{error}_t = \frac{1}{N} \sum_{i=1}^N \frac{|\alpha_{ti} - \overline{\alpha}|}{\overline{\alpha}},
+					\label{eq:density_metric}
+				\end{equation}
+				
+				where $t$ is the number of the time step, $N$ is the number of robots, $\alpha_{ti}$ is the angle separating the pair of consecutive robots $i$ at time step $t$, and $\overline{\alpha}$ is the target angle.
+				
+				\begin{figure}\centering
+					\begin{tikzpicture}
+					
+					%	\foreach \i in {\xMin,...,\xMax} {
+					%        \draw [very thin,gray] (\i,\yMin) -- (\i,\yMax)  node [below] at (\i,\yMin) {$\i$};
+					%    }
+					%    \foreach \i in {\yMin,...,\yMax} {
+					%        \draw [very thin,gray] (\xMin,\i) -- (\xMax,\i) node [left] at (\xMin,\i) {$\i$};
+					%    }
+					
+						\draw[red, fill, opacity=0.05] (-0.5,-2) rectangle (-2.35,2);
+						\draw[LimeGreen, fill, opacity=0.05] (0.5,-2) rectangle (2.35,2);
+						
+						\draw[BurlyWood, fill, opacity=0.2] (-0.73,-1.77) rectangle (-2.12,1.77);
+						\draw[BurlyWood, fill, opacity=0.2] (0.73,-1.77) rectangle (2.12,1.77);
+					
+						\draw[very thick, dashed, orange] (0,0) circle [radius=5cm];
+						
+						\foreach \i in {0,45,...,315} {
+							\draw [very thick, dashed, gray, rotate around={\i:(0,0)}] (0,0) -- (5,0);
+							
+							\draw [very thick, fill=RoyalBlue, rotate around={\i:(0,0)}] (5,0) circle [radius=0.5];
+							\draw [very thick, rotate around={\i:(0,0)}] (5-0.25,-0.433) -- (5,0+0.45) -- (5+0.25,-0.433);
+							
+							%\draw[rotate around={\i:(0,0)}] (\i*5/360,0) arc [0:30:(\i+45)*4/360];
+							\draw [<->, very thick, gray, rotate around={\i:(0,0)}] (\i*4/360+0.5,0) arc [radius=(\i+45)*4/360, start angle=0, end angle=45];
+							
+							\draw [rotate around={\i+22.5:(0,0)}] (\i*4/360+1,0) node {\textcolor{gray}{45°}};
+						}
+						
+						%\human{0}{0}
+					
+						
+					\end{tikzpicture}
+					
+					\caption{The density metric}{This figure represents the algorithm used to compute the second metric evaluating our solution. The position of all robots with the origin centred on the shoes is obtained thanks to the arena tracking system (see Appendix \ref{app:arena_tracking_system}). Then the angle between every consecutive pair of robots is computed. We compare every angle to the target angle (360°/\#robots) by subtracting the second to the first. Then we divide by the target angle to normalise. Normalisation is necessary since an error of 10° for a target of 30° is not the same as an error of 10° for a target of 90°. The average of all those divisions is the error of the current time step. See expression \ref{eq:density_metric}.}
+				\end{figure}
+				
+				
 			\paragraph{Time}
 			
 			[Do they do that in a relatively low amount of time?]
@@ -1116,6 +1222,7 @@ In this chapter, we introduce the different experiments we conducted with the re
 \chapter{ARGoS}
 
 \chapter{Arena Tracking System}
+\label{app:arena_tracking_system}
 
 \chapter{Range and Bearing}
 
