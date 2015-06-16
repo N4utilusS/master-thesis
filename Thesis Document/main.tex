@@ -116,7 +116,7 @@
 %\setcounter{secnumdepth}{3}
 %\setcounter{tocdepth}{3}
 \maxsecnumdepth{subsubsection}% 'secnumdepth' is reset by \mainmatter. You should use 'maxsecnumdepth'.
-\maxtocdepth{subsubsection}
+\maxtocdepth{subsection}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % THE DOCUMENT
@@ -243,13 +243,13 @@ As swarm robotic systems are mostly destined to operate on risky floors, unknown
 	
 	\section{Human - Robot Interaction}
 	
-	[Work related to what I do (detect humans, protection, follow person). Conclude on why it cannot be applied to my problem.]
+	[Work related to what I do (detect humans, protection, follow person). Conclude on why it cannot be applied to my problem. The Kinect project to detect the legs of a human]
 
 	\section{Swarm Robotics}
 	
 	[Flocking with a guide, and then Pattern Formation with a Guide. Work related to what I do. Conclude on why it cannot be applied to my problem. Make connections with this part later in the document. S'inspirer de Brambilla pour les flock et pattern.]
 	
-	This section and the next one are largely inspired by~\citet{brambilla2013swarm}, a reviewing article on swarm engineering. For \citet{csahin2005swarm}, swarm robotics is defined as \quot{the study of how large numbers of relatively simple physically embodied agents can be designed such that a desired collective behavior emerges from the local interactions among agents and between the agents and the environment}~\citep{csahin2005swarm}. Swarm robotics can be separated from other robotic studies by the following characteristics \citep{brambilla2013swarm}:
+	This section and the next one are largely inspired by~\citet{brambilla2013swarm}, a reviewing article on swarm engineering. For \citet{csahin2005swarm}, swarm robotics is defined as \quot{the study of how large numbers of relatively simple physically embodied agents can be designed such that a desired collective behaviour emerges from the local interactions among agents and between the agents and the environment}~\citep{csahin2005swarm}. Swarm robotics can be separated from other robotic studies by the following characteristics \citep{brambilla2013swarm}:
 	
 \begin{itemize}
 \item Robots are \emph{autonomous}
@@ -316,7 +316,7 @@ Challenges: une fois qu'on connait la solution générale, parler des challenges
 In this chapter, we will explore the investigated problem and the proposed solution at a high level of description. In the next chapter, we will describe the implementation details.
 
 	\section{The Problem}
-	
+		\label{sec:the_problem}
 	\begin{comment}
 	[Human walking in unknown environment. Team to assist, perceive danger that the human cannot. Graphical example, human goes from A to B with dangers (keep it simple as demo). Write text about an image showing the problem. Mined field, real applications.]\\
 	\end{comment}
@@ -446,19 +446,17 @@ In this chapter, we will explore the investigated problem and the proposed solut
 
 Our objective in this thesis, is to present an innovative protection using swarm robotics. The results obtained with real robots are presented in the chapter \ref{chap:experiments}.
 
-%////////////////////////////////////////////////////////////
-\chapter{Implementation}
-%////////////////////////////////////////////////////////////
+\section{Implementation}
 
-	In this chapter, we present the solution to the problem described in chapter \ref{chap:escorting_swarm} and all the choices that resulted in it. The explanation will follow a top-down approach. We first review the hardware and the code architecture. Then, we will detail our implementation.\\
+	In this section, we present the solution to the problem described at the section \ref{sec:the_problem} and all the choices that resulted in it. The explanation will follow a top-down approach. We first review the hardware and the code architecture. Then, we will detail our implementation.\\
 	
 	The first question one could ask is: why swarm robotics for such an application? As stated in section \ref{def:robustness_scalability_flexibility}, robustness, scalability and flexibility are characteristics that makes swarm robotics systems well suited for unknown environments \citep{brambilla2013swarm}.\todo{Insert more justification?} In case one of the agents is broken, we do not want to see the whole system collapse and leave the human unattended. Flexibility guarantees that the solution will work in different conditions, environments, which is an advantage for exploration and rescue. In case of loss of robots, scalability would maintain the protection performance to an acceptable level.
 	
-	\section{The Hardware}
+	\subsection{The Hardware}
 	
 	In the following section, we present the robotic platform used in our experiments, and the device allowing the robots to detect the human.
 	
-		\subsection{E-puck}
+		\subsubsection{E-puck}
 		\label{sec:e-puck}
 		
 		The robotic platform chosen was the e-puck \citep{mondada2009puck}. The e-puck robot platform was made for educational purposes. Its shape is cylindrical with a diameter of 7.5 cm. It is moved by two diametrically opposed wheels. Figure \ref{fig:e-puck_red_zones} (left) shows an e-puck from the laboratory. Several extensions were plugged onto it to increase its capabilities. In this thesis, we used the proximity sensors, the omnidirectional camera sensor and the virtual ground sensor. The proximity sensor is made up by 8 infrared sensors. Each infrared sensor returns a value proportional to the proximity of an nearby obstacle in the $[0;1]$ interval. The infrared sensors are placed a along the perimeter of the robot. The omnidirectional camera is a vertical camera on top of the apparatus, aiming at a convex mirror to provide a 360° view of the environment. It translates this view into a list of colour blobs. A colour blob is a cluster of pixels presenting close colour characteristics, that is, almost being of the same colour (the degree of similarity can be tuned during calibration). During the calibration, among other parameters, one can tune the degree of similarity, the minimum size of the cluster, and the recognised colours. The last sensor is a bit special: it is not real, and not physically present on the board. It is simulated through the ARGoS simulator used to develop the controller of the robot. It sends data created inside the simulator to the robot, from the simulated environment. In our case, this \enquote{simulated/false data} contains the colour of the ground, symbolising the presence of danger. We actually simulated red discs on the floor through the simulator to artificially set up dangerous areas that were not visible by the testing user. That way, the conditions of real life application were the closest possible to ours. An example of red zone is in Figure \ref{fig:e-puck_red_zones}.
@@ -475,7 +473,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 			\label{fig:e-puck_red_zones}
 		\end{figure}
 		
-		\subsection{E-geta} % Longer text than for e-puck because more important!
+		\subsubsection{E-geta} % Longer text than for e-puck because more important!
 		\begin{comment}
 		[I will in this section describe the need for a device to detect a human and its development. What are the objectives of the hardware? The choices we made to get the final solution. How we built it. Calibration an adaptation process to make the current algorithm compatible with the new hardware. Where does the term come from?]
 		\end{comment}
@@ -520,7 +518,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		\label{fig:circuit}
 	\end{figure}
 	
-	\section{The Robot Behaviour}
+	\subsection{The Robot Behaviour}
 	\label{sec:robot_behaviour}
 	
 	\begin{comment}
