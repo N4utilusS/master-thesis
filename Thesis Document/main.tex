@@ -173,7 +173,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % BEFORE TEXT
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\addcontentsline{toc}{part}{First Matter}
+\part*{First Matter}
 \chapter{Acknowledgements}
 
 \begin{figure}
@@ -212,6 +213,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TEXT
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\part*{Main Matter}
+\addcontentsline{toc}{part}{Main Matter}
 \mainmatter
 \chapter{Introduction}
 
@@ -392,7 +395,7 @@ In the introduction we discussed the problem we wanted to address at a high leve
 	
 	The solution we propose involves the use of a swarm of robots. Swarm robotics seems fit to this kind of application, since it is compatible with unknown environments thanks to its flexible, robust and scalable characteristics \citep{brambilla2013swarm}. In case of failure of one or a few robots, the system would continue to provide sufficient performance thanks to its scalability and robustness.
 	
-	The swarm of robots forms a round shield around a user. The round shield formed by the swarm enables a 360° protection of the user. All the robots try to stay at the same distance from each other and the human (except when there is a danger). To achieve this, the final solution relies on the pattern formation theory widely used in swarm robotics \textbf{TODO Parler du flocking et pattern.}. The corresponding techniques will be explained in the next chapter with more details. If the number of robots is not high enough to form a complete circle, an arc is formed at the front to always shield the most critical zone.
+	The swarm of robots forms a round shield around a user. The round shield formed by the swarm enables a 360° protection of the user. All the robots try to stay at the same distance from each other and the human (except when there is a danger). To achieve this, the final solution relies on the pattern formation theory widely used in swarm robotics. The corresponding techniques will be explained in the next chapter with more details. If the number of robots is not high enough to form a complete circle, an arc is formed at the front to always shield the most critical zone.
 	
 	As shown on Figure \ref{fig:swarm_preventing}, the robots in contact with a dangerous zone will report the danger through visual communication with the human. Here the robots light on their orange LEDs and stay on the boundary of the zone to prevent the human from getting into it. Since the human cannot see the danger, and only the robots can, we can see that the swarm is increasing the perception capabilities of the human.
 		
@@ -463,7 +466,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		\subsubsection{E-puck}
 		\label{sec:e-puck}
 		
-		The robotic platform chosen was the e-puck \citep{mondada2009puck}. The e-puck robot platform was made for educational purposes. Its shape is cylindrical with a diameter of 7.5 cm. It is moved by two diametrically opposed wheels. Figure \ref{fig:e-puck_red_zones} (left) shows an e-puck from the laboratory. Several extensions were plugged onto it to increase its capabilities. In this thesis, we used the proximity sensors, the omnidirectional camera sensor and the virtual ground sensor. The proximity sensor is made up by 8 infrared sensors. Each infrared sensor returns a value proportional to the proximity of an nearby obstacle in the $[0;1]$ interval. The infrared sensors are placed a along the perimeter of the robot. The omnidirectional camera is a vertical camera on top of the apparatus, aiming at a convex mirror to provide a 360° view of the environment. It translates this view into a list of colour blobs. A colour blob is a cluster of pixels presenting close colour characteristics, that is, almost being of the same colour (the degree of similarity can be tuned during calibration). During the calibration, among other parameters, one can tune the degree of similarity, the minimum size of the cluster, and the recognised colours. The last sensor is a bit special: it is not real, and not physically present on the board. It is simulated through the ARGoS simulator used to develop the controller of the robot. It sends data created inside the simulator to the robot, from the simulated environment. In our case, this \enquote{simulated/false data} contains the colour of the ground, symbolising the presence of danger. We actually simulated red discs on the floor through the simulator to artificially set up dangerous areas that were not visible by the testing user. That way, the conditions of real life application were the closest possible to ours. An example of red zone is in Figure \ref{fig:e-puck_red_zones}.
+		The robotic platform chosen was the e-puck \citep{mondada2009puck} because the laboratory possess approximately 28 of them, along with the needed modules. Furthermore, the academic personnel had developed a good knowledge of the platform. The e-puck robot platform was made for educational purposes. Its shape is cylindrical with a diameter of 7.5 cm. It is moved by two diametrically opposed wheels. Figure \ref{fig:e-puck_red_zones} (left) shows an e-puck from the laboratory. Several extensions (modules) were plugged onto it to increase its capabilities. In this thesis, in the final solution, we used the proximity sensors, the omnidirectional camera sensor and the virtual ground sensor. The proximity sensor is made up by 8 infrared sensors. Each infrared sensor returns a value proportional to the proximity of an nearby obstacle in the $[0;1]$ interval. The infrared sensors are placed a along the perimeter of the robot. The omnidirectional camera is a vertical camera on top of the apparatus, aiming at a convex mirror to provide a 360° view of the environment. It translates this view into a list of colour blobs. A colour blob is a cluster of pixels presenting close colour characteristics, that is, almost being of the same colour (the degree of similarity can be tuned during calibration). During the calibration, among other parameters, one can tune the degree of similarity, the minimum size of the cluster, and the recognised colours. The last sensor is a bit special: it is not real, and not physically present on the board. It is simulated through the ARGoS simulator used to develop the controller of the robot. It sends data created inside the simulator to the robot, from the simulated environment. In our case, this \enquote{simulated/false data} contains the colour of the ground, symbolising the presence of danger. We actually simulated red discs on the floor through the simulator to artificially set up dangerous areas that were not visible by the testing user. That way, the conditions of real life application were the closest possible to ours. An example of red zone is in Figure \ref{fig:e-puck_red_zones} (right). Using a virtual sensor allows early experimentation by removing the need to implement a real sensor.
 		
 		\begin{figure}[!h]
 			\begin{minipage}[c]{0.49\textwidth}
@@ -476,6 +479,10 @@ Our objective in this thesis, is to present an innovative protection using swarm
 			\caption{The E-puck and its Virtual Sensor}{On the left, one can see a picture of the robotic platform we used: the E-puck. Our swarm is composed of several robot like this one. On the right is a screen capture of the ARGoS simulator \citep{pinciroli2012argos} where the danger virtual sensor is used. Virtual means that it is not real, not physically present on the board. It is simulated through the ARGoS simulator. It sends data created inside the simulator to the robot, from the simulated environment. It augments the robot sensing capabilities. In our case, this \enquote{simulated/false data} contains the colour of the ground, symbolising the presence of danger. The red circle represents a danger zone in which no human can go. No human can see it though. The small dots are representations of the real robots inside the simulator.}
 			\label{fig:e-puck_red_zones}
 		\end{figure}
+		
+		[4ème capteur essayé, sur papier avait plus de potentiel car moins contraignant, mais comportement complètement imprévisible, calibration impossible, passé sur l'OC]
+		
+		Before considering the omnidirectional camera as the best option, another sensor was examined: the range and bearing sensor \citep{gutierrez2009open}. The range and bearing extension is a infrared communication board that also provides the range (distance) and the bearing (angle) of the source of emission. On paper it seemed like a better option because it was less restrictive than the omnidirectional camera. With the camera, a precise calibration of the different colours is required to avoid errors. The range and bearing uses a CRC code to detect errors in the data received, thus ensuring the correct recognition of the different entity types in the environment. The number of different entities (colours) is very limited with the omnidirectional camera as a result of the algorithm behind it. The range and bearing actuator can send up to 4 bytes of data, multiplying the amount of different entities. It is also less sensitive to light conditions. Unfortunately, after multiple attempts to use the range and bearing, we realised that it was unusable. It behaves in a completely unpredictable way.
 		
 		\subsubsection{E-geta} % Longer text than for e-puck because more important!
 		\begin{comment}
@@ -1253,7 +1260,7 @@ In this chapter, we introduce the different experiments we conducted with the re
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % BIBLIOGRAPHY
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\addcontentsline{toc}{part}{Bibliography}
 \part*{Bibliography}
 
 \begin{filecontents}{thesis.bib}
@@ -1443,6 +1450,15 @@ In this chapter, we introduce the different experiments we conducted with the re
   pages={137--162},
   year={2004},
   publisher={Springer}
+}
+
+@inproceedings{gutierrez2009open,
+  title={Open e-puck range \& bearing miniaturized board for local communication in swarm robotics},
+  author={Guti{\'e}rrez, {\'A}lvaro and Campo, Alexandre and Dorigo, Marco and Donate, Jesus and Monasterio-Huelin, F{\'e}lix and Magdalena, Luis},
+  booktitle={Robotics and Automation, 2009. ICRA'09. IEEE International Conference on},
+  pages={3111--3116},
+  year={2009},
+  organization={IEEE}
 }
 
 \end{filecontents}
