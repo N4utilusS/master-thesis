@@ -480,9 +480,19 @@ Our objective in this thesis, is to present an innovative protection using swarm
 			\label{fig:e-puck_red_zones}
 		\end{figure}
 		
+		\begin{comment}
 		[4ème capteur essayé, sur papier avait plus de potentiel car moins contraignant, mais comportement complètement imprévisible, calibration impossible, passé sur l'OC]
+		\end{comment}
+		Before considering the omnidirectional camera as the best option, another sensor was examined: the range and bearing sensor \citep{gutierrez2009open}. The range and bearing extension is a infrared communication board that also provides the range (distance) and the bearing (angle) of the emission source. On paper it seemed like a better option because it was less restrictive than the omnidirectional camera. With the camera, a precise calibration of the different colours is required to avoid errors. The range and bearing uses a CRC code to detect errors in the data received, thus ensuring the correct recognition of the different entity types in the environment. The number of different entities (colours) is very limited with the omnidirectional camera as a result of the algorithm behind it. The range and bearing actuator can send up to 4 bytes of data, multiplying the amount of different entities (one string of bits for each entity). It is also less sensitive to light conditions. Unfortunately, after multiple attempts to use the range and bearing, we realised that it was unusable. It behaves in a completely unpredictable way with the range value. We tried to calibrate it, to no avail. Figure \ref{fig:rab_intensities} illustrates the wide distribution of message intensities causing an imprecise measure of the range (distance of the source). This figure is only for one run of the experiment. Consecutive runs yielded very different results for the same experiment configuration.
 		
-		Before considering the omnidirectional camera as the best option, another sensor was examined: the range and bearing sensor \citep{gutierrez2009open}. The range and bearing extension is a infrared communication board that also provides the range (distance) and the bearing (angle) of the source of emission. On paper it seemed like a better option because it was less restrictive than the omnidirectional camera. With the camera, a precise calibration of the different colours is required to avoid errors. The range and bearing uses a CRC code to detect errors in the data received, thus ensuring the correct recognition of the different entity types in the environment. The number of different entities (colours) is very limited with the omnidirectional camera as a result of the algorithm behind it. The range and bearing actuator can send up to 4 bytes of data, multiplying the amount of different entities. It is also less sensitive to light conditions. Unfortunately, after multiple attempts to use the range and bearing, we realised that it was unusable. It behaves in a completely unpredictable way.
+		\begin{figure}[!h]
+			\includegraphics[trim=35px 0px 100px 0px, clip=true, width=\textwidth]{images/powers_29-28.png}
+			\includegraphics[trim=35px 20px 100px 0px, clip=true, width=\textwidth]{images/powers_54-28.png}
+			\caption{Intensities of the RAB messages}{This figure shows the absolute frequencies of the range and bearing messages intensities for a duration of 3 minutes. During these 3 minutes, one robot is emitting messages and rotating on itself. Another robot is placed at 25 centimetres of the first one and receives the messages. The message intensity can vary from 0 to 1023 on the x axis. The y axis is the absolute frequency. Each graph corresponds to a different emitting robot. On the upper graph, one can see that frequency pikes can appear far away from the \enquote{normal} average value. On the lower graph, the interval of intensity is very big. Other runs of the experiment with the same robots yielded very different results. The RAB sensor is thus a bad choice for the measure of the distance between robots.}
+			\label{fig:rab_intensities}
+		\end{figure}
+		
+		
 		
 		\subsubsection{E-geta} % Longer text than for e-puck because more important!
 		\begin{comment}
