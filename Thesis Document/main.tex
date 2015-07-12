@@ -17,11 +17,12 @@
 \usetikzlibrary{arrows,automata,external}
 \tikzexternalize[prefix=tikz_external_figures/]
 \usepackage{ccaption}
-\usepackage{flafter}
+%\usepackage{flafter}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.12}
 \usepackage[figure]{algorithm2e}
 \usepackage[hidelinks,breaklinks=true]{hyperref}
+\usepackage[section]{placeins}
 
 % Logos
 \newcommand{\ulb}{\includegraphics[scale=1.1]{PageDeGarde_MFE/logo_ULB2.pdf}}
@@ -177,7 +178,7 @@
 \part*{First Matter}
 \chapter{Acknowledgements}
 
-\begin{figure}
+\begin{figure}[!htp]
 	\centering\begin{tikzpicture}
 	%Mauro, Gaëtan, Giovanni, Anthony, Lorenzo, Brian, Family and friends.
 	\epuck{-5}{12}
@@ -245,7 +246,7 @@ As swarm robotic systems are mostly destined to operate on risky floors, unknown
 	An article will be written to expose this research to the rest of the swarm robotics community.
 
 \chapter{State of the Art}
-	
+	\label{chap:state_of_the_art}
 	In this section, we will discuss the problem that led to the creation of this thesis by first providing the reader with some general insight in the world of swarm robotics and swarm intelligence. Then we will focus on specific parts of these domains of study: feedbacks between human and single robot, and human and robots' swarm.
 	
 	\section{Human - Robot Interaction}
@@ -289,7 +290,7 @@ With these definitions in mind, we can explain swarm engineering as:
 	
 	Currently, little attention has been devoted to the study of the interaction between humans and robotic swarms, how one can send instructions and receive feedback. People investigating in the field encounter many difficulties, such as the difference of perspective between the swarm and the human operator (the human only observes the global collective behaviour, not the local interactions or individual behaviours driving the robots), the simplicity of the hardware found on the robots, or the efficient synthesis of all the information sent by the robots. All the existing types of interactions in the literature present a major disadvantage: they require an extra layer between the group of robots and the human. This requirement might not always be satisfied when we remember that swarms like this are mostly destined to evolve in an unknown environment. The monitoring equipment necessary to operate the swarm may not be safely deployed. Furthermore, a synthesis of all the local information pieces must be done in order to provide an understandable state of the system to the human. A supplementary step that involves modelling, additional overheads and perhaps heavy computations, and the gathering of all information at a central point (eliminating by the way the distributed and not centralised properties of the swarm system) \citep{podevijn2012self}.
 	
-	\citet{daily2003world} used a head-mounted display and augmented reality to add information right on top of the robot in the environment itself, suppressing the need for an additional display. \citet{baizid2009human} proposed a platform to interact with multiple robots simultaneously through a graphical user interface, or a head-mounted display, virtual reality etc. They also studied how virtual reality abstraction affected the human perception and cognitive capabilities, i.e, they created a virtual environment by filtering useless information. \citet{mclurkin2006speaking} developed an centralised graphical user interface taking inspiration from real-time strategy video games, where one must control armies. They also imagined a feedback approach based on LEDs and sounds. The robots transmit their internal state by applying to their LEDs and sound system a defined pattern, recognisable by the operator, now able to quickly understand the state of the swarm without looking at a supplementary interface.
+	\citet{daily2003world} used a head-mounted display and augmented reality to add information right on top of the robot in the environment itself, suppressing the need for an additional display. \citet{baizid2009human} proposed a platform to interact with multiple robots simultaneously through a graphical user interface, or a head-mounted display, in virtual reality. They also studied how virtual reality abstraction affected the human perception and cognitive capabilities, i.e, they created a virtual environment by filtering useless information. \citet{mclurkin2006speaking} developed an centralised graphical user interface taking inspiration from real-time strategy video games, where one must control armies. They also imagined a feedback approach based on LEDs and sounds. The robots transmit their internal state by applying to their LEDs and sound system a defined pattern, recognisable by the operator, now able to quickly understand the state of the swarm without looking at a supplementary interface.
 	
 	\citet{podevijn2012self} argue that self-organised mechanism, as those ruling the behaviour of the swarm, should be used to provide feedback to the operator. They suggest that the best entity which could communicate the status of the system and the whole swarm is the swarm itself. They performed experiments using colour feedback to distinguish different internal states and split the swarms into groups to tackle different tasks.
 	
@@ -320,7 +321,7 @@ On veut protéger un humain qui ne voit rien comme danger. Solution: un swarm de
 Challenges: une fois qu'on connait la solution générale, parler des challenges, genre comment reconnaître un humain?]
 \end{comment}
 
-In the introduction we discussed the problem we wanted to address at a high level. The following chapter introduced some of the works that are related to it. In this chapter, we will explore in details the investigated problem and the proposed solution at a high level of description. Then, we will describe the implementation details.
+As discussed in the introduction, the problem we want to address is the protection of a human evolving in a dangerous environment. The human is unable to see the danger. Chapter \ref{chap:state_of_the_art} introduced some of the works that are related to the problem. In this chapter, we will present the problem in details and the proposed solution at a high level of description. Then, we will describe the implementation details.
 
 	\section{The Problem}
 		\label{sec:the_problem}
@@ -328,13 +329,13 @@ In the introduction we discussed the problem we wanted to address at a high leve
 	[Human walking in unknown environment. Team to assist, perceive danger that the human cannot. Graphical example, human goes from A to B with dangers (keep it simple as demo). Write text about an image showing the problem. Mined field, real applications.]
 	\end{comment}
 	
-	Since the early days, human beings have explored new territories to expand their control and get a better understanding of the world surrounding them. Among those new landscapes, some were relatively safe but some were dangerous. To overcome this, we have invented equipment, suits, and other kinds of protections. We tried, with this work, to contribute to the study of these solutions.
+	Since the early days, human beings have explored new territories to expand their control and get a better understanding of the world surrounding them. Among those new territories, some were relatively safe but some were dangerous. To reduce risks, we have invented equipment, suits, and other kinds of protections (e.g. guards, sensors, alarms). In this work, we suggest a solution to the problem presented in this section.
 	
-	Figure \ref{fig:unknown_environment} shows a graphical representation of a possible scenario. The dangerous areas are the red circles. Those areas could be radioactive areas, mine fields, or any other invisible threats. The human must travel from point \emph{A} to \emph{B} without being hurt by the danger contained in these areas. The human cannot perceive them. The protection created should prevent the user from going inside those areas.
+	Figure \ref{fig:unknown_environment} shows a graphical representation of a possible scenario to our problem. This scenario will help exemplify the challenges we address. In this scenario, the human must go from point a to point b. Between these two points, the human might be confronted to hazardous areas. These hazardous areas are represented by the red circles in Figure \ref{fig:unknown_environment}. Example of such hazardous areas are radioactive zones, mine fields. The human cannot perceive them. The protection created should prevent the user from going inside those areas.
 	
-	Exploration is not the only real application for the proposed solution that comes into mind. Rescue in disaster areas would also benefit from it (evacuation of people to safe zones, etc). The solution should be able to constantly protect the person using it, and constantly provide feedback. It should be robust and fit to the destination environment.
+	Exploration is not the only real application for the proposed solution that comes into mind. Rescue in disaster areas would also benefit from it (evacuation of people to safe zones). A solution to this problem should be able to constantly protect the person using it, and constantly provide feedback. It should be robust and fit to the environment in which it would be used.
 	
-%	\begin{figure}\centering
+%	\begin{figure}[!htp]\centering
 %		\begin{tikzpicture}
 %			\draw [dashed] (0,0) circle [radius=1];
 %			\draw (0,0) node[scale=2]{A};
@@ -351,7 +352,7 @@ In the introduction we discussed the problem we wanted to address at a high leve
 %		\end{tikzpicture}
 %	\end{figure}
 	
-	\begin{figure}\centering
+	\begin{figure}[!htp]\centering
 		\begin{tikzpicture}
 			\draw [dashed] (0,0) circle [radius=0.5];
 			\draw (0,0) node[scale=2]{A};
@@ -381,7 +382,7 @@ In the introduction we discussed the problem we wanted to address at a high leve
 			\draw [very thick] (1,0.433+0.375) arc [radius=0.5, start angle=120, end angle=180];
 		\end{tikzpicture}
 		
-		\caption{Unknown Dangerous Environment}{This image illustrates an environment, observed from above, in which a human must move from point \emph{A} to point \emph{B} while avoiding invisible dangerous areas. \emph{A} is the start location, \emph{B} is the goal ant the red circles represent dangerous zones. We provide in this thesis a solution to guarantee safeness in such circumstances. Possible applications for this type of solutions are: mine fields crossing and cleaning, radioactive areas avoidance,...}
+		\caption{Unknown dangerous environment}{This image illustrates an environment, observed from above, in which a human must move from point \emph{A} to point \emph{B} while avoiding invisible dangerous areas. \emph{A} is the start location, \emph{B} is the goal ant the red circles represent dangerous zones. We provide in this thesis a solution to guarantee safeness in such circumstances. Possible applications for this type of solutions are: mine fields crossing and cleaning, radioactive areas avoidance,...}
 		\label{fig:unknown_environment}
 	\end{figure}
 	
@@ -393,13 +394,13 @@ In the introduction we discussed the problem we wanted to address at a high leve
 	On a choisit d'utiliser des swarms car... Equidistance par rapport à l'humain. Carac du système. Pb pour détecter l'humain...avec solution. Agent de la swarm doit être capable de détecter le danger. Humain perçoit la swarm qui elle perçoit le danger.]
 	\end{comment}
 	
-	The solution we propose involves the use of a swarm of robots. Swarm robotics seems fit to this kind of application, since it is compatible with unknown environments thanks to its flexible, robust and scalable characteristics \citep{brambilla2013swarm}. In case of failure of one or a few robots, the system would continue to provide sufficient performance thanks to its scalability and robustness.
+	The solution we propose involves the use of a swarm of robots. Swarm robotics systems are well suited for this types of application because it is compatible with unknown environments thanks to its flexible, robust and scalable characteristics \citep{brambilla2013swarm}. In case of failure of one or a few robots, the system would continue to provide sufficient performance thanks to its scalability and robustness.
 	
-	The swarm of robots forms a round shield around a user. The round shield formed by the swarm enables a 360° protection of the user. All the robots try to stay at the same distance from each other and the human (except when there is a danger). To achieve this, the final solution relies on the pattern formation theory widely used in swarm robotics. The corresponding techniques will be explained in the next chapter with more details. If the number of robots is not high enough to form a complete circle, an arc is formed at the front to always shield the most critical zone.
+	In our solution, a swarm of robots forms a round shield around a user (i.e., they form a circle around the user). The round shield formed by the swarm enables a 360° protection of a user. All the robots try to stay at the same distance from each other and the human. However, when a danger is detected, the robots might not respect that rule to form a boundary on the edge of the danger zone. To achieve this, the solution relies on the pattern formation theory widely used in swarm robotics. The corresponding techniques will be explained in the next chapter with more details. If the number of robots is not high enough to form a complete circle, an arc is formed at the front to always shield the most critical zone.
 	
 	As shown on Figure \ref{fig:swarm_preventing}, the robots in contact with a dangerous zone will report the danger through visual communication with the human. Here the robots light on their orange LEDs and stay on the boundary of the zone to prevent the human from getting into it. Since the human cannot see the danger, and only the robots can, we can see that the swarm is increasing the perception capabilities of the human.
 		
-	\begin{figure}\centering
+	\begin{figure}[!htp]\centering
 		\begin{tikzpicture}
 		
 		%	\foreach \i in {\xMin,...,\xMax} {
@@ -430,15 +431,15 @@ In the introduction we discussed the problem we wanted to address at a high leve
 					
 		\end{tikzpicture}
 		
-		\caption{Swarm Prevention}{This figure is a symbolic representation of a human helped by a swarm. The circles with a triangle inside are representations of a robot. The swarm tells the human that a dangerous zone is located at the front right by visual communication (here the robots change their colour to red). The swarm stays at the boundary to form a \enquote{shield}. The direction taken by each individual in the swarm is given by the triangle inside (here heading north).}
+		\caption{Swarm prevention}{This figure is a symbolic representation of a human helped by a swarm. The circles with a triangle inside are representations of a robot. The swarm tells the human that a dangerous zone is located at the front right by visual communication (here the robots change their colour to red). The swarm stays at the boundary to form a \enquote{shield}. The direction taken by each individual in the swarm is given by the triangle inside (here heading north).}
 		\label{fig:swarm_preventing}
 	\end{figure}
 	
-	One issue that had to be resolved was the detection of the human by the robots. As \citet{podevijn2012self} suggested, the interface between the human and the robots swarm should be restricted to the strict minimum because in the field the infrastructure needed to operate the swarm might not be easy to build and manipulate. The swarm should handle the communication on its own. Furthermore, any centralised control system would break the distributed and robust feature of swarm robotics. As a big infrastructure such as a tracking system, or any interface of the same kind would have been difficult to use in real life applications, we designed and implemented a compact, wearable device that allows a human to be recognised by the robots: a pair of shoes.
+	One issue that had to be resolved was the detection of the human by the robots. As \citet{podevijn2012self} suggested, the interface between the human and the robots swarm should be restricted to the strict minimum because in the field the infrastructure needed to operate the swarm might not be easy to build and manipulate. The swarm should handle the communication on its own. As a big infrastructure such as a tracking system, or any interface of the same kind would have been difficult to use in real life applications, we designed and implemented a compact, wearable device that allows a human to be recognised by the robots: a pair of shoes.
 	
 	Figure \ref{fig:shoes} illustrates the use of the shoes (no user is wearing them to not occlude the field of view). In Figure \ref{fig:shoes} (left), the robots have just recognised the shoes thanks to the LED system inside and begin to move in order to form a circle around the shoe. On Figure \ref{fig:shoes} (right), we show an example of one configuration obtained after 3 minutes, viewed from above.
 	
-	\begin{figure}
+	\begin{figure}[!htp]
 		\begin{minipage}[c]{0.6\textwidth}
 			\includegraphics[trim=200px 300px 140px 300px, clip=true, height=5cm]{images/shoes.jpg}
 		\end{minipage}
@@ -447,17 +448,17 @@ In the introduction we discussed the problem we wanted to address at a high leve
 			\hfill\includegraphics[trim=380px 230px 380px 360px, clip=true, height=5cm]{../Experiments/No_Human/6end.png}
 		\end{minipage}				
 		
-		\caption{The Shoes}{This picture shows a prototype of the shoes viewed from above, and the robots interacting with it. The interaction is realised through the recognition of the colours, one for each shoe, indicating left or right side. This pair of shoes enables the robots to locate the user, allowing them to evolve at the target distance from him/her. On the left image, the robots are still in the process of placing themselves in a correct circle. The right image depicts the situation after a 3 minutes experiment where the robots were initially placed in lines around the shoes. Objects are put on the shoes to close the lights switch (normally activated by the weight of the user).}
+		\caption{The shoes}{This picture shows a prototype of the shoes viewed from above, and the robots interacting with the shoes. The interaction is enabled through the recognition of the colours, one for each shoe, indicating left (red) or right (green) side. This pair of shoes enables the robots to locate the user, allowing them to evolve at the target distance from him/her. On the left image, the robots are still in the process of placing themselves in a correct circle. The right image depicts the situation after a 3 minutes experiment where the robots were initially placed in lines around the shoes. Objects are put on the shoes to close the lights switch (normally activated by the weight of the user).}
 		\label{fig:shoes}
 	\end{figure}
 
-Our objective in this thesis, is to present an innovative protection using swarm robotics. The results obtained with real robots are presented in the chapter \ref{chap:experiments}.
+Our objective in this thesis, is to present an innovative protection using swarm robotics. The results obtained from experiments with a swarm of real robots are presented in the chapter \ref{chap:experiments}.
 
 \section{Implementation}
 
-	In this section, we present the solution to the problem described at the section \ref{sec:the_problem} and all the choices that resulted in it. The explanation will follow a top-down approach. We first review the hardware and the code architecture. Then, we will detail our implementation.
+	In this section, we present the solution to the problem described in section \ref{sec:the_problem} and all the choices that resulted in it. The explanation will follow a top-down approach. We first review the hardware and the code architecture. Then, we will detail our implementation.
 	
-	The first question one could ask is: why swarm robotics for such an application? As stated in section \ref{def:robustness_scalability_flexibility}, robustness, scalability and flexibility are characteristics that makes swarm robotics systems well suited for unknown environments \citep{brambilla2013swarm}. In case one of the agents is broken, we do not want to see the whole system collapse and leave the human unattended. Flexibility guarantees that the solution will work in different conditions, environments, which is an advantage for exploration and rescue. In case of loss of robots, scalability would maintain the protection performance to an acceptable level.
+	We decided on swarm robotics because, as stated in section \ref{def:robustness_scalability_flexibility}, robustness, scalability and flexibility are characteristics that make swarm robotics systems well suited for unknown environments \citep{brambilla2013swarm}. In case one of the agents is broken, we do not want to see the whole system collapse and leave the human unattended. The solution guarantees that the solution will work in different conditions, environments, which is an advantage for exploration and rescue (flexibility). In case of loss of robots, scalability would maintain the protection performance to an acceptable level.
 	
 	\subsection{The Hardware}
 	
@@ -466,9 +467,9 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		\subsubsection{E-puck}
 		\label{sec:e-puck}
 		
-		The robotic platform chosen was the e-puck \citep{mondada2009puck} because the laboratory possess approximately 28 of them, along with the needed modules. Furthermore, the academic personnel had developed a good knowledge of the platform. The e-puck robot platform was made for educational purposes. Its shape is cylindrical with a diameter of 7.5 cm. It is moved by two diametrically opposed wheels. Figure \ref{fig:e-puck_red_zones} (left) shows an e-puck from the laboratory. Several extensions (modules) were plugged onto it to increase its capabilities. In this thesis, in the final solution, we used the proximity sensors, the omnidirectional camera sensor and the virtual ground sensor. The proximity sensor is made up by 8 infrared sensors. Each infrared sensor returns a value proportional to the proximity of an nearby obstacle in the $[0;1]$ interval. The infrared sensors are placed a along the perimeter of the robot. The omnidirectional camera is a vertical camera on top of the apparatus, aiming at a convex mirror to provide a 360° view of the environment. It translates this view into a list of colour blobs. A colour blob is a cluster of pixels presenting close colour characteristics, that is, almost being of the same colour (the degree of similarity can be tuned during calibration). During the calibration, among other parameters, one can tune the degree of similarity, the minimum size of the cluster, and the recognised colours. The last sensor is a bit special: it is not real, and not physically present on the board. It is simulated through the ARGoS simulator used to develop the controller of the robot. It sends data created inside the simulator to the robot, from the simulated environment. In our case, this \enquote{simulated/false data} contains the colour of the ground, symbolising the presence of danger. We actually simulated red discs on the floor through the simulator to artificially set up dangerous areas that were not visible by the testing user. That way, the conditions of real life application were the closest possible to ours. An example of red zone is in Figure \ref{fig:e-puck_red_zones} (right). Using a virtual sensor allows early experimentation by removing the need to implement a real sensor.
+		The robotic platform chosen was the e-puck \citep{mondada2009puck} because the laboratory possess approximately 28 of them, along with the appropriate modules (omnidirectional camera, top LEDs). Furthermore, the academic personnel had developed a good knowledge of the platform. The e-puck robot platform was made for educational purposes. Its shape is cylindrical with a diameter of 7.5 cm. It is moved by two diametrically opposed wheels. Figure \ref{fig:e-puck_red_zones} (left) shows an e-puck from the laboratory. Several extensions (modules) were plugged onto it to increase its capabilities. In this thesis, in the final solution, we used the proximity sensors, the omnidirectional camera sensor and the virtual ground sensor. The proximity sensor is made up by 8 infrared sensors. Each infrared sensor returns a value proportional to the proximity of a nearby obstacle in the $[0,1]$ interval. The infrared sensors are placed along the perimeter of the robot. The omnidirectional camera is a vertical camera placed on the top of the e-puck's base, aiming at a convex mirror to provide a 360° view of the environment. It translates this view into a list of colour blobs. A colour blob is a cluster of pixels being almost of the same colour. During the calibration, among other parameters, one can tune the degree of similarity, the minimum size of the cluster, and the recognised colours. The last sensor is different: it is not real, and not physically present on the board \citep{reinaaugmented}. It is simulated through the ARGoS simulator used to develop the controller of the robot \citep{pinciroli2012argos}. It sends data created inside the simulator to the robot, from the simulated environment. In our case, this data contains the colour of the ground, symbolising the presence of danger. We actually simulated red discs on the floor through the simulator to artificially set up dangerous areas that were not visible by the testing user. That way, the conditions of real life application were the closest possible to ours. An example of red zone is in Figure \ref{fig:e-puck_red_zones} (right). The positions of the robots inside the simulator are determined by the use of a tracking system \citep{stranieri2013iridia}. The virtual positions correspond to the real positions. Using a virtual sensor enables early experimentation by removing the need to implement a real sensor. The real robots actually have a ground sensor. However, as during the tests the human cannot see the dangerous zones, we could not use any visible colour. A new type of ground sensors, able to detect other types of information was necessary. Hence we chose to create a ground virtual sensor that detects colours that are only present in the simulator, not physically present in the laboratory. That way, the dangers remain invisible to the human doing the experiments, but visible by other operators watching the simulator screen.
 		
-		\begin{figure}[!h]
+		\begin{figure}[!htp]
 			\begin{minipage}[c]{0.49\textwidth}
 				\includegraphics[height=7cm]{images/e-puck.jpg}			
 			\end{minipage}
@@ -476,21 +477,23 @@ Our objective in this thesis, is to present an innovative protection using swarm
 				\includegraphics[width=\textwidth]{../Experiments/No_Human/red_circle.png}			
 			\end{minipage}
 			
-			\caption{The E-puck and its Virtual Sensor}{On the left, one can see a picture of the robotic platform we used: the E-puck. Our swarm is composed of several robot like this one. On the right is a screen capture of the ARGoS simulator \citep{pinciroli2012argos} where the danger virtual sensor is used. Virtual means that it is not real, not physically present on the board. It is simulated through the ARGoS simulator. It sends data created inside the simulator to the robot, from the simulated environment. It augments the robot sensing capabilities. In our case, this \enquote{simulated/false data} contains the colour of the ground, symbolising the presence of danger. The red circle represents a danger zone in which no human can go. No human can see it though. The small dots are representations of the real robots inside the simulator.}
+			\caption{The E-puck and its virtual sensor}{On the left, one can see a picture of the robotic platform we used: the E-puck. Our swarm is composed of several robot like this one. On the right is a screen capture of the ARGoS simulator \citep{pinciroli2012argos} where the danger virtual sensor is used. Virtual means that it is not real, not physically present on the board. It is simulated through the ARGoS simulator. It sends data created inside the simulator to the robot, from the simulated environment. It augments the robot sensing capabilities. In our case, this data contains the colour of the ground, symbolising the presence of danger. The red circle represents a danger zone in which no human can go. No human can see it though. The small dots are representations of the real robots inside the simulator.}
 			\label{fig:e-puck_red_zones}
 		\end{figure}
 		
 		\begin{comment}
 		[4ème capteur essayé, sur papier avait plus de potentiel car moins contraignant, mais comportement complètement imprévisible, calibration impossible, passé sur l'OC]
 		\end{comment}
-		Before considering the omnidirectional camera as the best option, another sensor was examined: the range and bearing sensor \citep{gutierrez2009open}. The range and bearing extension is a infrared communication board that also provides the range (distance) and the bearing (angle) of the emission source. On paper it seemed like a better option because it was less restrictive than the omnidirectional camera. With the camera, a precise calibration of the different colours is required to avoid errors. The range and bearing uses a CRC code to detect errors in the data received, thus ensuring the correct recognition of the different entity types in the environment. The number of different entities (colours) is very limited with the omnidirectional camera as a result of the algorithm behind it. The range and bearing actuator can send up to 4 bytes of data, multiplying the amount of different entities (one string of bits for each entity). It is also less sensitive to light conditions. Unfortunately, after multiple attempts to use the range and bearing, we realised that it was unusable. It behaves in a completely unpredictable way with the range value. We tried to calibrate it, to no avail. Figure \ref{fig:rab_intensities} illustrates the wide distribution of message intensities causing an imprecise measure of the range (distance of the source). This figure is only for one run of the experiment. Consecutive runs yielded very different results for the same experiment configuration.
+		Before considering the omnidirectional camera as the best option, another sensor was examined: the range and bearing sensor \citep{gutierrez2009open}. The range and bearing extension is a infrared communication board that also provides the range (distance) and the bearing (angle) of the emission source. On paper it seemed like a better option because it was less restrictive than the omnidirectional camera. With the camera, a precise calibration of the different colours is required to avoid errors. The range and bearing uses a CRC code to detect errors in the data received, thus ensuring the correct recognition of the different entity types in the environment. The number of different entities (colours) is very limited with the omnidirectional camera as a result of the algorithm behind it. The range and bearing actuator can send up to 4 bytes of data, multiplying the amount of different entities (one string of bits for each entity). It is also less sensitive to light conditions. Unfortunately, after multiple attempts to use the range and bearing, we realised that it was unusable. It behaves in a completely unpredictable way with the range value. We tried to calibrate it, but to no avail. Figure \ref{fig:rab_intensities} illustrates the wide distribution of message intensities causing an imprecise measure of the range (distance of the source). This figure is only for one run of the experiment. Consecutive runs yielded very different results for the same experiment configuration.
 		
-		\begin{figure}[!h]
+		\begin{figure}[!htp]
 			\includegraphics[trim=35px 0px 100px 0px, clip=true, width=\textwidth]{images/powers_29-28.png}
 			\includegraphics[trim=35px 20px 100px 0px, clip=true, width=\textwidth]{images/powers_54-28.png}
-			\caption{Intensities of the RAB messages}{This figure shows the absolute frequencies of the range and bearing messages intensities for a duration of 3 minutes. During these 3 minutes, one robot is emitting messages and rotating on itself. Another robot is placed at 25 centimetres of the first one and receives the messages. The message intensity can vary from 0 to 1023 on the x axis. The y axis is the absolute frequency. Each graph corresponds to a different emitting robot. On the upper graph, one can see that frequency pikes can appear far away from the \enquote{normal} average value. On the lower graph, the interval of intensity is very big. Other runs of the experiment with the same robots yielded very different results. The RAB sensor is thus a bad choice for the measure of the distance between robots.}
+			\caption{Intensities of the RAB messages}{This figure shows the absolute frequencies of the range and bearing messages intensities for a duration of 3 minutes. During these 3 minutes, one robot is emitting messages and rotating on itself. Another robot is placed at 25 centimetres of the first one and receives the messages. The message intensity can vary from 0 to 1023 on the x axis. The y axis is the absolute frequency. Each graph corresponds to a different emitting robot. On the upper graph, one can see that frequency pikes can appear far away from the \enquote{normal} average value. On the lower graph, the interval of intensity is very big. Other runs of the experiment with the same robots yielded very different results. The current implementation of the RAB sensor is thus a bad choice for the measure of the distance between robots.}
 			\label{fig:rab_intensities}
 		\end{figure}
+		
+		\paragraph{Limitations}
 		
 		Although the omnidirectional camera worked better than the range and bearing, it was still restrictive. The difficulty of the calibration, and the error rate, increase with the amount of recognised colours. We limited ourselves to 3 colours: red, green and blue. Another limitation was the speed of the robot, limited to 10 cm/s. Normal speed for a human walking is about 5 km/h or 140 cm/s. In these circumstances we had to reduce the walking speed of the user during the demonstration and the tests. The battery was also an issue. The autonomy of one robot is between 30 minutes and one hour when moving a lot. Changing batteries and restarting the robots multiple times was necessary during long testing sessions. Since the robot only has two wheels, it maintains its equilibrium by lowering the chassis. The front or the back of the robot always touches the ground, making it impossible to use on uneven grounds. The floor of the arena, the room where all the experiments were done, is composed of adjacent squares. Sometimes the robots would get stuck between two squares. Moreover, the activity LEDs on the different circuit boards composing the robots interfered with the omnidirectional camera, taking them as other robots. We had to cover them with pieces of tape, and change the calibration to not take into account the blobs that were too small.
 		
@@ -499,17 +502,15 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		[I will in this section describe the need for a device to detect a human and its development. What are the objectives of the hardware? The choices we made to get the final solution. How we built it. Calibration an adaptation process to make the current algorithm compatible with the new hardware. Where does the term come from?]
 		\end{comment}
 		
-	As explained in chapter \ref{chap:escorting_swarm}, one of the main issue was to enhance the robots so they could detect the user and position themselves with respect to him without any large external equipment. Large external equipments are not recommended since, in the targeted unknown environment, they might not be usable. For example, one might use a tracking system to get the position of the robots in real time and communicate it to the robots for them to adjust their speed. In controlled environment, this may work very well, but in the field it would be difficult to access that knowledge.
+	As explained in chapter \ref{chap:escorting_swarm}, one of the main issue was to enhance the robots so they could detect the user and position themselves with respect to him without any large external equipment. Large external equipments are not recommended since, in the targeted unknown environment, they might not be usable. For example, one might use a tracking system to get the position of the robots in real time and communicate it to the robots for them to adjust their speed. In a controlled environment, this may work very well, but in the field it would be difficult to deploy such a tracking system.
 	
-	We thus opted for a compact, wearable device that would act as a \enquote{landmark} for the robots: a pair of shoes. In order for the robots to understand on which side of the human they were (to go in front of him/her), the two shoes had to emit a different message. Our first idea was to make use of the range and bearing sensors of the e-pucks to interact with the shoes. The shoes would have been equipped with infrared emitters. Unfortunately, tests with real robots demonstrated the inability of the range and bearing sensors to evaluate their distance to the human with precision. This method was abandoned for another one, more reliable: LEDs.
-	
-	The omnidirectional camera sensor, explained in section \ref{sec:e-puck}, provided more accurate data. After validation of this method by tests on the real robots, the decision was made to create a prototype of a pair of shoes equipped with colour lights. Both shoes had to emit a different colour to give the robot information on the direction of the human. In section \ref{sec:robot_behaviour} we come back on the algorithm used to deduce the direction of the human from the observed colours.
+	We thus opted for a compact, wearable device that would act as a \enquote{landmark} for the robots: a pair of shoes. In order for the robots to understand on which side of the human they are (to go in front of him/her), the two shoes have to emit a different message. The two shoes have to emit a different colour to give the robot information on the direction of the human. In section \ref{sec:robot_behaviour} we come back on the algorithm used to deduce the direction of the human from the observed colours.
 	
 	\begin{comment}
 	[Inspiration des getas. Plan ou modèle 3D. Méthode de construction (laser cut pour les plexi etc). Circuit électronique.]
 	\end{comment}
 	
-	\begin{figure}
+	\begin{figure}[!htp]
 		\begin{minipage}[c]{0.49\textwidth}
 			\includegraphics[width=\textwidth]{images/512px-Geta.jpg}
 		\end{minipage}
@@ -522,13 +523,13 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		\label{fig:e-geta}
 	\end{figure}
 	
-	We took inspiration from the Japanese \enquote{geta} shoes for the design. Figure \ref{fig:e-geta} shows a picture of a Japanese wooden shoe called geta. The right side of the figure is a picture of our prototype. Both have the same overall design. We chose this design in order to slow down the human's speed. Indeed, the speed of the robots is limited to maximum 10 cm/s per wheel. Another advantage is the simplicity of the structure, and the low number of assembly parts.
+	We took inspiration from the Japanese \enquote{geta} shoes for the design. Figure \ref{fig:e-geta} shows a picture of a Japanese wooden shoe called geta. The right side of the figure is a picture of our prototype. The two have the same overall design. We chose this design in order to slow down the human's speed. Indeed, the speed of the robots is limited to maximum 10 cm/s per wheel. Another advantage is the simplicity of the structure, and the low number of assembly parts.
 	
 	The base of the shoe is made with wood. The surrounding piece covering the LEDs was cut in sheets of semi-opaque plexiglass to diffuse the light. The LEDs are standard strip LEDs (one red strip, and one green). The electronic circuit (Figure \ref{fig:circuit}) is made up by a 9 volt battery connected to two variable voltage regulators. The two regulators are step up in parallel in order to increase the potential on the output. Each regulator is connected to a shoe LED strip. A separation is necessary since the green LED strip requires more energy than the red one. To get an equivalent luminosity for both shoes, a different voltage had to be applied.
 	
-	\begin{figure}\centering
+	\begin{figure}[!htp]\centering
 		\includegraphics[scale=0.5]{figures/circuit.png}
-		\caption{The Circuit}{The figure shows a sketch of the final electronic circuit for the shoes. The battery delivers 9 volts to two regulators in parallel, one for each shoe since each one of them need a different energy supply. Indeed, the green LED strip is more power hungry than the red one. The mass (black cable) is common for all the circuit.}
+		\caption{The circuit}{The figure shows a sketch of the final electronic circuit for the shoes. The battery delivers 9 volts to two regulators in parallel, one for each shoe since each one of them need a different energy supply. Indeed, the green LED strip is more power hungry than the red one. The mass (black cable) is common for all the circuit.}
 		\label{fig:circuit}
 	\end{figure}
 	
@@ -545,13 +546,13 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		5) Comment traduire le vecteur de direction en vitesse de roue.
 	\end{comment}
 	
-	The first step of the design of the solution is to imagine how the system will look like and how we will implement it, the overall behaviour of the swarm. How do the robots move around the human? What shape will they try to form? This part is important because it will define the overall look and performance of the system.
+	The first step of the design of the solution is to imagine how the system will look like and how we will implement it (how do the robots move around the human, what shape will they try to form). This part is important because it will define the overall look and performance of the system.
 	
-	We decided on a circle shape because it is the easiest to realise in practice. It offers the best ratio
+	We decided on a circle shape because it is the easiest to realise in practice in the pattern formation theory. It offers the best ratio
 	$$\frac{\mbox{\textit{Surface}}}{\mbox{\textit{Perimeter}}} = \frac{\pi r^2}{2\pi r} = \frac{r}{2}~\mbox{,}$$
 	 where $r$ is the radius of the circle. That means that fewer robots are needed for the same protected area, and more space for the human with a certain amount of robots than any other possible shape. The Figure \ref{fig:circle_shape} represents the kind of circle that we would like to obtain for 6 robots and 1 human in the centre.% All the robots are equally distanced from each other and the human. The human is protected in all directions. In presence of danger, the robots in contact with it should report it to the human and prevent him from going towards it, as seen on Figure \ref{fig:swarm_preventing}. In that case, the conditions concerning the target distance from the human and between robot may not be respected.
 	
-	\begin{figure}[!h]\centering
+	\begin{figure}[!htp]\centering
 	\begin{tikzpicture}
 		\draw [dashed] (0,0) circle [radius=4];
 		\epuck{4}{0}
@@ -563,15 +564,15 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		
 		\human{0}{0}
 	\end{tikzpicture}
-	\caption{Ideal Behaviour in Absence of Danger}{This figure symbolises the ideal behaviour required in absence of danger. The swarm forms a circle to cover the widest protected surface for a given amount of robots. All the robots are equally distanced from each other and the human. The human is protected in all directions. In presence of danger, the robots in contact with it should report it to the human and prevent him from going towards it, as seen on Figure \ref{fig:swarm_preventing}. In that case, the conditions concerning the target distance from the human and between robot may not be respected.}
+	\caption{Ideal behaviour in absence of danger}{This figure symbolises the ideal behaviour required in absence of danger. The swarm forms a circle to cover the widest protected surface for a given amount of robots. All the robots are equally distanced from each other and the human. The human is protected in all directions. In presence of danger, the robots in contact with it should report it to the human and prevent him from going towards it, as seen on Figure \ref{fig:swarm_preventing}. In that case, the conditions concerning the target distance from the human and between robot may not be respected.}
 	\label{fig:circle_shape}
 	\end{figure}	
 	
-	Implementing a robots swarm behaviour means writing a controller code for its individual components: the robots. The laboratory provides a template in the Lua and the C++ languages for this purpose. The logic of the individual behaviour is added inside callback methods called either by the simulator when performing simulations inside ARGoS \citep{pinciroli2012argos}, or by the robot main method when testing on real robots. Although Lua is very convenient for quick implementation, it is not supported by the robots. Hence the final code was written in C++. The code can be compiled for the ARGoS simulator and cross-compiled for the real robots (E-puck) without any modification. After the compilation, a simple transfer of the binary codes over WiFi allows the operator to store the controller on the robots to launch an experiment.
+	Implementing a robots swarm behaviour means writing a controller code for its individual components: the robots. The laboratory provides a template for this purpose. The logic of the individual behaviour is added inside callback methods called either by the simulator when performing simulations inside ARGoS \citep{pinciroli2012argos}, or by the robot main method when testing on real robots. The final code was written in C++. The code can be compiled for the ARGoS simulator and cross-compiled for the real robots (E-puck) without any modification. After the compilation, a simple transfer of the binary codes over WiFi allows the operator to store the controller on the robots to launch an experiment.
 	
-	The final implementation of the controller is built on 2 layers\label{def:implementation_layers}. The upper layer is a deterministic finite state machine, containing for each state a specific behaviour in the lower layer. Figure \ref{fig:state_machine} illustrates the whole structure of the upper layer in a simplified fashion. A complete state machine gathering all the states can be found in Figure \ref{fig:state_machine_complete}. Although the complete state machine is containing all the aspects of the behaviour, it does not allow to grasp the idea quickly. Dividing the final behaviour into several connected sub-behaviours modularises the solution. Adding a new state, a new sub-behaviour is easy.
+	The implementation of the controller is built on 2 layers\label{def:implementation_layers}. The upper layer is a deterministic finite state machine, containing for each state a specific behaviour in the lower layer. Figure \ref{fig:state_machine} illustrates the whole structure of the upper layer in a simplified fashion. A complete state machine gathering all the states can be found in Figure \ref{fig:state_machine_complete}. Although the complete state machine is containing all the aspects of the behaviour, it does not allow to grasp the idea quickly. Dividing the final behaviour into several connected sub-behaviours modularises the solution. Adding a new state, a new sub-behaviour is easy.
 	
-	\begin{figure}[!h]\centering
+	\begin{figure}[!htp]\centering
 		\begin{minipage}[c]{.49\textwidth}
 			\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=4cm, semithick]
 				\node[initial,state] (RW)                    {Searching};
@@ -607,11 +608,11 @@ Our objective in this thesis, is to present an innovative protection using swarm
 			\end{tikzpicture}}
 		\end{minipage}
 		
-		\caption{State Machine of the Final Behaviour}{This figure is the visual representation of the state machine of the final behaviour. Figure \ref{fig:state_machine} (left) is what could be called the \enquote{core} of the behaviour, while Figure \ref{fig:state_machine} (right) would be considered as additions to enhance the behaviour. The core part of the state machine is present on Figure \ref{fig:state_machine} (right) since it is one of its constituents. It is composed of 3 states: \emph{Searching} when the robots do not detect any human nor obstacle, \emph{Escorting} when a human is detected, and \emph{Protection} when a human is detected and there is a danger nearby. If an obstacle is detected by a robot, the controller changes its state to the \emph{Obstacle Avoidance (O.A.)} state. If the robot gets blocked, another state takes over to unblock it: \emph{Unblocking}. When no more obstacle is in front of the robot, it can go back to its obstacle avoidance if any obstacle remains close. If none, it switches back to its core actions. The labels next to each transition must be read as follows: H(uman), D(anger), O(bstacle), F(ront obstacle), B(locked. The robot detects that it is blocked. See page \pageref{sec:unblocking} for details.). N stands for the negation, so NH means \enquote{no human found}.}
+		\caption{State machine of the final behaviour}{This figure is the visual representation of the state machine of the final behaviour. Figure \ref{fig:state_machine} (left) is what could be called the \enquote{core} of the behaviour, while Figure \ref{fig:state_machine} (right) would be considered as additions to enhance the behaviour. The core part of the state machine is present on Figure \ref{fig:state_machine} (right) since it is one of its constituents. It is composed of 3 states: \emph{Searching} when the robots do not detect any human nor obstacle, \emph{Escorting} when a human is detected, and \emph{Protection} when a human is detected and there is a danger nearby. If an obstacle is detected by a robot, the controller changes its state to the \emph{Obstacle Avoidance (O.A.)} state. If the robot gets blocked, another state takes over to unblock it: \emph{Unblocking}. When no more obstacle is in front of the robot, it can go back to its obstacle avoidance if any obstacle remains close. If none, it switches back to its core actions. The labels next to each transition must be read as follows: H(uman), D(anger), O(bstacle), F(ront obstacle), B(locked. The robot detects that it is blocked. See page \pageref{sec:unblocking} for details.). N stands for the negation, so NH means \enquote{no human found}.}
 		\label{fig:state_machine}
 	\end{figure}
 	
-	\begin{figure}[!h]\centering
+	\begin{figure}[!htp]\centering
 		\begin{minipage}[c]{.49\textwidth}
 	%			\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=4cm, semithick]
 	%				\node[initial,state] (NORMAL)                    {Normal};
@@ -689,11 +690,11 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		\label{fig:state_machine_complete}
 	\end{figure}
 
-	Once the actions the robots have to execute have been defined, we have to implement them, code them in the controller that will be run. So the next step was to find a way to translate those actions into code. Our behaviour is a kind of coordinated motion and pattern formation. Thus the common way of implementing it was to make use of the virtual physics design. Using this framework, each robot is a particle subject to virtual forces exerted by the environment (the other robots, the obstacles, and other elements). \citet{khatib1986real} was among the first to use this method. His goal was to implement an obstacle avoidance swarm behaviour where the obstacles create repulsive forces and the goals attractive forces. The overall resulting potential presented local minima at goals and maxima at obstacles. \citet{reif1999social} introduces \enquote{social potential fields} consisting in virtual forces applied on robots by other robots, obstacles, objectives,... The robot resultant motion is defined by the sum of all the forces applied to it. The individual robots carry out the calculations themselves, so the final control is completely distributed. The laws they used are similar to those found in molecular dynamics (inverse-power laws). For example, a law could favour attraction over long distances and repulsion over short distances. One of these is the Lennard-Jones potential, depicted in Figure \ref{fig:lennard-jones_potential}. Inverse-power laws, while being extremely simple, can form interesting and elaborate patterns with molecules and plasma gases \citep{reif1999social}. \citet{spears2004distributed} proposed a framework they call \enquote{physicomimetics} to grant distributed control over a large swarm of robots with \enquote{artificial physics}.%\textbf{TODO More works on virtual physics?}
+	Once the actions the robots have to execute have been defined, we have to implement them, code them in the controller that will be run. So the next step was to find a way to translate those actions into code. Our behaviour is a kind of coordinated motion and pattern formation. Thus the common way of implementing it was to make use of the virtual physics design. Using this framework, each robot is a particle subject to virtual forces exerted by the environment (the other robots, the obstacles, and other elements). \citet{khatib1986real} was among the first to use this method. His goal was to implement an obstacle avoidance swarm behaviour where the obstacles create repulsive forces and the goals attractive forces. The overall resulting potential presented local minima at goals and maxima at obstacles. \citet{reif1999social} introduces \enquote{social potential fields} consisting in virtual forces applied on robots by other robots, obstacles, objectives, or other elements. The robot resultant motion is defined by the sum of all the forces applied to it. The individual robots carry out the calculations themselves, so the final control is completely distributed. The laws they used are similar to those found in molecular dynamics (inverse-power laws). For example, a law could favour attraction over long distances and repulsion over short distances. One of these is the Lennard-Jones potential, depicted in Figure \ref{fig:lennard-jones_potential}. Inverse-power laws, while being extremely simple, can form interesting and elaborate patterns with molecules and plasma gases \citep{reif1999social}. \citet{spears2004distributed} proposed a framework they call \enquote{physicomimetics} to grant distributed control over a large swarm of robots with \enquote{artificial physics}.%\textbf{TODO More works on virtual physics?}
 	
 	The laws of physics force a system to go to a state of minimum energy, i.e., to reach a minimum of the potential function of the system. Since the force exerted on the system is proportional to the derivative of the corresponding potential -- $$\vec{f} = -\vec{\nabla}P\mbox{,}$$ with $\vec{\nabla}$ being the nabla operator for the gradient computation, $P$ the potential and $\vec{f}$ the force -- the minimum of the potential function means the disappearance of the forces. For every robot to be at the desired location, the forces need to disappear. In this thesis, we only consider forces and not the virtual potentials associated to them. The implemented behaviour is expressed in terms of virtual forces.
 	
-	\begin{figure}
+	\begin{figure}[!htp]
 	\begin{minipage}[c]{0.6\textwidth}
 		\begin{tikzpicture}
 			\begin{axis}[
@@ -721,7 +722,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		$$\sigma = 0.3$$
 	\end{minipage}
 		
-		\caption{The Lennard-Jones Potential}{This figure shows a graph of one of the most used virtual potentials in virtual physics, the Lennard-Jones potential, where $\epsilon$ is the gain, $\sigma$ is the target distance and $d$ is the current real distance. In this example, the equilibrium is reached at the global minimum at $0.3$.}
+		\caption{The Lennard-Jones potential}{This figure shows a graph of one of the most used virtual potentials in virtual physics, the Lennard-Jones potential, where $\epsilon$ is the gain, $\sigma$ is the target distance and $d$ is the current real distance. In this example, the equilibrium is reached at the global minimum at $0.3$.}
 		\label{fig:lennard-jones_potential}
 	\end{figure}
 	
@@ -734,8 +735,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		\item Multiple behaviours can be combined by simply summing the corresponding resulting vectors.
 		$$y_1,y_2,...,y_n = g(x_1,x_2,...,x_m) = \sum_{i=0}^{s}{f_i(x_1,x_2,...,x_m)}\mbox{,}$$ where $s$ is the number of behaviour components.
 	\end{enumerate}
-	
-	One disadvantage is that it might be difficult to find an expression that implements perfectly the behaviour we want.
+One disadvantage is that it might be difficult to find an expression that implements perfectly the behaviour we want.
 	
 	As written above, the robots need inputs to compute the values to send to the actuators, i.e., the wheels. The two types of inputs are the \emph{colour blobs} and the \emph{proximity sensor values}, respectively provided by the omnidirectional camera and the proximity sensors. Both are explained in section \ref{sec:e-puck}. Three blob colours are used for our solution: red, green and blue, the three basic components of every colour in computer graphics. It was decided to a low number of colours to ease the calibration process and lower the amount of errors when detecting the blobs (wrong colour). To each blob is associated a distance - angle couple. The angle is taken from the front of the robot in radians. With these two values, the robot is able to situate all the blobs and use them as attractive or repulsive points. The proximity values are a list of 8 angle - value couples, where the angle is the position of the sensor on the perimeter of the robot. The whole perimeter of the robot is covered to detect any nearby obstacle. The value is comprised between 0 and 1, inversely proportional to the distance to the obstacle.
 	
@@ -755,7 +755,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 				\end{equation}
 				 The simplified version is exposed in Figure \ref{fig:lennard-jones_force_simplified}. If no blob is detected, the robot goes forward with a speed of 5 cm/s. The unit vector $\vec{1_s}$ is heading towards the source of the force (the applier).
 				
-				\begin{figure}\centering
+				\begin{figure}[!htp]\centering
 					\begin{tikzpicture}
 						\begin{axis}[
 						    samples=50,
@@ -775,7 +775,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 						\end{axis}
 					\end{tikzpicture}
 					
-					\caption{The Simplified Lennard-Jones Virtual Force}{This figure exposes a simplified version of the Lennard-Jones force derivated from the corresponding potential. Its expression is given by equation \ref{eq:lennard-jones_force_simplified}. The parameters values are: $\epsilon=100$ and $\sigma=50$, and are conform to those used with robots. One can observe the root at 50 corresponding to the state of minimum energy in the system. Above 50, the force is positive, so the robot is attracted by the source applying the force. Below 50, it is negative, so the robot is repulsed from the source of the force.}
+					\caption{The simplified Lennard-Jones virtual force}{This figure exposes a simplified version of the Lennard-Jones force derivated from the corresponding potential. Its expression is given by equation \ref{eq:lennard-jones_force_simplified}. The parameters values are: $\epsilon=100$ and $\sigma=50$, and are conform to those used with robots. One can observe the root at 50 corresponding to the state of minimum energy in the system. Above 50, the force is positive, so the robot is attracted by the source applying the force. Below 50, it is negative, so the robot is repulsed from the source of the force.}
 					\label{fig:lennard-jones_force_simplified}
 				\end{figure}
 			
@@ -794,7 +794,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 						\label{eq:lennard-jones_force_stronger}
 					\end{equation}
 				
-					\begin{figure}\centering
+					\begin{figure}[!htp]\centering
 						\begin{tikzpicture}
 							\begin{axis}[
 							    samples=40,
@@ -817,7 +817,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 							\end{axis}
 						\end{tikzpicture}
 						
-						\caption{The Stronger Lennard-Jones Virtual Force}{This figure exposes a stronger version of the Lennard-Jones force derivated from the corresponding potential. Its expression is given by the equation system \ref{eq:lennard-jones_force_stronger}. The functions are plotted on the whole domain but only the red part is used. It allows to compare both values for the same distance. The force is stronger in the attraction part, hence the name. The repulsion part is unchanged because of the more interesting asymptotic behaviour at $d=0$, increasing the norm of the force quicker than the linear attraction replacement (in gray). The parameters values are: $\epsilon=500$ and $\sigma=35$, and are conform to those used with robots. One can observe the root at 35 corresponding to the state of minimum energy in the system. Above 35, the force is positive, so the robot is attracted by the source applying the force. Below 35, it is negative, so the robot is repulsed from the source of the force.}
+						\caption{The stronger Lennard-Jones virtual force}{This figure exposes a stronger version of the Lennard-Jones force derivated from the corresponding potential. Its expression is given by the equation system \ref{eq:lennard-jones_force_stronger}. The functions are plotted on the whole domain but only the red part is used. It allows to compare the two values for the same distance. The force is stronger in the attraction part, hence the name. The repulsion part is unchanged because of the more interesting asymptotic behaviour at $d=0$, increasing the norm of the force quicker than the linear attraction replacement (in gray). The parameters values are: $\epsilon=500$ and $\sigma=35$, and are conform to those used with robots. One can observe the root at 35 corresponding to the state of minimum energy in the system. Above 35, the force is positive, so the robot is attracted by the source applying the force. Below 35, it is negative, so the robot is repulsed from the source of the force.}
 						\label{fig:lennard-jones_force_stronger}
 					\end{figure}
 				
@@ -833,7 +833,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 				
 				$\vec{1_\theta}$ is the standard axis in polar coordinates ($\vec{1_r},\vec{1_\theta}$) where the origin is the centre of the human. $\epsilon$ is the norm of the force. This force can be deactivated in the configuration file. Sometimes it might not be needed, like in the experiments without human in chapter \ref{chap:experiments}, or when the robots do not need to be pushed in front of the human.
 				
-				\begin{figure}\centering
+				\begin{figure}[!htp]\centering
 					\begin{tikzpicture}						
 						\draw[red, fill] (0,3) arc (90:270:3cm);	
 						\draw[LimeGreen, fill] (0,3) arc (90:-90:3cm);
@@ -847,11 +847,11 @@ Our objective in this thesis, is to present an innovative protection using swarm
 						\human{0}{0}
 					\end{tikzpicture}
 					
-					\caption{The Gravity Virtual Force Concept}{This figure illustrates the idea of the gravity virtual force. This force that can be disabled in the configuration of the experiment if there is no need to push the robot in front of the human. The closest human colour blob to the human is taken as reference (the closest shoe). Then depending on colour of the blob (shoe), two different things can happen: the blob is red and the robot turns clockwise around it, or the blob is green and the it turns anti-clockwise. The goal is to go in front of the human like if the floor was \enquote{sloped down} to the front of the human, hence the name. Two robots are both on the opposite side of the human. The left one sees the red shoe as the closest one and turns clockwise heading for the front. The right robot does the opposite with the same intention.}
+					\caption{The gravity virtual force concept}{This figure illustrates the idea of the gravity virtual force. This force that can be disabled in the configuration of the experiment if there is no need to push the robot in front of the human. The closest human colour blob to the human is taken as reference (the closest shoe). Then depending on colour of the blob (shoe), two different things can happen: the blob is red and the robot turns clockwise around it, or the blob is green and the it turns anti-clockwise. The goal is to go in front of the human like if the floor was \enquote{sloped down} to the front of the human, hence the name. Two robots are both on the opposite side of the human. The left one sees the red shoe as the closest one and turns clockwise heading for the front. The right robot does the opposite with the same intention.}
 					\label{fig:gravity_force_idea}
 				\end{figure}
 				
-				\begin{figure}\centering
+				\begin{figure}[!htp]\centering
 					\begin{tikzpicture}
 						\begin{axis}[
 						    samples=40,
@@ -872,7 +872,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 						\end{axis}
 					\end{tikzpicture}
 					
-					\caption{The Gravity Virtual Force}{This depicts the adopted value for the gravity virtual force with respect to the angle from the front of the human. Any angle outside this domain can fall back in the $[-180;180]$ interval by normalising it. An angle of 0° means that the robot is in front of the human. The angle increases by turning anti-clockwise.}
+					\caption{The gravity virtual force}{This depicts the adopted value for the gravity virtual force with respect to the angle from the front of the human. Any angle outside this domain can fall back in the $[-180;180]$ interval by normalising it. An angle of 0° means that the robot is in front of the human. The angle increases by turning anti-clockwise.}
 					\label{fig:gravity_force}
 				\end{figure}
 			\end{itemize}
@@ -882,7 +882,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 			
 			The \emph{Protection} is reached when the robot detects a human and a danger. It makes its blue LEDs blink and stays at the border of the encountered danger area while maintaining the escorting formation. Hence this sub-behaviour is based on the one from the \emph{Escorting} state. The only difference is in the \emph{human virtual force}. Since everything stays the same as in \emph{Escorting}, except the fact that the robot must not cross the danger border, we just modify the target distance from the human. In presence of a danger, $\sigma$ (the target distance) will be decreased incrementally until no danger is detected any more. As a result, the robot gets closer to the human like seen on Figure \ref{fig:swarm_preventing} at page \pageref{fig:swarm_preventing}. We speak about \emph{dynamic target distance}. Figure \ref{fig:dynamic_target_distance} illustrates the concept. %On the figure, the same robot is represented at two different time steps. On the right, the robot is inside the dangerous area after the human took a step towards it. The robot enters \emph{protection mode} and starts blinking. Its human target distance begins to decrease incrementally at each time step by a user-defined amount. As a consequence, it comes closer to the human. When it crosses the border of the danger zone, it goes back to \emph{Escorting} mode (the danger is not detected any more) and raises its target distance again. At some point, it will re-enter in the area and the whole process will start over. To avoid human confusion regarding the presence of danger, there is a delay before the robot stops blinking. That way, when the robot oscillates around the border, it keeps blinking to report the close danger.
 			
-			\begin{figure}\centering
+			\begin{figure}[!htp]\centering
 				\begin{tikzpicture}
 					
 					\draw[white, fill] (0,-1) rectangle (4,3);
@@ -915,7 +915,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 								
 				\end{tikzpicture}
 				
-				\caption{The Dynamic Target Distance}{The concept of dynamic target distance is explained in this drawing. On the figure, the same robot is represented at two different time steps. On the right, the robot is inside the red dangerous area after the human took a step towards it. The robot enters \emph{protection mode} and starts blinking. Its human target distance begins to decrease incrementally at each time step by a user-defined amount. As a consequence, it comes closer to the human. When it crosses the border of the danger zone, it goes back to \emph{Escorting} mode (the danger is not detected any more) and raises its target distance again. At some point, it will re-enter in the area and the whole process will start over. To avoid human confusion regarding the presence of danger, there is a delay before the robot stops blinking. That way, when the robot oscillates around the border, it keeps blinking to report the close danger.}
+				\caption{The dynamic target distance}{The concept of dynamic target distance is explained in this drawing. On the figure, the same robot is represented at two different time steps. On the right, the robot is inside the red dangerous area after the human took a step towards it. The robot enters \emph{protection mode} and starts blinking. Its human target distance begins to decrease incrementally at each time step by a user-defined amount. As a consequence, it comes closer to the human. When it crosses the border of the danger zone, it goes back to \emph{Escorting} mode (the danger is not detected any more) and raises its target distance again. At some point, it will re-enter in the area and the whole process will start over. To avoid human confusion regarding the presence of danger, there is a delay before the robot stops blinking. That way, when the robot oscillates around the border, it keeps blinking to report the close danger.}
 				\label{fig:dynamic_target_distance}
 			\end{figure}
 			
@@ -923,7 +923,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 			
 			The \emph{Obstacle Avoidance} is activated when the robot encounters an object. Since the robot cannot go back, only the front sensors are used. Figure \ref{fig:obstacle_avoidance} shows the four sensors that are taken into account and explains how the state is activated.
 			
-			\begin{figure}\centering
+			\begin{figure}[!htp]\centering
 				\begin{tikzpicture}
 					
 					\draw [very thick, fill=white] (0,0) circle [radius=1.5];
@@ -936,7 +936,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 				
 				\end{tikzpicture}
 				
-				\caption{The Obstacle Avoidance Concept}{This figure shows the four sensors that are taken into account to detect a nearby object. Each sensor is seen as a force pushing the robot whose intensity is inversely proportional to the distance to the sensed object. If the norm of the strongest force is over a threshold, the robot goes into \emph{Obstacle Avoidance} and uses the resultant as direction vector.}
+				\caption{The obstacle avoidance concept}{This figure shows the four sensors that are taken into account to detect a nearby object. Each sensor is seen as a force pushing the robot whose intensity is inversely proportional to the distance to the sensed object. If the norm of the strongest force is over a threshold, the robot goes into \emph{Obstacle Avoidance} and uses the resultant as direction vector.}
 				\label{fig:obstacle_avoidance}
 				\end{figure}
 			
@@ -947,9 +947,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 				\item If there is nothing, the robot moves forward for one time step, and returns to the appropriate state: \emph{Obstacle Avoidance} if there is an obstacle around, or a state of the \emph{core} if none.
 				\item If there is an obstacle in front, the robot turns on itself until there is none. It is the case in Figure \ref{fig:unblocking}.
 			\end{itemize}
-			
-			
-			\begin{figure}\centering
+			\begin{figure}[!htp]\centering
 				\begin{tikzpicture}					
 					
 					\draw [Sienna, fill] (-4,2) -- (-4.3,1.7) -- (-4.3,-2.3) -- (-4,-2) -- cycle;
@@ -980,11 +978,10 @@ Our objective in this thesis, is to present an innovative protection using swarm
 					
 				\end{tikzpicture}
 				
-				\caption{The Unblocking Concept}{On this figure, the robot is trapped between two obstacles, one on the left and the other on the side. Let us say that it is closer to the left object and goes towards it. Since the forces generated by the proximity sensors on the left are stronger, the resultant is heading to the right, bringing the robot to the other obstacle. The same event occurs on the right side, and the robot returns to the left obstacle. If the robot keeps doing for a certain amount of time, the \emph{Unblocking} mode is activated. At that point, two different things can occur: an obstacle lies ahead of the robot within a certain distance, or nothing is in front of the robot. If there is nothing, the robot moves forward for one time step, and returns to the appropriate state: \emph{Obstacle Avoidance} if there is an obstacle around, or a state of the \emph{core} if none. If there is an obstacle in front, the robot turns on itself until there is none. Here, it will turn until heading south of the image, and then get out.}
+				\caption{The unblocking concept}{On this figure, the robot is trapped between two obstacles, one on the left and the other on the side. Let us say that it is closer to the left object and goes towards it. Since the forces generated by the proximity sensors on the left are stronger, the resultant is heading to the right, bringing the robot to the other obstacle. The same event occurs on the right side, and the robot returns to the left obstacle. If the robot keeps doing for a certain amount of time, the \emph{Unblocking} mode is activated. At that point, two different things can occur: an obstacle lies ahead of the robot within a certain distance, or nothing is in front of the robot. If there is nothing, the robot moves forward for one time step, and returns to the appropriate state: \emph{Obstacle Avoidance} if there is an obstacle around, or a state of the \emph{core} if none. If there is an obstacle in front, the robot turns on itself until there is none. Here, it will turn until heading south of the image, and then get out.}
 				\label{fig:unblocking}
 			\end{figure}
-		
-	All the parameters presented until now can be tuned by the human to ensure the best performance. Here is a list of the important parameters available inside the configuration file:
+All the parameters presented until now can be tuned by the human to ensure the best performance. Here is a list of the important parameters available inside the configuration file:
 		
 	\begin{description}
 		\item[Human Force Gain:] The factor $\epsilon$ multiplying the force in expression \ref{eq:lennard-jones_force_stronger}. Increasing it strengthens the force the human exerts on the robots.
@@ -996,8 +993,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		\item[Gravity Force Gain:] The norm of the force that pushes the robots in front of the human.
 		\item[Direction Vector Window Size:] The direction vector sent to the wheels is computed by averaging a number of direction vectors: the one returned from the forces exerted on the robot at this time step, and a number of previous vectors sent to the wheels. The parameter gives the amount of vectors used for the average. Increasing it makes the motion smoother.
 	\end{description}
-	
-	Once the direction vector has been computed by the robot, it still has to translate it into wheel speeds. The robotic platform we used is the E-puck. As mentioned in section \ref{sec:e-puck}, it only has two diametrically opposed wheels. Figure \ref{fig:direction_vector_wheel_speeds_translation} exposes in pseudo code the algorithm behind the conversion.
+Once the direction vector has been computed by the robot, it still has to translate it into wheel speeds. As mentioned in section \ref{sec:e-puck}, it has two diametrically opposed wheels. Figure \ref{fig:direction_vector_wheel_speeds_translation} exposes in pseudo code the algorithm behind the conversion.
 	
 		\begin{algorithm}
 			\textcolor{gray}{\tcc{Get the direction values:}}
@@ -1037,7 +1033,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 				\emph{rightWheelSpeed} = \emph{speed} $\cdot\cos($\emph{angle}$)$\;
 			}
 			
-					\caption{The Direction Vector to Wheel Speeds Translation}{This pseudo code explains how the computed direction vector is translated into the robot wheel speeds. The speed limit for the e-pucks is about 10 cm/s. Thus, the first action after getting the direction vector is to limit its norm. The angle of the vector is then multiplied by a factor to accelerate the rotation of the robots. The idea behind the rotation algorithm is to reduce the speed of the wheel corresponding to the direction of the rotation. E.g.: if the robot needs to turn left, the left wheel speed decreases by a factor proportional to the angle. The function that best fits is the cosinus of the angle, decreasing from 1 at 0° to -1 when the angle is 180°, making the robot progressively increase the curvature of the path from straight line to rotation on itself.}
+					\caption{The direction vector to wheel speeds translation}{This pseudo code explains how the computed direction vector is translated into the robot wheel speeds. The speed limit for the e-pucks is about 10 cm/s. Thus, the first action after getting the direction vector is to limit its norm. The angle of the vector is then multiplied by a factor to accelerate the rotation of the robots. The idea behind the rotation algorithm is to reduce the speed of the wheel corresponding to the direction of the rotation. E.g.: if the robot needs to turn left, the left wheel speed decreases by a factor proportional to the angle. The function that best fits is the cosinus of the angle, decreasing from 1 at 0° to -1 when the angle is 180°, making the robot progressively increase the curvature of the path from straight line to rotation on itself.}
 		\label{fig:direction_vector_wheel_speeds_translation}
 		\end{algorithm}
 		
@@ -1052,7 +1048,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 [\textcolor{red}{Explain very clearly both types of tests (no human/human).}]
 \end{comment}
 
-In this chapter, we introduce the different experiments we conducted with the real robots. The tests were made with the E-puck robotic platform \citep{mondada2009puck}. We can classify the tests into two sets: one implicating a human operator, and one without any human. We first describe the tests that did not require a human, and their results in the section \ref{sec:characterisation_system}. Then we switch to the other kind of tests in the section \ref{sec:demonstration}.
+In this chapter, we introduce the different experiments we conducted with the real robots. The tests were made with the E-puck robotic platform \citep{mondada2009puck}. We can classify the tests into two sets: one assessing the system quantitatively, and one assessing the system qualitatively (also know as the demonstration). We first describe the quantitative assessments, and their results in the section \ref{sec:characterisation_system}. Then we switch to the other kind of tests in the section \ref{sec:demonstration}.
 
 	\section{Characterisation of the System}
 	\label{sec:characterisation_system}
@@ -1060,151 +1056,210 @@ In this chapter, we introduce the different experiments we conducted with the re
 		[The measurements and the tests on the final behaviour.]
 	\end{comment}
 	
-	In this section, we assess the performance of our solution without any human controlling the swarm. By assessing the performance we mean evaluate the shape that is formed by the robots over time.
-
-		\subsection{Metrics}
-		\begin{comment}
-			[Metrics I will use. Their description. How I will compute them.]
-		\end{comment}
+	In this section, we assess the performance of our solution without any human controlling the swarm. The solution is evaluated quantitatively with several criteria.
+	
+		\subsection{The Shoe Detection Range}
 		
-		In order to evaluate the performance of our solution, we needed to create metrics to put numbers on the behaviour observed (how we compute the performance of our solution). We defined three metrics which we think correspond the most to what we want to capture from the observations: \emph{Correct Distance}, \emph{Robot Density} and \emph{Time}.
-		
-		\begin{enumerate}
-			\item \emph{Correct Distance}. This metric measures to what extent the robotic swarm respects the target distance to the human.
-			\item \emph{Robot Density}. It measures how regularly spaced the robots are around the human. The more regularly spaced they are, the best it is. It checks if the human is protected from all directions.
-			\item \emph{Time}. It measures how long it takes for the swarm to reach a configuration such that the \emph{Correct Distance} and \emph{Robot Density} metrics go under a given threshold.
-		\end{enumerate}
-		
-			\paragraph{Correct Distance}
-				\begin{comment}
-					[Do the robots respect the correct wanted distance?]
-				\end{comment}
-				
-				This metric measures to what extent the robotic swarm respects the target distance to the human. To measure the error related to the distance human-robot, we consider the distance from every robot to the rectangle formed by the two shoes (see Figure \ref{fig:distance_metric}). Once we have these distances, we use the next formula to compute an error for every time step:
-				
-				\begin{equation}
-					\mbox{error}_t = \frac{1}{N} \sum_{i=1}^N \frac{|d_{ti} - \overline{d}|}{\overline{d}},
-					\label{eq:distance_metric}
-				\end{equation}
-				
-				 where $t$ is the number of the time step, $N$ is the number of robots, $d_{ti}$ is the distance human-robot for robot $i$ at time step $t$, and $\overline{d}$ is the target distance. Since the detected colour blob on the shoe might not always be the nearest point to the robot in the rectangle, this error measure is not perfect. Indeed, the robot adjusts its distance based on the closest human colour blob, not on the closest point of the shoe (perimeter of the rectangle).
-				
-				\begin{figure}\centering
-					\begin{tikzpicture}
-					
-					%	\foreach \i in {\xMin,...,\xMax} {
-					%        \draw [very thin,gray] (\i,\yMin) -- (\i,\yMax)  node [below] at (\i,\yMin) {$\i$};
-					%    }
-					%    \foreach \i in {\yMin,...,\yMax} {
-					%        \draw [very thin,gray] (\xMin,\i) -- (\xMax,\i) node [left] at (\xMin,\i) {$\i$};
-					%    }
-					
-						\draw[red, fill] (-0.5,-2) rectangle (-2.35,2);
-						\draw[LimeGreen, fill] (0.5,-2) rectangle (2.35,2);
+			In this section, we determine the range of detection of the shoes by the robots. We determine the maximum distance at which the robots see the shoes. Figure \ref{fig:shoe_detection_range} illustrates the experiment we conducted to determine this distance. The maximal distance goes from 59 cm in front and behind the shoes, to 65 cm on the right and 70 cm on the left. This distance is acceptable given the size of the robots. It gives enough room to the user.
 						
-						\draw[BurlyWood, fill] (-0.73,-1.77) rectangle (-2.12,1.77);
-						\draw[BurlyWood, fill] (0.73,-1.77) rectangle (2.12,1.77);
-						
-					%	\draw[dashed, very thick] (-2.35,5) -- (2.35,5);
-					%	\draw[dashed, very thick] (-2.35,-5) -- (2.35,-5);
-					%	\draw[dashed, very thick] (-5.35,2) -- (-5.35,-2);
-					%	\draw[dashed, very thick] (5.35,2) -- (5.35,-2);
-					%	\draw[dashed, very thick] (-5.35,2) arc (180:90:3);
-					%	\draw[dashed, very thick] (5.35,2) arc (0:90:3);
-					%	\draw[dashed, very thick] (-5.35,-2) arc (180:270:3);
-					%	\draw[dashed, very thick] (5.35,-2) arc (0:-90:3);
-					
-						\draw[dashed, very thick, LightGray] (-2.37, 5) -- (-2.37, -5);
-						\draw[dashed, very thick, LightGray] (2.37, 5) -- (2.37, -5);
-						\draw[dashed, very thick, LightGray] (-5.35, 2.02) -- (5.35, 2.02);
-						\draw[dashed, very thick, LightGray] (-5.35, -2.02) -- (5.35, -2.02);
-					
-						
-						\draw [dashed, very thick, orange] (2.35,5) to [out=0,in=90] (5.35,2) to [out=270,in=90] (5.35,-2) to [out=270, in=0] (2.35,-5) to [out=180, in=0] (-2.35,-5) to [out=180, in=270] (-5.35,-2) to [out=90, in=270] (-5.35,2) to [out=90, in=180] (-2.35,5) -- cycle;
-					
-						%\draw[dashed, LightGray] (-2.37,-2.02) rectangle (2.37,2.02);
-						
-						\draw[<->, very thick] (0,2.02) -- (0,5) node [right] at (0,3.5) {\textsc{Target Distance}};
-						\draw[<->, very thick] (-2.37,-2.02) -- (-4.47,-4.12);
-						\draw[<->, very thick] (2.37,-2.02) -- (4.47,-4.12);
-						
-						\epuckblue{0}{-5}
-						\epuckblue{-4.49}{4.14}
-						\epuckblue{4.49}{4.14}
-					\end{tikzpicture}
-					
-					\caption{The distance metric}{This figure represents the algorithm used to compute the first metric evaluating our solution: the distance metric. The red and green shoes in the middle form a rectangle. The position of all robots is obtained thanks to the arena tracking system (see Appendix \ref{app:arena_tracking_system}). The distance of all robots to the rectangle is computed. We compare every distance to the target human distance (we take absolute value of the difference). Then we divide by the human target distance to normalise. We normalise since an error of 10 cm for a target distance of 30 cm is not the same as an error of 10 cm for a target distance of 100 cm. The average of all those divisions is the error of the current time step. The example depicted on the figure would return an error of 0. See expression \ref{eq:distance_metric}.}
-					\label{fig:distance_metric}
-				\end{figure}
+			\begin{figure}[!htp]\centering
+			\begin{tikzpicture}
 			
-			\paragraph{Robot Density}
-				\begin{comment}
-					[Do the robots surround the human correctly?]
-				\end{comment}
+				\draw[Yellow, fill] (-1,2) rectangle (-1.3,4.5);
+				\foreach \i in {2.1,2.3,...,4.5} {
+			        \draw [very thin,Black] (-1,\i) -- (-1.2,\i);
+			    }
+			    \epuckblue[180]{0}{4.5}
+			    \draw (-1.3,4.5) node[scale=2, anchor=east]{60 cm$\leadsto$};
+			    
+			    \draw[Yellow, fill] (1,-2) rectangle (1.3,-4.5);
+				\foreach \i in {-2.1,-2.3,...,-4.5} {
+			        \draw [very thin,Black] (1,\i) -- (1.2,\i);
+			    }
+			    \epuckblue[-90]{-5}{0}
+			    \draw (-5,-1.3) node[scale=2, anchor=east, rotate=90]{70 cm$\leadsto$};
+			    
+			    \draw[Yellow, fill] (-2.35,-1) rectangle (-5,-1.3);
+				\foreach \i in {-2.45,-2.65,...,-5} {
+			        \draw [very thin,Black] (\i,-1) -- (\i,-1.2);
+			    }
+			    \epuckblue{0}{-4.5}
+			    \draw (4.75,1.3) node[scale=2, anchor=west, rotate=90]{~~~~~65 cm};
+			    \draw (4.75,1.3) node[scale=2, anchor=east, rotate=270]{$\leadsto$};
+			    
+			    \draw[Yellow, fill] (2.35,1) rectangle (4.75,1.3);
+				\foreach \i in {2.45,2.65,...,4.75} {
+			        \draw [very thin,Black] (\i,1) -- (\i,1.2);
+			    }
+			    \epuckblue[90]{4.75}{0}
+			    \draw (1.3,-4.5) node[scale=2, anchor=west]{~~~~~60 cm};
+			    \draw (1.3,-4.5) node[scale=2, anchor=east, rotate=180]{$\leadsto$};
+			    
+				\draw[red, fill] (-0.5,-2) rectangle (-2.35,2);
+				\draw[LimeGreen, fill] (0.5,-2) rectangle (2.35,2);
 				
-				It measures how regularly spaced the robots are around the human. The more regularly spaced they are, the best it is. It checks if the human is protected from all directions. The error on the angular density of robots is computed as follows. The positions of all the robots are captured, and the angle between each consecutive pair of robots is calculated (see Figure \ref{fig:density_metric}). This list of angles is fed to the next formula to return the error for the current timestep:
-				\begin{equation}
-					\mbox{error}_t = \frac{1}{N} \sum_{i=1}^N \frac{|\alpha_{ti} - \overline{\alpha}|}{\overline{\alpha}},
-					\label{eq:density_metric}
-				\end{equation}
+				\draw[BurlyWood, fill] (-0.73,-1.77) rectangle (-2.12,1.77);
+				\draw[BurlyWood, fill] (0.73,-1.77) rectangle (2.12,1.77);	
 				
-				where $t$ is the number of the time step, $N$ is the number of robots, $\alpha_{ti}$ is the angle separating the pair of consecutive robots $i$ at time step $t$, and $\overline{\alpha}$ is the target angle.
-				
-				\begin{figure}\centering
-					\begin{tikzpicture}
-					
-					%	\foreach \i in {\xMin,...,\xMax} {
-					%        \draw [very thin,gray] (\i,\yMin) -- (\i,\yMax)  node [below] at (\i,\yMin) {$\i$};
-					%    }
-					%    \foreach \i in {\yMin,...,\yMax} {
-					%        \draw [very thin,gray] (\xMin,\i) -- (\xMax,\i) node [left] at (\xMin,\i) {$\i$};
-					%    }
-					
-						\draw[red, fill, opacity=0.05] (-0.5,-2) rectangle (-2.35,2);
-						\draw[LimeGreen, fill, opacity=0.05] (0.5,-2) rectangle (2.35,2);
-						
-						\draw[BurlyWood, fill, opacity=0.2] (-0.73,-1.77) rectangle (-2.12,1.77);
-						\draw[BurlyWood, fill, opacity=0.2] (0.73,-1.77) rectangle (2.12,1.77);
-					
-						\draw[very thick, dashed, orange] (0,0) circle [radius=5cm];
-						
-						\foreach \i in {0,45,...,315} {
-							\draw [very thick, dashed, gray, rotate around={\i:(0,0)}] (0,0) -- (5,0);
-							
-							\draw [very thick, fill=RoyalBlue, rotate around={\i:(0,0)}] (5,0) circle [radius=0.5];
-							\draw [very thick, rotate around={\i:(0,0)}] (5-0.25,-0.433) -- (5,0+0.45) -- (5+0.25,-0.433);
-							
-							%\draw[rotate around={\i:(0,0)}] (\i*5/360,0) arc [0:30:(\i+45)*4/360];
-							\draw [<->, very thick, gray, rotate around={\i:(0,0)}] (\i*4/360+0.5,0) arc [radius=(\i+45)*4/360, start angle=0, end angle=45];
-							
-							\draw [rotate around={\i+22.5:(0,0)}] (\i*4/360+1,0) node {\textcolor{gray}{45°}};
-						}
-						
-						%\human{0}{0}
-					
-						
-					\end{tikzpicture}
-					
-					\caption{The density metric}{This figure represents the algorithm used to compute the second metric evaluating our solution: the density metric. The position of all robots with the origin centred on the shoes is obtained thanks to the arena tracking system (see Appendix \ref{app:arena_tracking_system}). Then the angle between every consecutive pair of robots is computed. We compare every angle to the target angle (360°/\#robots, here 45°) by subtracting the second to the first. Then we divide by the target angle to normalise. Normalisation is necessary since an error of 10° for a target of 30° is not the same as an error of 10° for a target of 90°. The average of all those divisions is the error of the current time step. The example depicted on the figure would return an error of 0. See expression \ref{eq:density_metric}.}
-					\label{fig:density_metric}
-				\end{figure}
-				
-				
-			\paragraph{Time}
+			\end{tikzpicture}
+			\caption{The shoe detection range}{This figure depicts the experiment we conducted to evaluate the maximum distance from the shoes at which the robots detect the shoes. A robot was placed on the left, right, front and behind the shoes. We manually incrementally moved the robot closer to the shoes until the robot detected them. We measured the corresponding distance to the shoes. The red shoe is the left shoe, and the green one is the right one.}
+			\label{fig:shoe_detection_range}
+			\end{figure}
+			
+		\subsection{Circle Properties}
+			In this section, we evaluate the properties of the circle formed by the swarm of robots. We first expose the three metrics we used to perform the evaluations. Then we detail the conditions of the experiments. Finally, we analyse the observations made with the experiments.
+			
+			\subsubsection{Metrics}
 			\begin{comment}
-				[Do they do that in a relatively low amount of time?]
+				[Metrics I will use. Their description. How I will compute them.]
 			\end{comment}
 			
-			It measures how long it takes for the swarm to reach a configuration such that the \emph{Correct Distance} and \emph{Robot Density} metrics go under a given threshold. To get this value, we average the evolutions of the error over time for every type of experiment. We compare this evolution to a defined threshold representing a certain quality of the solution. We obtain an average time for every type of experiment corresponding to the time step where the threshold is crossed.
+			In order to evaluate the performance of our solution, we needed to create metrics to put numbers on the behaviour observed (how we compute the performance of our solution). We defined three metrics which we think correspond the most to what we want to capture from the observations: \emph{Correct Distance}, \emph{Robot Density} and \emph{Time}.
 			
-		\subsection{Set-up}
-		
-		[How I am performing my experiments.]
-		
-		\subsection{Analysis}
-		
-		[All the graphs we discussed about. The evolution of the error over time. The analysis of the behaviour on basis of the criteria we defined.]
-		
+			\begin{enumerate}
+				\item \emph{Correct Distance}. This metric measures to what extent the robotic swarm respects the target distance to the human.
+				\item \emph{Robot Density}. It measures how regularly spaced the robots are around the human. The more regularly spaced they are, the best it is. It checks if the human is protected from all directions.
+				\item \emph{Time}. It measures how long it takes for the swarm to reach a configuration such that the \emph{Correct Distance} and \emph{Robot Density} metrics go under a given threshold.
+			\end{enumerate}
+			
+				\paragraph{Correct Distance}
+					\begin{comment}
+						[Do the robots respect the correct wanted distance?]
+					\end{comment}
+					
+					This metric measures to what extent the robotic swarm respects the target distance to the human. To measure the error related to the distance human-robot, we consider the distance from every robot to the rectangle formed by the two shoes (see Figure \ref{fig:distance_metric}). Once we have these distances, we use the next formula to compute an error for every time step:
+					\begin{equation}
+						\mbox{error}_t = \frac{1}{N} \sum_{i=1}^N \frac{|d_{ti} - \overline{d}|}{\overline{d}},
+						\label{eq:distance_metric}
+					\end{equation}
+					
+					 where $t$ is the number of the time step, $N$ is the number of robots, $d_{ti}$ is the distance human-robot for robot $i$ at time step $t$, and $\overline{d}$ is the target distance. Since the detected colour blob on the shoe might not always be the nearest point to the robot in the rectangle, this error measure is not perfect. Indeed, the robot adjusts its distance based on the closest human colour blob, not on the closest point of the shoe (perimeter of the rectangle).
+					
+					\begin{figure}[!htp]\centering
+						\begin{tikzpicture}
+						
+						%	\foreach \i in {\xMin,...,\xMax} {
+						%        \draw [very thin,gray] (\i,\yMin) -- (\i,\yMax)  node [below] at (\i,\yMin) {$\i$};
+						%    }
+						%    \foreach \i in {\yMin,...,\yMax} {
+						%        \draw [very thin,gray] (\xMin,\i) -- (\xMax,\i) node [left] at (\xMin,\i) {$\i$};
+						%    }
+						
+							\draw[red, fill] (-0.5,-2) rectangle (-2.35,2);
+							\draw[LimeGreen, fill] (0.5,-2) rectangle (2.35,2);
+							
+							\draw[BurlyWood, fill] (-0.73,-1.77) rectangle (-2.12,1.77);
+							\draw[BurlyWood, fill] (0.73,-1.77) rectangle (2.12,1.77);
+							
+						%	\draw[dashed, very thick] (-2.35,5) -- (2.35,5);
+						%	\draw[dashed, very thick] (-2.35,-5) -- (2.35,-5);
+						%	\draw[dashed, very thick] (-5.35,2) -- (-5.35,-2);
+						%	\draw[dashed, very thick] (5.35,2) -- (5.35,-2);
+						%	\draw[dashed, very thick] (-5.35,2) arc (180:90:3);
+						%	\draw[dashed, very thick] (5.35,2) arc (0:90:3);
+						%	\draw[dashed, very thick] (-5.35,-2) arc (180:270:3);
+						%	\draw[dashed, very thick] (5.35,-2) arc (0:-90:3);
+						
+							\draw[dashed, very thick, LightGray] (-2.37, 5) -- (-2.37, -5);
+							\draw[dashed, very thick, LightGray] (2.37, 5) -- (2.37, -5);
+							\draw[dashed, very thick, LightGray] (-5.35, 2.02) -- (5.35, 2.02);
+							\draw[dashed, very thick, LightGray] (-5.35, -2.02) -- (5.35, -2.02);
+						
+							
+							\draw [dashed, very thick, orange] (2.35,5) to [out=0,in=90] (5.35,2) to [out=270,in=90] (5.35,-2) to [out=270, in=0] (2.35,-5) to [out=180, in=0] (-2.35,-5) to [out=180, in=270] (-5.35,-2) to [out=90, in=270] (-5.35,2) to [out=90, in=180] (-2.35,5) -- cycle;
+						
+							%\draw[dashed, LightGray] (-2.37,-2.02) rectangle (2.37,2.02);
+							
+							\draw[<->, very thick] (0,2.02) -- (0,5) node [right] at (0,3.5) {\textsc{Target Distance}};
+							\draw[<->, very thick] (-2.37,-2.02) -- (-4.47,-4.12);
+							\draw[<->, very thick] (2.37,-2.02) -- (4.47,-4.12);
+							
+							\epuckblue{0}{-5}
+							\epuckblue{-4.49}{4.14}
+							\epuckblue{4.49}{4.14}
+						\end{tikzpicture}
+						
+						\caption{The distance metric}{This figure represents the algorithm used to compute the first metric evaluating our solution: the distance metric. The red and green shoes in the middle form a rectangle. The position of all robots is obtained thanks to the arena tracking system (see Appendix \ref{app:arena_tracking_system}). The distance of all robots to the rectangle is computed. We compare every distance to the target human distance (we take absolute value of the difference). Then we divide by the human target distance to normalise. We normalise since an error of 10 cm for a target distance of 30 cm is not the same as an error of 10 cm for a target distance of 100 cm. The average of all those divisions is the error of the current time step. The example depicted on the figure would return an error of 0. See expression \ref{eq:distance_metric}.}
+						\label{fig:distance_metric}
+					\end{figure}
+				
+				\paragraph{Robot Density}
+					\begin{comment}
+						[Do the robots surround the human correctly?]
+					\end{comment}
+					
+					It measures how regularly spaced the robots are around the human. The more regularly spaced they are, the best it is. It checks if the human is protected from all directions. The error on the angular density of robots is computed as follows. The positions of all the robots are captured, and the angle between each consecutive pair of robots is calculated (see Figure \ref{fig:density_metric}). This list of angles is fed to the next formula to return the error for the current timestep:
+					\begin{equation}
+						\mbox{error}_t = \frac{1}{N} \sum_{i=1}^N \frac{|\alpha_{ti} - \overline{\alpha}|}{\overline{\alpha}},
+						\label{eq:density_metric}
+					\end{equation}
+					
+					where $t$ is the number of the time step, $N$ is the number of robots, $\alpha_{ti}$ is the angle separating the pair of consecutive robots $i$ at time step $t$, and $\overline{\alpha}$ is the target angle.
+					
+					\begin{figure}[!htp]\centering
+						\begin{tikzpicture}
+						
+						%	\foreach \i in {\xMin,...,\xMax} {
+						%        \draw [very thin,gray] (\i,\yMin) -- (\i,\yMax)  node [below] at (\i,\yMin) {$\i$};
+						%    }
+						%    \foreach \i in {\yMin,...,\yMax} {
+						%        \draw [very thin,gray] (\xMin,\i) -- (\xMax,\i) node [left] at (\xMin,\i) {$\i$};
+						%    }
+						
+							\draw[red, fill, opacity=0.05] (-0.5,-2) rectangle (-2.35,2);
+							\draw[LimeGreen, fill, opacity=0.05] (0.5,-2) rectangle (2.35,2);
+							
+							\draw[BurlyWood, fill, opacity=0.2] (-0.73,-1.77) rectangle (-2.12,1.77);
+							\draw[BurlyWood, fill, opacity=0.2] (0.73,-1.77) rectangle (2.12,1.77);
+						
+							\draw[very thick, dashed, orange] (0,0) circle [radius=5cm];
+							
+							\foreach \i in {0,45,...,315} {
+								\draw [very thick, dashed, gray, rotate around={\i:(0,0)}] (0,0) -- (5,0);
+								
+								\draw [very thick, fill=RoyalBlue, rotate around={\i:(0,0)}] (5,0) circle [radius=0.5];
+								\draw [very thick, rotate around={\i:(0,0)}] (5-0.25,-0.433) -- (5,0+0.45) -- (5+0.25,-0.433);
+								
+								%\draw[rotate around={\i:(0,0)}] (\i*5/360,0) arc [0:30:(\i+45)*4/360];
+								\draw [<->, very thick, gray, rotate around={\i:(0,0)}] (\i*4/360+0.5,0) arc [radius=(\i+45)*4/360, start angle=0, end angle=45];
+								
+								\draw [rotate around={\i+22.5:(0,0)}] (\i*4/360+1,0) node {\textcolor{gray}{45°}};
+							}
+							
+							%\human{0}{0}
+						
+							
+						\end{tikzpicture}
+						
+						\caption{The density metric}{This figure represents the algorithm used to compute the second metric evaluating our solution: the density metric. The position of all robots with the origin centred on the shoes is obtained thanks to the arena tracking system (see Appendix \ref{app:arena_tracking_system}). Then the angle between every consecutive pair of robots is computed. We compare every angle to the target angle (360°/\#robots, here 45°) by subtracting the second to the first. Then we divide by the target angle to normalise. Normalisation is necessary since an error of 10° for a target of 30° is not the same as an error of 10° for a target of 90°. The average of all those divisions is the error of the current time step. The example depicted on the figure would return an error of 0. See expression \ref{eq:density_metric}.}
+						\label{fig:density_metric}
+					\end{figure}
+					
+					
+				\paragraph{Time}
+				\begin{comment}
+					[Do they do that in a relatively low amount of time?]
+				\end{comment}
+				
+				It measures how long it takes for the swarm to reach a configuration such that the \emph{Correct Distance} and \emph{Robot Density} metrics go under a given threshold. To get this value, we average the evolutions of the error over time for every type of experiment. We compare this evolution to a defined threshold representing a certain quality of the solution. We obtain an average time for every type of experiment corresponding to the time step where the threshold is crossed.
+				
+			\subsubsection{Set-up}
+			
+				\begin{comment}
+					How I am performing my experiments. Two types. Pictures. 
+				\end{comment}
+			
+				In this section, we explain how we conducted the experiments. 
+			
+				\begin{figure}[!htp]
+					\includegraphics[width=\textwidth]{images/setup_random.png}
+					\caption{The random setup}{}
+				\end{figure}
+			
+			\subsubsection{Analysis}
+			
+			[All the graphs we discussed about. The evolution of the error over time. The analysis of the behaviour on basis of the criteria we defined. Random, side, other geo?, all together.]
+			
 	\section{Demonstration}
 	\label{sec:demonstration}
 	
@@ -1462,6 +1517,19 @@ In this chapter, we introduce the different experiments we conducted with the re
   pages={3111--3116},
   year={2009},
   organization={IEEE}
+}
+
+@techreport{stranieri2013iridia,
+  title={IRIDIA’s arena tracking system},
+  author={Stranieri, A and Turgut, A and Francesca, G and Reina, A and Dorigo, M and Birattari, M},
+  year={2013},
+  institution={Technical report TR/IRIDIA/2013-013, IRIDIA, Universit{\'e} Libre de Bruxelles, Brussels, Belgium}
+}
+
+@article{reinaaugmented,
+  title={Augmented reality for robots: virtual sensing technology applied to a swarm of e-pucks},
+  author={Reina, Andreagiovanni and Salvaro, Mattia and Francesca, Gianpiero and Garattoni, Lorenzo and Pinciroli, Carlo and Dorigo, Marco and Birattari, Mauro},
+  journal={Adaptive Hardware and Systems (AHS)}
 }
 
 \end{filecontents}

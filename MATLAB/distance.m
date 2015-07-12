@@ -1,9 +1,10 @@
-clear all
+%clear all
 AMOUNT_OF_ROBOTS = 8;
 NOMINAL_DISTANCE = 0.35;
 DISTANCE_RATIO = 0.43;
 TRANSLATE_X = 0.734;
 TRANSLATE_Y = 3.87;
+PLOT_RESOLUTION = 30;
 
 % Rectangle properties
 MIN_X = -0.1575;
@@ -12,8 +13,8 @@ MAX_X = 0.1575;
 MAX_Y = 0.19;
 
 % Import the data
-%data = importdata('results.txt');
-loadData
+data = importdata(name);
+%loadData
 data = data(:,2:end);
 
 % Keep only the needed column of the matrix
@@ -39,11 +40,36 @@ dx = max(dx, [], 3);
 dy = max(dy, [], 3);
 distancesToRectangle = sqrt(dx.^2 + dy.^2);
 
+% Area metric
+areaMetric = sum(abs(distancesToRectangle(end,:) - NOMINAL_DISTANCE) <= 0.05)/AMOUNT_OF_ROBOTS;
+
 % Compute the error value for this time step
 relErrors = abs((distancesToRectangle - NOMINAL_DISTANCE)/NOMINAL_DISTANCE);
-results = mean(relErrors, 2);
+tempResults = mean(relErrors, 2);
 
-plot((1:size(results,1))/10, results)
+% Downscale to 180 ticks (3 minutes, 1 tick per second)
+results = zeros(1,PLOT_RESOLUTION);
+newIndices = (1:length(tempResults)) / length(tempResults) * PLOT_RESOLUTION; % Put linspace instead?
+maxi = 1;
+counter = 0;
+
+for j = 1:length(tempResults)
+    if newIndices(j) <= maxi
+        results(maxi) = results(maxi) + tempResults(j);
+        counter = counter + 1;
+    else
+        results(maxi) = results(maxi)/counter;
+        counter = 0;
+        maxi = maxi + 1;
+        
+        results(maxi) = results(maxi) + tempResults(j);
+        counter = counter + 1;
+    end
+end
+
+results(end) = results(end)/counter;
+
+plot(1:length(results), results)
 title('Distance Error')
 xlabel('Time (s)')
 ylabel('Error')

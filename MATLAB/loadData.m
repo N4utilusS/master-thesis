@@ -1,6 +1,6 @@
 %http://www.mathworks.com/matlabcentral/answers/54068-how-to-read-data-file-with-rows-of-different-length
 %AMOUNT_OF_ROBOTS = 8;
-fid = fopen('output.txt');
+fid = fopen([name '.txt']);
 textLine = fgets(fid); % Read first line.
 lineCounter = 1;
 
@@ -10,7 +10,7 @@ while ischar(textLine)
 	% get into numbers array.
 	numbers = sscanf(textLine, '%f ');
     numbersMax = min(columnsAmount, length(numbers));
-	data(lineCounter,:) = [numbers(1:numbersMax)' ones(1, columnsAmount-length(numbers))];
+	data(lineCounter,:) = [numbers(1:numbersMax)' -ones(1, columnsAmount-length(numbers))];
 	
 	% Read the next line.
     textLine = fgets(fid);
