@@ -53,7 +53,7 @@
 \newcommand{\promAb}{\fontText{Professeur Mauro Birattari}}
 \newcommand{\promBa}{\fontColor{Co-Promoteur}}
 \newcommand{\promBb}{\fontText{Professeur Marco Dorigo}}
-\newcommand{\promCa}{\fontColor{Superviseur}}
+\newcommand{\promCa}{\fontColor{Superviseurs}}
 \newcommand{\promCb}{\fontText{Gaëtan Podevijn, Andreagiovanni Reina}}
 \newcommand{\deptA}{\fontColor{Service}}
 \newcommand{\deptB}{\fontText{IRIDIA}}
@@ -467,7 +467,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		\subsubsection{E-puck}
 		\label{sec:e-puck}
 		
-		The robotic platform chosen was the e-puck \citep{mondada2009puck} because the laboratory possess approximately 28 of them, along with the appropriate modules (omnidirectional camera, top LEDs). Furthermore, the academic personnel had developed a good knowledge of the platform. The e-puck robot platform was made for educational purposes. Its shape is cylindrical with a diameter of 7.5 cm. It is moved by two diametrically opposed wheels. Figure \ref{fig:e-puck_red_zones} (left) shows an e-puck from the laboratory. Several extensions (modules) were plugged onto it to increase its capabilities. In this thesis, in the final solution, we used the proximity sensors, the omnidirectional camera sensor and the virtual ground sensor. The proximity sensor is made up by 8 infrared sensors. Each infrared sensor returns a value proportional to the proximity of a nearby obstacle in the $[0,1]$ interval. The infrared sensors are placed along the perimeter of the robot. The omnidirectional camera is a vertical camera placed on the top of the e-puck's base, aiming at a convex mirror to provide a 360° view of the environment. It translates this view into a list of colour blobs. A colour blob is a cluster of pixels being almost of the same colour. During the calibration, among other parameters, one can tune the degree of similarity, the minimum size of the cluster, and the recognised colours. The last sensor is different: it is not real, and not physically present on the board \citep{reinaaugmented}. It is simulated through the ARGoS simulator used to develop the controller of the robot \citep{pinciroli2012argos}. It sends data created inside the simulator to the robot, from the simulated environment. In our case, this data contains the colour of the ground, symbolising the presence of danger. We actually simulated red discs on the floor through the simulator to artificially set up dangerous areas that were not visible by the testing user. That way, the conditions of real life application were the closest possible to ours. An example of red zone is in Figure \ref{fig:e-puck_red_zones} (right). The positions of the robots inside the simulator are determined by the use of a tracking system \citep{stranieri2013iridia}. The virtual positions correspond to the real positions. Using a virtual sensor enables early experimentation by removing the need to implement a real sensor. The real robots actually have a ground sensor. However, as during the tests the human cannot see the dangerous zones, we could not use any visible colour. A new type of ground sensors, able to detect other types of information was necessary. Hence we chose to create a ground virtual sensor that detects colours that are only present in the simulator, not physically present in the laboratory. That way, the dangers remain invisible to the human doing the experiments, but visible by other operators watching the simulator screen.
+		The robotic platform chosen was the e-puck \citep{mondada2009puck} because the laboratory possess approximately 28 of them, along with the appropriate modules (omnidirectional camera, top LEDs). Furthermore, the academic personnel had developed a good knowledge of the platform. The e-puck robot platform was made for educational purposes. Its shape is cylindrical with a diameter of 7.5 cm. It is moved by two diametrically opposed wheels. Figure \ref{fig:e-puck_red_zones} (left) shows an e-puck from the laboratory. Several extensions (modules) were plugged onto it to increase its capabilities. In this thesis, in the final solution, we used the proximity sensors, the omnidirectional camera sensor and the virtual ground sensor. The proximity sensor is made up by 8 infrared sensors. Each infrared sensor returns a value proportional to the proximity of a nearby obstacle in the $[0,1]$ interval. The infrared sensors are placed along the perimeter of the robot. The omnidirectional camera is a vertical camera placed on the top of the e-puck's base, aiming at a convex mirror to provide a 360° view of the environment. It translates this view into a list of colour blobs. A colour blob is a cluster of pixels being almost of the same colour. During the calibration, among other parameters, one can tune the degree of similarity, the minimum size of the cluster, and the recognised colours. The last sensor is different: it is not real, and not physically present on the board \citep{reinaaugmented}. It is simulated through the ARGoS simulator used to develop the controller of the robot \citep{pinciroli2012argos,GarFraBruPinBir2015:techreport-004}. It sends data created inside the simulator to the robot, from the simulated environment. In our case, this data contains the colour of the ground, symbolising the presence of danger. We actually simulated red discs on the floor through the simulator to artificially set up dangerous areas that were not visible by the testing user. That way, the conditions of real life application were the closest possible to ours. An example of red zone is in Figure \ref{fig:e-puck_red_zones} (right). The positions of the robots inside the simulator are determined by the use of a tracking system \citep{stranieri2013iridia}. The virtual positions correspond to the real positions. Using a virtual sensor enables early experimentation by removing the need to implement a real sensor. The real robots actually have a ground sensor. However, as during the tests the human cannot see the dangerous zones, we could not use any visible colour. A new type of ground sensors, able to detect other types of information was necessary. Hence we chose to create a ground virtual sensor that detects colours that are only present in the simulator, not physically present in the laboratory. That way, the dangers remain invisible to the human doing the experiments, but visible by other operators watching the simulator screen.
 		
 		\begin{figure}[!htp]
 			\begin{minipage}[c]{0.49\textwidth}
@@ -1060,7 +1060,7 @@ In this chapter, we introduce the different experiments we conducted with the re
 	
 		\subsection{The Shoe Detection Range}
 		
-			In this section, we determine the range of detection of the shoes by the robots. We determine the maximum distance at which the robots see the shoes. Figure \ref{fig:shoe_detection_range} illustrates the experiment we conducted to determine this distance. The maximal distance goes from 59 cm in front and behind the shoes, to 65 cm on the right and 70 cm on the left. This distance is acceptable given the size of the robots. It gives enough room to the user.
+			In this section, we determine the range of detection of the shoes by the robots. We determine the maximum distance at which the robots see the shoes. Figure \ref{fig:shoe_detection_range} illustrates the experiment we conducted to determine this distance. The maximal distance goes from 59 cm in front and behind the shoes, to 65 cm on the right and 70 cm on the left. This distance is acceptable given the size of the robots. It gives enough room to the user. The probable cause of the lower distance for the green shoe is the lower intensity of the green LEDs inside the shoe. We use a lower luminosity to increase the recognition rate of the green shoe by the robots. A brighter green shoe leads to a more difficult calibration and worse blob detection rate on the robots.
 						
 			\begin{figure}[!htp]\centering
 			\begin{tikzpicture}
@@ -1110,6 +1110,7 @@ In this chapter, we introduce the different experiments we conducted with the re
 			In this section, we evaluate the properties of the circle formed by the swarm of robots. We first expose the three metrics we used to perform the evaluations. Then we detail the conditions of the experiments. Finally, we analyse the observations made with the experiments.
 			
 			\subsubsection{Metrics}
+			\label{sec:circle_properties_metrics}
 			\begin{comment}
 				[Metrics I will use. Their description. How I will compute them.]
 			\end{comment}
@@ -1249,11 +1250,11 @@ In this chapter, we introduce the different experiments we conducted with the re
 					How I am performing my experiments. Two types. Pictures. Duration. 8 robots. Dimensions of the arena. Where? Matlab scripts?
 				\end{comment}
 			
-				In this section, we explain how we conducted the experiments assessing our solution. These experiments took place in the IRIDIA laboratory, in the arena room. The arena room is the place were the academic staff can manipulate the robots. We used 8 e-pucks for every experiment. They were all equipped with tags to allow the arena tracking system \citep{stranieri2013iridia} to locate them, and transmit the information to the simulator. At the beginning of each experiment, the robots were placed according to the type of experiment undertaken. There are two types of experiment. The first one consists in a random starting position for all the robots. Figure \ref{fig:random_setup} illustrates the first set-up type. The other type consists in a specific starting position: all the robots are placed on the right of the shoes. Each experiment lasted 3 minutes. The arena is a square, bounded with wood boards or walls (on the right of the picture on the two figures).
+				These experiments took place in the IRIDIA laboratory, in the arena room. The arena room is the place were the academic staff can manipulate the robots and run experiments. We used 8 e-pucks for every experiment. They were all equipped with tags to allow the arena tracking system \citep{stranieri2013iridia} to locate them, and transmit the location to the simulator. At the beginning of each experiment, the robots were placed according to the type of experiment undertaken. There are two types of experiment. The first one consists in a random starting position for all the robots. Figure \ref{fig:random_setup} illustrates the first set-up type. The other type consists in a specific starting position: all the robots are placed on the right of the shoes. The arena is a rectangle, bounded with wood boards or walls (on the right of the picture on the two figures there is a wall). Each experiment lasted 3 minutes. During the whole 3 minutes, the positions of the robots are saved inside a file on the tracking system server. When it is finished, the file is transferred to another computer located in the arena room. All the log files are then filtered by a Matlab script we implemented to remove the errors in the positions. Some robots are indeed misplaced or not found for several time steps. Once the files have been cleaned, other Matlab scripts compute the values for the metrics listed in section \ref{sec:circle_properties_metrics}.
 			
 				\begin{figure}[!htp]
 					\includegraphics[width=\textwidth]{images/setup_random.png}
-					\caption{The random setup}{}
+					\caption{The random setup}{On this figure, we show an example of a random starting position for all the robots. The initial positions of all the robots are computed by a random plot of 8 points in Matlab. The robots are then manually placed as the points are shown on the plot. The shoes are centred under the camera. The camera is the origin of the environment. The origin is not centred on the picture as we cropped the image to keep the relevant part.}
 					\label{fig:random_setup}
 				\end{figure}
 			
@@ -1436,7 +1437,8 @@ In this chapter, we introduce the different experiments we conducted with the re
   pages={271--295},
   year={2012},
   publisher={Springer},
-  address = {Berlin, Germany}
+  address = {Berlin, Germany},
+  doi = {10.1007/s11721-012-0072-5}
 }
 
 @inproceedings{daily2003world,
@@ -1527,16 +1529,34 @@ In this chapter, we introduce the different experiments we conducted with the re
 }
 
 @techreport{stranieri2013iridia,
-  title={IRIDIA’s arena tracking system},
-  author={Stranieri, A and Turgut, A and Francesca, G and Reina, A and Dorigo, M and Birattari, M},
+  author={A. Stranieri and A.E. Turgut and M. Salvaro and L. Garattoni and G. Francesca and A. Reina and M. Dorigo and  M. Birattari},
+  title={IRIDIA's Arena Tracking System},
+  institution={IRIDIA, Universit{\'e} Libre de Bruxelles},
   year={2013},
-  institution={Technical report TR/IRIDIA/2013-013, IRIDIA, Universit{\'e} Libre de Bruxelles, Brussels, Belgium}
+  number={TR/IRIDIA/2013-013},
+  address={Brussels, Belgium},
+  month={January}
 }
 
-@article{reinaaugmented,
-  title={Augmented reality for robots: virtual sensing technology applied to a swarm of e-pucks},
-  author={Reina, Andreagiovanni and Salvaro, Mattia and Francesca, Gianpiero and Garattoni, Lorenzo and Pinciroli, Carlo and Dorigo, Marco and Birattari, Mauro},
-  journal={Adaptive Hardware and Systems (AHS)}
+@incollection{reinaaugmented,
+  author = {Reina, Andreagiovanni and Salvaro, Mattia and Francesca, Gianpiero and Garattoni, Lorenzo and Pinciroli, Carlo and Dorigo, Marco and Birattari, Mauro},
+  title = {Augmented reality for robots: virtual sensing technology applied to a swarm of e-pucks},
+  booktitle = {2015 {NASA/ESA} Conference on Adaptive Hardware and Systems ({AHS 2015}))},
+  publisher = {{IEEE} Computer Society Press},
+  address = {Los Alamitos, CA},
+  year = {2015},
+  pages = {1--6},
+  note = {Paper ID sB\_p3}
+}
+
+@techreport{GarFraBruPinBir2015:techreport-004,
+ author={L. Garattoni and G. Francesca and A. Brutschy and C. Pinciroli and M. Birattari},
+ title={Software Infrastructure for E-puck (and TAM)},
+ institution={IRIDIA, Universit{\'e} Libre de Bruxelles},
+ year={2015},
+ number={TR/IRIDIA/2015-004},
+ address={Brussels, Belgium},
+ month={July}
 }
 
 \end{filecontents}
