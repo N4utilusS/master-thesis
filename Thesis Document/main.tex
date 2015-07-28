@@ -1270,39 +1270,47 @@ In this chapter, we introduce the different experiments we conducted with the re
 					All the graphs we discussed about. The evolution of the error over time. The analysis of the behaviour on basis of the criteria we defined. Random, side, other geo?, all together.
 				\end{comment}
 					
+					In this section we analyse the information gathered from our experiments. The goal of these experiments was to show that the error measures we defined in section \ref{sec:circle_properties_metrics} are decreasing over time during each experiment and stabilising after some acceptable time. We grouped the results by type of error measure. First we analyse the distance results, then the density results. We end with the time metric.
 					
+					On figures \ref{fig:boxplot_random_distance} and \ref{fig:boxplot_geo_distance}, we show the evolution of the average error over time. On both figures, we observe a clear decrease of the error over time. On figure \ref{fig:boxplot_random_distance}, the stabilisation is more obvious than for figure \ref{fig:boxplot_geo_distance} where the median continues to decrease slightly at the end of the 3 minutes. Furthermore we can observe that the values of the error are a lot more spread for the specific setup than for the random setup. We can explain this observation by the fact that the robots are close to each other at the beginning of the experiment. That, and the nature of the virtual forces exerted on the robots make the robots disperse in almost random directions at the beginning of the experiments. Typically, on figure \ref{fig:geo_setup}, the robots on the right column would disperse to the right because of the column of robots on their left. Although the robots on the right are also attracted by the shoes, the repulsive forces of the robots on the left are stronger. Since for the random start configuration the robots are more likely to be dispersed in the arena, they are less subject to the forces of the other robots. Once the experiment starts, they just move towards the shoes. The behaviours observed during these experiment were not so different, leading to a small distribution for the error value, as seen on figures \ref{fig:boxplot_random_distance} and \ref{fig:boxplot_random_density}. From the distance metric point of view, the random starting position is the best one.
 			
 				\begin{figure}[!htp]
 					\includegraphics[width=\textwidth]{../MATLAB/boxplot_random_distance.png}
-					\caption{The distance error for a random starting configuration}{}
+					\caption{The distance error for a random starting configuration}{On this figure, we show the evolution of the average distance error through boxplots. It is an average on 10 experiments with real robots. The initial positions of all the robots are randomly selected. We observe that the behaviour of the swarm tends to lower the error measure. The variance of the values distribution is very low.}
+					\label{fig:boxplot_random_distance}
 				\end{figure}
 			
 				
 				\begin{figure}[!htp]
 					\includegraphics[width=\textwidth]{../MATLAB/boxplot_geo2_distance.png}
 					\caption{The distance error for a specific starting configuration}{}
+					\label{fig:boxplot_geo_distance}
 				\end{figure}
 				
 				
 				\begin{figure}[!htp]
 					\includegraphics[width=\textwidth]{../MATLAB/boxplot_random_density.png}
 					\caption{The density error for a random starting configuration}{}
+					\label{fig:boxplot_random_density}
 				\end{figure}
 			
 				
 				\begin{figure}[!htp]
 					\includegraphics[width=\textwidth]{../MATLAB/boxplot_geo2_density.png}
 					\caption{The density error for a specific starting configuration}{}
+					\label{fig:boxplot_geo_density}
 				\end{figure}
 				
 				\begin{figure}[!htp]
 					\includegraphics[width=\textwidth]{../MATLAB/boxplot_geolong_distance.png}
 					\caption{The distance error for a specific starting configuration (long experiment)}{}
+					\label{fig:geolong_distance}
 				\end{figure}
 			
 				\begin{figure}[!htp]
 					\includegraphics[width=\textwidth]{../MATLAB/boxplot_geolong_density.png}
 					\caption{The density error for a specific starting configuration (long experiment)}{}
+					\label{fig:geolong_density}
 				\end{figure}
 			
 	\section{Demonstration}
