@@ -41,9 +41,9 @@ dy = max(dy, [], 3);
 distancesToRectangle = sqrt(dx.^2 + dy.^2);
 
 % Area metric
-areaMetric = sum(abs(distancesToRectangle(end,:) - NOMINAL_DISTANCE) <= 0.05)/AMOUNT_OF_ROBOTS;
+%areaMetric = sum(abs(distancesToRectangle(end,:) - NOMINAL_DISTANCE) <= 0.05)/AMOUNT_OF_ROBOTS;
 
-% Compute the error value for this time step
+% Compute the error value
 relErrors = abs((distancesToRectangle - NOMINAL_DISTANCE)/NOMINAL_DISTANCE);
 tempResults = mean(relErrors, 2);
 
@@ -69,7 +69,7 @@ end
 
 results(end) = results(end)/counter;
 
-plot(1:length(results), results)
+plot((1:length(results))/length(results)*180, results)
 title('Distance Error')
 xlabel('Time (s)')
 ylabel('Error')

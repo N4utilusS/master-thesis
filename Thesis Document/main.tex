@@ -1254,19 +1254,56 @@ In this chapter, we introduce the different experiments we conducted with the re
 			
 				\begin{figure}[!htp]
 					\includegraphics[width=\textwidth]{images/setup_random.png}
-					\caption{The random setup}{On this figure, we show an example of a random starting position for all the robots. The initial positions of all the robots are computed by a random plot of 8 points in Matlab. The robots are then manually placed as the points are shown on the plot. The shoes are centred under the camera. The camera is the origin of the environment. The origin is not centred on the picture as we cropped the image to keep the relevant part.}
+					\caption{The random setup}{On this figure, we show an example of a random starting position for all the robots. The initial positions of all the robots are computed by a random plot of 8 points in Matlab, 8 couples (x,y) such that $x \in [-1,1], y \in [-1,1]$. The robots are then manually placed as the points are shown on the plot. The shoes are centred under the camera. The camera is the origin of the environment: $(0,0)$. The origin is not centred on the picture as we cropped the image to keep only the relevant part. The picture was taken from one of the 16 camera of the arena tracking system \citep{stranieri2013iridia}.}
 					\label{fig:random_setup}
 				\end{figure}
 			
 				\begin{figure}[!htp]
 					\includegraphics[width=\textwidth]{images/setup_geo.png}
-					\caption{The specific setup}{}
+					\caption{The specific setup}{On this figure, we show an example of a specific setup. All the robots are placed on the right of the shoes. This starting configuration is interesting since it could represent the usual configuration where all the robots are stored and waiting for the activity to begin. The shoes are centred under the camera. The camera is the origin of the environment: $(0,0)$. The origin is not centred on the picture as we cropped the image to keep only the relevant part. The picture was taken from one of the 16 camera of the arena tracking system \citep{stranieri2013iridia}.}
 					\label{fig:geo_setup}
 				\end{figure}
 			
 			\subsubsection{Analysis}
 			
-			[All the graphs we discussed about. The evolution of the error over time. The analysis of the behaviour on basis of the criteria we defined. Random, side, other geo?, all together.]
+				\begin{comment}
+					All the graphs we discussed about. The evolution of the error over time. The analysis of the behaviour on basis of the criteria we defined. Random, side, other geo?, all together.
+				\end{comment}
+					
+					
+			
+				\begin{figure}[!htp]
+					\includegraphics[width=\textwidth]{../MATLAB/boxplot_random_distance.png}
+					\caption{The distance error for a random starting configuration}{}
+				\end{figure}
+			
+				
+				\begin{figure}[!htp]
+					\includegraphics[width=\textwidth]{../MATLAB/boxplot_geo2_distance.png}
+					\caption{The distance error for a specific starting configuration}{}
+				\end{figure}
+				
+				
+				\begin{figure}[!htp]
+					\includegraphics[width=\textwidth]{../MATLAB/boxplot_random_density.png}
+					\caption{The density error for a random starting configuration}{}
+				\end{figure}
+			
+				
+				\begin{figure}[!htp]
+					\includegraphics[width=\textwidth]{../MATLAB/boxplot_geo2_density.png}
+					\caption{The density error for a specific starting configuration}{}
+				\end{figure}
+				
+				\begin{figure}[!htp]
+					\includegraphics[width=\textwidth]{../MATLAB/boxplot_geolong_distance.png}
+					\caption{The distance error for a specific starting configuration (long experiment)}{}
+				\end{figure}
+			
+				\begin{figure}[!htp]
+					\includegraphics[width=\textwidth]{../MATLAB/boxplot_geolong_density.png}
+					\caption{The density error for a specific starting configuration (long experiment)}{}
+				\end{figure}
 			
 	\section{Demonstration}
 	\label{sec:demonstration}

@@ -62,7 +62,7 @@ end
 
 results(end) = results(end)/counter;
 
-plot(1:length(results), results)
+plot((1:length(results))/length(results)*180, results)
 title('Density Error')
 xlabel('Time (s)')
 ylabel('Error')

@@ -6,6 +6,7 @@ SMOOTH_INTENSITY = 7; % Amount of timestep to make average.
 TAGS = [8 9 3 2 6 4 5 7]; % Fill with tags of robots used (ATS tags).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 TAGS = sort(TAGS);
+%name = 'geolong';
 display([name ' ==> Importing data'])
 %data = importdata([name '.txt'],' ');
 loadData
