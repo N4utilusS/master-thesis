@@ -1272,7 +1272,7 @@ In this chapter, we introduce the different experiments we conducted with the re
 					
 					In this section we analyse the information gathered from our experiments. The goal of these experiments was to show that the error measures we defined in section \ref{sec:circle_properties_metrics} are decreasing over time during each experiment and stabilising after some acceptable time. We grouped the results by type of error measure. First we analyse the distance results, then the density results. We end with the time metric.
 					
-					On figures \ref{fig:boxplot_random_distance} and \ref{fig:boxplot_geo_distance}, we show the evolution of the average error over time. On both figures, we observe a clear decrease of the error over time. On figure \ref{fig:boxplot_random_distance}, the stabilisation is more obvious than for figure \ref{fig:boxplot_geo_distance} where the median continues to decrease slightly at the end of the 3 minutes. Furthermore we can observe that the values of the error are a lot more spread for the specific setup than for the random setup. We can explain this observation by the fact that the robots are close to each other at the beginning of the experiment. That, and the nature of the virtual forces exerted on the robots make the robots disperse in almost random directions at the beginning of the experiments. Typically, on figure \ref{fig:geo_setup}, the robots on the right column would disperse to the right because of the column of robots on their left. Although the robots on the right are also attracted by the shoes, the repulsive forces of the robots on the left are stronger. Since for the random start configuration the robots are more likely to be dispersed in the arena, they are less subject to the forces of the other robots. Once the experiment starts, they just move towards the shoes. The behaviours observed during these experiment were not so different, leading to a small distribution for the error value, as seen on figures \ref{fig:boxplot_random_distance} and \ref{fig:boxplot_random_density}. From the distance metric point of view, the random starting position is the best one.
+					On figures \ref{fig:boxplot_random_distance} and \ref{fig:boxplot_geo_distance}, we show the evolution of the average error over time. On both figures, we observe a clear decrease of the error over time. On figure \ref{fig:boxplot_random_distance}, the stabilisation is more obvious than for figure \ref{fig:boxplot_geo_distance} where the median continues to decrease slightly at the end of the 3 minutes. Furthermore we can observe that the values of the error are a lot more spread for the specific setup than for the random setup. We can explain this observation by the fact that the robots are close to each other at the beginning of the experiment. That, and the nature of the virtual forces exerted on the robots make the robots disperse in almost random directions at the beginning of the experiments. Typically, on figure \ref{fig:geo_setup}, the robots on the right column would disperse to the right because of the column of robots on their left. Although the robots on the right are also attracted by the shoes, the repulsive forces of the robots on the left are stronger. Since for the random start configuration the robots are more likely to be dispersed in the arena, they are less subject to the forces of the other robots. Once the experiment starts, they just move towards the shoes. The behaviours observed during these experiment were not so different, leading to a small distribution for the error value, as seen on figures \ref{fig:boxplot_random_distance} and \ref{fig:boxplot_random_density}. From the distance metric point of view, the random starting position is the best.
 			
 				\begin{figure}[!htp]
 					\includegraphics[width=\textwidth]{../MATLAB/boxplot_random_distance.png}
@@ -1287,31 +1287,42 @@ In this chapter, we introduce the different experiments we conducted with the re
 					\label{fig:boxplot_geo_distance}
 				\end{figure}
 				
+				As expected, the density error value is bigger for the specific configuration than for the random starting configuration as the robots are clustered on the right of the shoes (Figure \ref{fig:boxplot_random_density} and \ref{fig:boxplot_geo_density}). The angles separating the robots are further from the target angle (see section \ref{sec:circle_properties_metrics}) than for the random setup. Once again, the values are decreasing over time for the two types of configurations. The values are stabilising after some time for the random configuration. The specific configuration does not stabilise completely at the end of the 3 minutes. The variance of the values distribution is bigger for the specific configuration. However the difference is less important than for the previous metric. The error values are higher for the specific configuration. This could be due to the difficulty of the reorganisation undertaken by the robots: half of the robots have to go on the other side of the shoes. In the other configuration, the robots are already more dispersed around the shoes. As for the previous metric, the random configuration is the best alternative.
 				
 				\begin{figure}[!htp]
 					\includegraphics[width=\textwidth]{../MATLAB/boxplot_random_density.png}
-					\caption{The density error for a random starting configuration}{}
+					\caption{The density error for a random starting configuration}{On this figure, we show the evolution of the average density error through boxplots. It is an average on 10 experiments with real robots. The initial positions of all the robots are randomly selected. We observe that the behaviour of the swarm tends to lower the error measure. The variance of the values distribution is low.}
 					\label{fig:boxplot_random_density}
 				\end{figure}
 			
 				
 				\begin{figure}[!htp]
 					\includegraphics[width=\textwidth]{../MATLAB/boxplot_geo2_density.png}
-					\caption{The density error for a specific starting configuration}{}
+					\caption{The density error for a specific starting configuration}{On this figure, we show the evolution of the average density error through boxplots. It is an average on 10 experiments with real robots. The robots are placed on a grid on the right of the shoes like shown on Figure \ref{fig:geo_setup}. We observe that the behaviour of the swarm tends to lower the error measure. The variance of the values distribution is high.}
 					\label{fig:boxplot_geo_density}
 				\end{figure}
 				
+				As the values are not completely stabilising for the specific starting configuration, it was interesting to see what was the evolution of the error for a longer experiment. We thus launched one experiment of 9 minutes with the specific starting configuration. Figure \ref{fig:geolong_distance} and \ref{fig:geolong_density} show the evolution of the error over time. The two figures show a global decrease of the error value. However, the distance error on Figure \ref{fig:geolong_distance} has a more monotonous evolution than the density one. The latter undergoes an augmentation around 3 minutes. During the first 180 seconds, the two evolutions correspond to what was observed in figures \ref{fig:boxplot_geo_distance} and \ref{fig:boxplot_geo_density}. The two series of values tend to stabilise at 0.8. Figure \ref{fig:geolong_final_state} shows the final state of the swarm at the end of the experiment. The robots are forming an acceptable circular shield around the human. One can conclude that 0.8 is a nice value for the error measure. The value 0.8 will thus be used as threshold of quality for the time metric.
+				
 				\begin{figure}[!htp]
 					\includegraphics[width=\textwidth]{../MATLAB/boxplot_geolong_distance.png}
-					\caption{The distance error for a specific starting configuration (long experiment)}{}
+					\caption{The distance error for a specific starting configuration (long experiment)}{On this figure, we show the evolution of the distance error for one run of the experiment. The experiment lasted 9 minutes. One can see a global decrease showing that the behaviour tends to create a circle that presents good characteristics for our application.}
 					\label{fig:geolong_distance}
 				\end{figure}
 			
 				\begin{figure}[!htp]
 					\includegraphics[width=\textwidth]{../MATLAB/boxplot_geolong_density.png}
-					\caption{The density error for a specific starting configuration (long experiment)}{}
+					\caption{The density error for a specific starting configuration (long experiment)}{On this figure, we show the evolution of the density error for one run of the experiment. The experiment lasted 9 minutes. One can see a global decrease showing that the behaviour tends to create a circle that presents good characteristics for our application. One can observe an augmentation around 200 seconds. The video from the experiment showed that the robots moved slightly to the right of the shoes, putting more space between the robots on the left. The robots returned to their correct position afterwards, as the graph suggests.}
 					\label{fig:geolong_density}
 				\end{figure}
+				
+				\begin{figure}[!htp]
+					\includegraphics[width=\textwidth]{images/geolong_end.png}
+					\caption{Final state of the 9-minutes experiment}{}
+					\label{fig:geolong_final_state}
+				\end{figure}
+				
+				Time. Consistent behaviour for the random.
 			
 	\section{Demonstration}
 	\label{sec:demonstration}
