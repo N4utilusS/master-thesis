@@ -1056,7 +1056,11 @@ In this chapter, we introduce the different experiments we conducted with the re
 		[The measurements and the tests on the final behaviour.]
 	\end{comment}
 	
-	In this section, we assess the performance of our solution without any human controlling the swarm. The solution is evaluated quantitatively with several criteria.
+	In this section, we assess the performance of our solution without any human controlling the swarm. The solution is evaluated quantitatively and qualitatively with several criteria.
+	
+		\subsection{The Robot Speed}
+			
+			The robots have a speed limit. Their wheel speed cannot be higher than 10 cm/s (0.36 km/h). This limit has been fixed as one of the best practices by the laboratory staff to ensure that the robots do not get damaged in an experiment. The average walk speed of a human is 5 km/h \citep{wiki:002}. The experiments that will follow can thus be seen as proof of concept. Faster robots would be required for real application. Furthermore, the robots should be able to move around in multiple kinds of environments. The E-puck \citep{mondada2009puck} is only suited for flat surfaces.
 	
 		\subsection{The Shoe Detection Range}
 		
@@ -1244,7 +1248,7 @@ In this chapter, we introduce the different experiments we conducted with the re
 				
 				It measures how long it takes for the swarm to reach a configuration such that the \emph{Correct Distance} and \emph{Robot Density} metrics go under a given threshold. To get this value, we average the evolutions of the error over time for every type of experiment. We compare this evolution to a defined threshold representing a certain quality of the solution. We obtain an average time for every type of experiment corresponding to the time step where the threshold is crossed.
 				
-			\subsubsection{Set-up}
+			\subsubsection{Setup}
 			
 				\begin{comment}
 					How I am performing my experiments. Two types. Pictures. Duration. 8 robots. Dimensions of the arena. Where? Matlab scripts?
@@ -1322,11 +1326,18 @@ In this chapter, we introduce the different experiments we conducted with the re
 					\label{fig:geolong_final_state}
 				\end{figure}
 				
-				If we use a threshold value of 0.8 for the quality measure, we observe a great difference between the random and specific configuration in the time it takes for the swarm to cross the threshold. Since for the previous metrics the best alternative was the random start configuration, it is logical that the alternative taking the less amount of time to cross the threshold of 0.8 is the random alternative.
+				If we use a threshold value of 0.8 for the quality measure, we observe a great difference between the random and specific configuration in the time it takes for the error measure to cross the threshold. Since for the previous metrics the best alternative was the random start configuration, it is logical that the alternative taking the less amount of time to cross the threshold of 0.8 is the random alternative. We take the median as reference. If the configuration is random, the swarm takes a few seconds on average to cross the threshold. On the other side, for the specific configuration, the swarm takes approximately 1min30s to do the same for the density metric, and 30 seconds for the distance metric.
 				
-				Time. Consistent behaviour for the random.
+				As a conclusion, we can say that the random starting configuration is the best in the experiments we performed. It offered a consistent behaviour, as seen on Figure \ref{fig:boxplot_random_distance} and Figure \ref{fig:boxplot_random_density}. The variance is a lot smaller than for the other solution. At the end of the experiments, the value for the two types of errors were almost the same. Even if the specific starting configuration is a worse solution than the random starting configuration, the robots still managed to reach a state of acceptable quality in our standards after some time. In future applications, one would thus have to choose between the compactness of the specific configuration, leading to bigger delays, and the speed of the random solution, harder to set up.
 			
 	\section{Demonstration}
+	
+		In the previous section we performed experiments that did not involve any human. In this section, one human is using the shoes to walk and stay protected by the robots. We called this experiment \enquote{the demonstration}. The goal was to check is the robots were able to follow the human and warn him/her about the dangerous areas.
+		
+		\subsection{Setup}
+		
+			We also ran this experiment in the arena room, at the IRIDIA laboratory. We simulated one dangerous area on the floor using the arena tracking system \citep{stranieri2013iridia,reinaaugmented}. 
+		\subsection{Analysis}
 	\label{sec:demonstration}
 	
 	[What demonstration was done with the device. Add pictures. Describe perfectly.]
@@ -1542,6 +1553,14 @@ In this chapter, we introduce the different experiments we conducted with the re
    year = "2015",
    url = "http://en.wikipedia.org/w/index.php?title=Geta_(footwear)&oldid=651925222",
    note = "[Online; accessed 20-May-2015]"
+ }
+ 
+ @misc{ wiki:002,
+   author = "Wikipedia",
+   title = "Walking --- Wikipedia{,} The Free Encyclopedia",
+   year = "2015",
+   url = "https://en.wikipedia.org/w/index.php?title=Walking&oldid=671922191",
+   note = "[Online; accessed 1-August-2015]"
  }
  
  @article{khatib1986real,
