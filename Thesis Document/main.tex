@@ -1331,16 +1331,69 @@ In this chapter, we introduce the different experiments we conducted with the re
 				As a conclusion, we can say that the random starting configuration is the best in the experiments we performed. It offered a consistent behaviour, as seen on Figure \ref{fig:boxplot_random_distance} and Figure \ref{fig:boxplot_random_density}. The variance is a lot smaller than for the other solution. At the end of the experiments, the value for the two types of errors were almost the same. Even if the specific starting configuration is a worse solution than the random starting configuration, the robots still managed to reach a state of acceptable quality in our standards after some time. In future applications, one would thus have to choose between the compactness of the specific configuration, leading to bigger delays, and the speed of the random solution, harder to set up.
 			
 	\section{Demonstration}
-	
-		In the previous section we performed experiments that did not involve any human. In this section, one human is using the shoes to walk and stay protected by the robots. We called this experiment \enquote{the demonstration}. The goal was to check is the robots were able to follow the human and warn him/her about the dangerous areas.
+		\label{sec:demonstration}
+
+		In the previous section we performed experiments that did not involve any human. In this section, one human is using the shoes to walk in a virtually dangerous zone and stay protected by the robots. We called this experiment \enquote{the demonstration}. The goal was to check is the robots were able to follow the human and warn him/her about the dangerous areas. It acts as a proof of concept.
 		
 		\subsection{Setup}
 		
-			We also ran this experiment in the arena room, at the IRIDIA laboratory. We simulated one dangerous area on the floor using the arena tracking system \citep{stranieri2013iridia,reinaaugmented}. 
+			We ran this experiment in the arena room, in the IRIDIA laboratory. We simulated one dangerous area on the floor using the arena tracking system \citep{stranieri2013iridia,reinaaugmented} and ARGoS \citep{pinciroli2012argos,GarFraBruPinBir2015:techreport-004}. Eight E-pucks were used \citep{mondada2009puck}. The experiment was recorded with a digital camera. Only one human took part of the experiment. The human had to walk slowly towards a circular dangerous zone whose diameter was 1 meter. At some point, the robots should notify him/her about the danger. The human would then walk around the dangerous area as depicted on Figure \ref{fig:demo_setup}. The dangerous area was not visible to the human. If the robots would not tell to the human that a danger is nearby, the experiment would fail. The human started the experiment as shown on the figure, on the left of the dangerous area.
+			
+			\begin{figure}[!htp]\centering
+				\begin{tikzpicture}
+				
+					\clip (-7,-3.1) rectangle (6.1, 4.2);
+					
+					\draw [dashed, fill=red] (3,0) circle [radius=3];
+					\draw (3,0) node[scale=5]{!};
+					
+					\draw[red, fill] (-2.9,0.65) rectangle (-4.1,1.35);
+					\draw[LimeGreen, fill] (-2.9,-0.65) rectangle (-4.1,-1.35);
+					\draw[BurlyWood, fill] (-3,0.75) rectangle (-4,1.25);
+					\draw[BurlyWood, fill] (-3,-0.75) rectangle (-4,-1.25);
+					\human[-90]{-4}{0}
+					
+					\draw [->,very thick, orange] (-2,0) to [out=0,in=180] (-1,0) to [out=90,in=180] (3,4);
+					
+					\foreach \i in {22.5,67.5,...,347.5} {
+						\begin{scope}[rotate around={\i:(-4,0)}]
+							\epuckblue[-90-\i]{-1.5}{0}
+						\end{scope}
+					}
+					%\draw [brown] (current bounding box.south west) rectangle (current bounding box.north east);
+				\end{tikzpicture}
+				
+				\caption{The demonstration setup}{On this figure, we show the staring configuration of the demonstration experiment, and the expected path the human has to follow. The human first walk slowly towards the dangerous area (the red disc). He is surrounded by 8 protecting E-pucks that follow him. The human is wearing the two shoes that were built to allow the robots to detect him.}
+				\label{fig:demo_setup}
+			\end{figure}
+			
 		\subsection{Analysis}
-	\label{sec:demonstration}
+		
+			\begin{comment}
+				[What demonstration was done with the device. Add pictures. Describe perfectly.]
+			\end{comment}
+			
+			\begin{figure}[!htp]
+				\includegraphics[width=\textwidth]{images/vlcsnap-00001.jpg}
+			\end{figure}
+			
+			\begin{figure}[!htp]
+				\includegraphics[width=\textwidth]{images/vlcsnap-00002.jpg}
+			\end{figure}
+			
+			\begin{figure}[!htp]
+				\includegraphics[width=\textwidth]{images/vlcsnap-00003.jpg}
+			\end{figure}
+			
+			\begin{figure}[!htp]
+				\includegraphics[width=\textwidth]{images/vlcsnap-00005.jpg}
+			\end{figure}
+			
+			\begin{figure}[!htp]
+				\includegraphics[width=\textwidth]{images/vlcsnap-00007.jpg}
+			\end{figure}
+			
 	
-	[What demonstration was done with the device. Add pictures. Describe perfectly.]
 
 \chapter{Conclusion}
 
