@@ -495,7 +495,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		
 		\paragraph{Limitations}
 		
-		Although the omnidirectional camera worked better than the range and bearing, it was still restrictive. The difficulty of the calibration, and the error rate, increase with the amount of recognised colours. We limited ourselves to 3 colours: red, green and blue. Another limitation was the speed of the robot, limited to 10 cm/s. Normal speed for a human walking is about 5 km/h or 140 cm/s. In these circumstances we had to reduce the walking speed of the user during the demonstration and the tests. The battery was also an issue. The autonomy of one robot is between 30 minutes and one hour when moving a lot. Changing batteries and restarting the robots multiple times was necessary during long testing sessions. Since the robot only has two wheels, it maintains its equilibrium by lowering the chassis. The front or the back of the robot always touches the ground, making it impossible to use on uneven grounds. The floor of the arena, the room where all the experiments were done, is composed of adjacent squares. Sometimes the robots would get stuck between two squares. Moreover, the activity LEDs on the different circuit boards composing the robots interfered with the omnidirectional camera, taking them as other robots. We had to cover them with pieces of tape, and change the calibration to not take into account the blobs that were too small.
+		Although the omnidirectional camera worked better than the range and bearing, it was still restrictive. The difficulty of the calibration, and the error rate, increase with the amount of recognised colours. We limited ourselves to 3 colours: red, green and blue. Another limitation was the speed of the robot, limited to 10 cm/s. Normal speed for a human walking is about 5 km/h or 140 cm/s \citep{wiki:002}. In these circumstances we had to reduce the walking speed of the user during the demonstration and the tests. The battery was also an issue. The autonomy of one robot is between 30 minutes and one hour when moving a lot. Changing batteries and restarting the robots multiple times was necessary during long testing sessions. Since the robot only has two wheels, it maintains its equilibrium by lowering the chassis. The front or the back of the robot always touches the ground, making it impossible to use on uneven grounds. The floor of the arena, the room where all the experiments were done, is composed of adjacent squares. Sometimes the robots would get stuck between two squares. Moreover, the activity LEDs on the different circuit boards composing the robots interfered with the omnidirectional camera, taking them as other robots. We had to cover them with pieces of tape, and change the calibration to not take into account the blobs that were too small.
 		
 		\subsubsection{E-geta} % Longer text than for e-puck because more important!
 		\begin{comment}
@@ -1400,16 +1400,22 @@ In this chapter, we introduce the different experiments we conducted with the re
 				\end{minipage}
 				
 				
-				\caption{Bitch, I'm fabulous}{Captured from the video of the experiment.}
+				\caption{The demonstration}{Captured from the video of the experiment.}
 				\label{fig:demo_pictures}
 			\end{figure}
 			
-			The experiment was a success. The robots notified the human about the dangerous area. They stayed on the boundary of the area. However, for some of the robots, the distance to the human was oscillating. One can see on Figure \ref{fig:demo_pictures} (b) that one of the robot on the back of the human is closer to the human than it should be. The speed of the human in this experiment was not constant. At the beginning, the human walked very slowly until the dangerous area. Then, he progressively increased the speed. The final speed was still low, though.
+			The experiment was a success. The robots notified the human about the dangerous area. They stayed on the boundary of the area. However, for some of the robots, the distance to the human was oscillating. One can see on Figure \ref{fig:demo_pictures} (b) that one of the robot on the back of the human is closer to the human than it should be. The speed of the human in this experiment was not constant. At the beginning, the human walked very slowly to the dangerous area. Then, he progressively increased the speed. The final speed was still low, though. For a real life application, the robots would have to be further from the human and form a wider circle. This would allow a higher anticipation, and higher walking speeds as the robots would have larger margins to react to the human changes of direction and speed. This experiment must be seen as a proof of concept. Further development must be undertaken to obtain a system ready for real life applications.
 	
 
 \chapter{Conclusion}
-
-[I've done this, this and this (~1/2 pages). (Intro: "I'll do this, this...) \textcolor{red}{Put sentences of type "so what?". Continuous text.}
+	\begin{comment}
+		I've done this, this and this (~1/2 pages). (Intro: "I'll do this, this...) \textcolor{red}{Put sentences of type "so what?". Continuous text. Limitations...}
+		- Done this and this (Requirements, design, implementation with trial and error and a lot of debugging, hardware, experiments, analysis, report)
+		- Limitations (speed, scope of the omnidirectional camera, flat surfaces, sensitive to light conditions, batteries). --> proof of concept
+		- Future works
+	\end{comment}
+	
+	In this chapter, we express our conclusions on our solution. The project followed a standard process. First, meetings were organised to capture the requirements of the final solution. 
 
 	\paragraph{Future Works}
 	[The future works that would be interesting from my point of view.]
