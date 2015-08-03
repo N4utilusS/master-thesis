@@ -1373,26 +1373,38 @@ In this chapter, we introduce the different experiments we conducted with the re
 				[What demonstration was done with the device. Add pictures. Describe perfectly.]
 			\end{comment}
 			
-			\begin{figure}[!htp]
-				\includegraphics[width=\textwidth]{images/vlcsnap-00001.jpg}
-			\end{figure}
+			In this section, we describe the unfolding of the experiment on the basis of pictures taken from the video we recorded. On Figure \ref{fig:demo_pictures}, we present the sequential events that occurred during the experiment. Figure \ref{fig:demo_pictures} (a) shows the starting configuration of the experiment. The human is equipped with the shoes we built. The robots are surrounding him. He is ready to move towards danger. After a few steps, the human has reached the point where the robots see the dangerous area. They notify him by blinking their LEDs. One can see on Figure \ref{fig:demo_pictures} (b) the two frontal robots blinking (their LEDs are off for a short period of time). The human decides to avoid the danger and turns left. While moving around the dangerous area, the robots in contact with it stay blinking. The 3 robots on the right side of the human on Figure \ref{fig:demo_pictures} (c) are touching the dangerous area. Thanks to this feedback sent by the robots, the human knows its relative position to the danger. On this picture, one can also see the mechanism that switches off the LEDs of the shoe working. The left shoe is not touching the ground any more, releasing the switch and opening the circuit powering the LEDs. On Figure \ref{fig:swarm_preventing} we showed how the swarm of robots had to stay on the boundary of the dangerous area, even if the distance between the robots and the human is under the target distance. One can observe on Figure \ref{fig:demo_pictures} (d) that the robots on the right of the human follow the curvature of the dangerous area. On Figure \ref{fig:demo_pictures} (e) the human has the same heading he had at the beginning of the experiment. The danger area is on his right, as signalled by the robots on his right. Soon after, the robots on the right of the human will retrieve their correct distance to the human, and stop blinking. The danger area has been avoided.
 			
 			\begin{figure}[!htp]
-				\includegraphics[width=\textwidth]{images/vlcsnap-00002.jpg}
+				\begin{minipage}[c]{0.49\textwidth}
+					\includegraphics[width=\textwidth]{images/vlcsnap-00001.jpg}
+					\centering (a)
+				\end{minipage}
+				\hfill
+				\begin{minipage}[c]{0.49\textwidth}
+					\includegraphics[width=\textwidth]{images/vlcsnap-00002.jpg}
+					\centering (b)
+				\end{minipage}
+				\begin{minipage}[c]{0.49\textwidth}
+					\includegraphics[width=\textwidth]{images/vlcsnap-00003.jpg}
+					\centering (c)
+				\end{minipage}
+				\hfill
+				\begin{minipage}[c]{0.49\textwidth}
+					\includegraphics[width=\textwidth]{images/vlcsnap-00005.jpg}
+					\centering (d)
+				\end{minipage}
+				\begin{minipage}[c]{0.49\textwidth}
+					\includegraphics[width=\textwidth]{images/vlcsnap-00007.jpg}
+					\centering (e)
+				\end{minipage}
+				
+				
+				\caption{Bitch, I'm fabulous}{Captured from the video of the experiment.}
+				\label{fig:demo_pictures}
 			\end{figure}
 			
-			\begin{figure}[!htp]
-				\includegraphics[width=\textwidth]{images/vlcsnap-00003.jpg}
-			\end{figure}
-			
-			\begin{figure}[!htp]
-				\includegraphics[width=\textwidth]{images/vlcsnap-00005.jpg}
-			\end{figure}
-			
-			\begin{figure}[!htp]
-				\includegraphics[width=\textwidth]{images/vlcsnap-00007.jpg}
-			\end{figure}
-			
+			The experiment was a success. The robots notified the human about the dangerous area. They stayed on the boundary of the area. However, for some of the robots, the distance to the human was oscillating. One can see on Figure \ref{fig:demo_pictures} (b) that one of the robot on the back of the human is closer to the human than it should be. The speed of the human in this experiment was not constant. At the beginning, the human walked very slowly until the dangerous area. Then, he progressively increased the speed. The final speed was still low, though.
 	
 
 \chapter{Conclusion}
