@@ -1,7 +1,7 @@
 PLOT_RESOLUTION = 30;
 diMatrix = zeros(1,PLOT_RESOLUTION);
 deMatrix = zeros(1,PLOT_RESOLUTION);
-NAME_BASE = 'random';
+NAME_BASE = 'geof';
 MIN_NUMBER = 1;
 MAX_NUMBER = 10;
 
