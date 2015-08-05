@@ -1285,7 +1285,7 @@ In this chapter, we introduce the different experiments we conducted with the re
 			
 				\begin{figure}[!htp]
 					\includegraphics[width=\textwidth]{../MATLAB/boxplot_random_distance.png}
-					\caption{The distance error for a random starting configuration}{On this figure, we show the evolution of the average distance error through boxplots. It is an average on 10 experiments with real robots. The initial positions of all the robots are randomly selected. We observe that the behaviour of the swarm tends to lower the error measure. The variance of the values distribution is very low (0.0087 on average). A boxplot is a way of representing the distribution of a group of values. Each box corresponds to one group of values. On each box, one can see the median (the red line) of the distribution. The blue box is the interval between the first quartile and the third quartile: the interquartile range (IQR). The dashed black line is the interval of all the non outlier points. The upper whisker (the upper end of the black line) is the highest datum still within 1.5 IQR of the upper quartile. The lower whisker is the lowest datum still within 1.5 IQR of the lower quartile. Any point above the upper whisker or below the lower whisker is called outlier.}
+					\caption{The distance error for a random starting configuration}{On this figure, we show the evolution of the average distance error through boxplots. It is an average on 10 experiments with real robots. The initial positions of all the robots are randomly selected. We observe that the behaviour of the swarm tends to lower the error measure. The variance of the values distribution is very low (0.0087 on average). A boxplot is a way of representing the distribution of a group of values. Each box corresponds to one group of values. On each box, one can see the median (the red line) of the distribution. The blue box is the interval between the first quartile and the third quartile: the interquartile range (IQR). The dashed black line is the interval of all the non outlier points. The upper whisker (the upper end of the black line) is the highest datum still within 1.5 IQR of the upper quartile \citep{wiki:003}. The lower whisker is the lowest datum still within 1.5 IQR of the lower quartile. Any point above the upper whisker or below the lower whisker is called outlier.}
 					\label{fig:boxplot_random_distance}
 				\end{figure}
 			
@@ -1311,7 +1311,7 @@ In this chapter, we introduce the different experiments we conducted with the re
 					\label{fig:boxplot_geo_density}
 				\end{figure}
 				
-				As the values are not completely stabilising for the specific starting configuration, it was interesting to see what was the evolution of the error for a longer experiment. We thus launched one experiment of 9 minutes with the specific starting configuration. Figure \ref{fig:geolong_distance} and \ref{fig:geolong_density} show the evolution of the error over time. The two figures show a global decrease of the error value. However, the distance error on Figure \ref{fig:geolong_distance} has a more monotonous evolution than the density one. The latter undergoes an augmentation around 3 minutes. During the first 180 seconds, the two evolutions correspond to what was observed in figures \ref{fig:boxplot_geo_distance} and \ref{fig:boxplot_geo_density}. The two series of values tend to stabilise at 0.8. Figure \ref{fig:geolong_final_state} shows the final state of the swarm at the end of the experiment. The robots are forming an acceptable circular shield around the human. One can conclude that 0.8 is a nice value for the error measure. The value 0.8 will thus be used as threshold of quality for the time metric.
+				As the values are not completely stabilising for the specific starting configuration, it was interesting to see what was the evolution of the error for a longer experiment. We thus launched one experiment of 9 minutes with the specific starting configuration. Figure \ref{fig:geolong} (a) and \ref{fig:geolong} (b) show the evolution of the error over time. The two figures show a global decrease of the error value. However, the distance error on Figure \ref{fig:geolong} (a) has a more monotonous evolution than the density one. The latter undergoes an augmentation around 3 minutes. During the first 180 seconds, the two evolutions correspond to what was observed in figures \ref{fig:boxplot_geo_distance} and \ref{fig:boxplot_geo_density}. The two series of values tend to stabilise at 0.8. Figure \ref{fig:geolong} (c) shows the final state of the swarm at the end of the experiment. The robots are forming an acceptable circular shield around the human. One can conclude that 0.8 is a nice value for the error measure. The value 0.8 will thus be used as threshold of quality for the time metric.
 				
 %				\begin{figure}[!htp]
 %					\includegraphics[width=\textwidth]{../MATLAB/boxplot_geolong_distance.png}
@@ -1345,6 +1345,7 @@ In this chapter, we introduce the different experiments we conducted with the re
 					\center (c)
 					
 					\caption{The long experiment for the specific starting configuration}{On this figure, we show the evolution of the distance error (a) and the density error (b) for one run of the experiment. The experiment lasted 9 minutes. One can see a global decrease in the two graphs showing that the behaviour tends to create a circle that presents good characteristics for our application. On (b) one can observe an augmentation around 200 seconds. The video from the experiment showed that the robots moved slightly to the right of the shoes, putting more space between the robots on the left. The robots returned to their correct position afterwards, as the graph suggests. (c) depicts the final state of the 9-minutes experiment using the specific configuration as starting configuration. It corresponds to a value of 0.8 for the two error measures. We defined this value as an acceptable quality.}
+					\label{fig:geolong}
 				\end{figure}
 				
 				If we use a threshold value of 0.8 for the quality measure, we observe a great difference between the random and specific configuration in the time it takes for the error measure to cross the threshold. Since for the distance and density metrics the best alternative was the random start configuration, it is logical that the alternative taking the less amount of time to cross the threshold of 0.8 is the random alternative. We take the median as reference. If the configuration is random, the swarm takes a few seconds on average to cross the threshold. On the other side, for the specific configuration, the swarm takes approximately 1min30s to do the same for the density metric, and 30 seconds for the distance metric.
@@ -1436,7 +1437,7 @@ In this chapter, we introduce the different experiments we conducted with the re
 				\end{minipage}
 				
 				
-				\caption{I'm fabulous}{Captured from the video of the experiment.}
+				\caption{I'm fabulous}{Captured from the video of the experiment. The virtual dangerous area is added as an overlay as a red disc.}
 				\label{fig:demo_pictures}
 			\end{figure}
 			
@@ -1457,7 +1458,10 @@ In this chapter, we introduce the different experiments we conducted with the re
 	
 	In this chapter, we express our conclusions on our solution. The project followed a standard process. First, meetings were organised to capture the requirements of the final solution, the idea behind the project. In the weeks that followed, we came up with a design that was meeting the first requirements and heading in the right direction. Once the design was accepted, the implementation could begin. The implementation consisted in a trial and error process with a lot of debugging. The controller we implemented was incrementally updated and tested, first in the simulator then on the real robots. At the end, when we were only changing the details of the solution, the tests were only made on the real robots. In the meantime, the hardware needed to perform the experiment was built. Once the current solution was apparently meeting the initial expectations, the writing of the report started. The experiments evaluating the behaviour of the swarm with defined metrics started at the same time (see Chapter \ref{chap:experiments}). Afterwards came the analysis of the results.
 	
-	 I've done this and this for the solution (the solution is composed of...). It works.
+	The idea behind the project was to create a new kind of protection with the expertise in swarm robotics we have in the laboratory. We decided to use the E-pucks \citep{mondada2009puck} to form a swarm encircling a human. The swarm is thus augmenting the capabilities of the human. He/she is able to \enquote{see} dangers that one usually cannot see. For this to happen, we implemented a controller for the individual robots composing the swarm. The controller is based on the principles of virtual physics and pattern formation. We had to think about how the robots would detect the human. The decision was made to build a portable device for this purpose. We built shoes with coloured LEDs that the robots can detect. Our solution was used in proof-of-concept experiment that yielded good results.
+	 
+	 
+	I've done this and this for the solution (the solution is composed of...). It works.
 
 	\paragraph{Future Works}
 	[The future works that would be interesting from my point of view.]
@@ -1674,6 +1678,14 @@ In this chapter, we introduce the different experiments we conducted with the re
    year = "2015",
    url = "https://en.wikipedia.org/w/index.php?title=Walking&oldid=671922191",
    note = "[Online; accessed 1-August-2015]"
+ }
+ 
+ @misc{ wiki:003,
+   author = "Wikipedia",
+   title = "Box plot --- Wikipedia{,} The Free Encyclopedia",
+   year = "2015",
+   url = "https://en.wikipedia.org/w/index.php?title=Box_plot&oldid=669188116",
+   note = "[Online; accessed 5-August-2015]"
  }
  
  @article{khatib1986real,
