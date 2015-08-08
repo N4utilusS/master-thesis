@@ -304,9 +304,9 @@ As swarm robotic systems are mostly destined to operate on risky floors, unknown
 			\item[Cohesion:] Each agent tries to centre itself at the average position of its neighbours.
 		\end{description}
 		%
-		\citet{baldassarre2003evolving} used evolutionary techniques to develop collective flocking behaviours. They demonstrate that these techniques are a powerful method for implementing collective behaviours. One of the most effective strategy that arose contained forms of \enquote{ situated specialisations}. Robots with identical evolved controllers have behaviours that depend on the circumstances. They think this is caused by the objective to reduce the interference between the attraction to the target and the need to maintain an aggregation state. Thanks to these specialisations, they observed that one of the robots was leading the way to the target while the others just tried to stay close to it. This is close to the idea behind the solution we want to implement.
-		
-		\citet{turgut2008self} proposed one of the first implementations of Reynolds' \citep{reynolds1987flocks} behaviour. Each robot knows the heading of the neighbours and their distance.
+		\citet{baldassarre2003evolving} used evolutionary techniques to develop collective flocking behaviours. They demonstrate that these techniques are a powerful method for implementing collective behaviours. One of the most effective strategy that arose contained forms of \enquote{ situated specialisations}. Robots with identical evolved controllers have behaviours that depend on the circumstances. They think this is caused by the objective to reduce the interference between the attraction to the target and the need to maintain an aggregation state. Thanks to these specialisations, they observed that one of the robots was leading the way to the target while the others just tried to stay close to it. This is close to the idea behind the solution we want to implement.\\
+		\citet{turgut2008self} proposed one of the first implementations of Reynolds' \citep{reynolds1987flocks} behaviour. Each robot knows the heading of its neighbours and their distance via a virtual heading sensor and infrared sensor respectively.\\
+		\citet{ccelikkanat2010steering} investigated on the very important problem of the control and guidance of a swarm of robots: how to control the swarm and to what extend it can be controlled. They guided a swarm of robots by controlling a minority of the agents inside the swarm, \enquote{informed robots}. \enquote{Naive robots} only consider the flocking objective while the \enquote{informed robots} also took into account the direction orders given by the operator.
 		
 		
 		Reynolds, Baldasserre, first implementation of R, Celikkanat and Sahin, Ferrante.
@@ -1873,6 +1873,17 @@ In this chapter, we introduce the different experiments we conducted with the re
   number={2-4},
   pages={97--120},
   year={2008},
+  publisher={Springer}
+}
+
+@article{ccelikkanat2010steering,
+  title={Steering self-organized robot flocks through externally guided individuals},
+  author={{\c{C}}elikkanat, Hande and {\c{S}}ahin, Erol},
+  journal={Neural Computing and Applications},
+  volume={19},
+  number={6},
+  pages={849--865},
+  year={2010},
   publisher={Springer}
 }
 
