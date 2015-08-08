@@ -177,33 +177,35 @@
 \addcontentsline{toc}{part}{First Matter}
 \part*{First Matter}
 \chapter{Acknowledgements}
-
-Faire un chemin présentant diverses zones dangereuses. Chaque zone dangereuse contient des problèmes que j'ai rencontrés. La personne qui m'a aidé à la résoudre est affichée sur le chemin à l'endroit où il est dévié.
-
-\begin{figure}[!htp]
-	\centering\begin{tikzpicture}
-	%Mauro, Gaëtan, Giovanni, Anthony, Lorenzo, Brian, Family and friends.
-	\epuck{-5}{12}
-	\epuck{-5}{10}
-	\epuck{-5}{8}
-	\epuck{-5}{6}
-	\epuck{-5}{4}
-	\epuck{-5}{2}
-	\epuck{-5}{0}
-	\epuck[60]{-2.5}{-4.33}
-	\epuck[120]{2.5}{-4.33}
-	\epuck[180]{5}{0}
 	
-	\draw (-4,12) node[anchor=west] {Mauro Birattari};
-	\draw (-4,10) node[anchor=west] {Gaëtan Podevijn};
-	\draw (-4,8) node[anchor=west] {Andreagiovanni Reina};
-	\draw (-4,6) node[anchor=west] {Anthony Antoun};
-	\draw (-4,4) node[anchor=west] {Brian Delhaisse};
-	\draw (-4,2) node[anchor=west] {Lorenzo Garattoni};
-	\draw (-4,0) node[anchor=west] {Family \& Friends};
+	\begin{comment}
+		Faire un chemin présentant diverses zones dangereuses. Chaque zone dangereuse contient des problèmes que j'ai rencontrés. La personne qui m'a aidé à la résoudre est affichée sur le chemin à l'endroit où il est dévié.
+	\end{comment}
 	
-	\end{tikzpicture}
-\end{figure}
+	\begin{figure}[!htp]
+		\centering\begin{tikzpicture}
+		%Mauro, Gaëtan, Giovanni, Anthony, Lorenzo, Brian, Family and friends.
+		\epuck{-5}{12}
+		\epuck{-5}{10}
+		\epuck{-5}{8}
+		\epuck{-5}{6}
+		\epuck{-5}{4}
+		\epuck{-5}{2}
+		\epuck{-5}{0}
+		\epuck[60]{-2.5}{-4.33}
+		\epuck[120]{2.5}{-4.33}
+		\epuck[180]{5}{0}
+		
+		\draw (-4,12) node[anchor=west] {Mauro Birattari};
+		\draw (-4,10) node[anchor=west] {Gaëtan Podevijn};
+		\draw (-4,8) node[anchor=west] {Andreagiovanni Reina};
+		\draw (-4,6) node[anchor=west] {Anthony Antoun};
+		\draw (-4,4) node[anchor=west] {Brian Delhaisse};
+		\draw (-4,2) node[anchor=west] {Lorenzo Garattoni};
+		\draw (-4,0) node[anchor=west] {Family \& Friends};
+		
+		\end{tikzpicture}
+	\end{figure}
 
 \chapter{Résumé}
 
@@ -269,32 +271,46 @@ As swarm robotic systems are mostly destined to operate on risky floors, unknown
 		
 		Human - robot interaction has become a subject of great importance. A lot of research has been done in this field recently in order to mimic the human communication behaviours in different circumstances. One of the most interesting examples is Minerva \citep{thrun1999minerva}. Minerva is a tour-guide robot that educates and entertains people in public places. It has a motorised face to imitate human emotions. It was tested in a museum where it successfully performed what it was created for while learning.
 		
-		The objective of this project is to protect a human from dangerous areas using robots. For this purpose, the robots have to recognise and locate the human. Plenty of solutions have emerged trying to solve that problem. However only few of them considered the viewpoint as being close to the ground. These solutions rely either on 2D laser range data on an horizontal plane, or RGB-D data. RGB-D (Red Green Blue-Depth/Distance) associates the usual video stream to a \enquote{depth} channel \citep{wiki:004}. \citet{gritti2014kinect} propose a new robust solution for people detection and tracking using Kinect \citep{kinect} or Asus Xtion \citep{asus}. The floor must be flat. It uses a statistical classifier trained with a big dataset containing real-world data. After classification either as human leg or obstacle, the data is fed to a tracking algorithm to track people. Such lasers are very expensive, and at the time of realising this thesis it was not possible to use Kinect sensors on the robots. As robotics swarms imply the use of many robots, buying one of these sensors for each robot was too expensive. Thus we had to implement our own solution based on the sensors available on the robots that we have.
+		The objective of this project is to protect a human from dangerous areas using robots. For this purpose, the robots have to recognise and locate the human. Plenty of solutions have emerged trying to solve that problem. However only few of them considered the viewpoint as being close to the ground. These solutions rely either on 2D laser range data on an horizontal plane, or RGB-D data. RGB-D (Red Green Blue-Depth/Distance) associates the usual video stream to a \enquote{depth} channel \citep{wiki:004}. \citet{gritti2014kinect} propose a new robust solution for people detection and tracking using Kinect \citep{kinect} or Asus Xtion \citep{asus}. The floor must be flat. It uses a statistical classifier trained with a big dataset containing real-world data. After classification either as human leg or obstacle, the data is fed to a tracking algorithm to track people. Such lasers are very expensive, and at the time of realising this thesis it was not possible to use Kinect sensors on the robots. As robotics swarms imply the use of many robots, buying one of these sensors for each robot is too expensive. Thus we have to implement our own solution based on the sensors available on the robots that we have.
 		
 	\section{Swarm Robotics}
 		\begin{comment}
 			Flocking with a guide, and then Pattern Formation with a Guide. Work related to what I do. Conclude on why it cannot be applied to my problem. Make connections with this part later in the document. S'inspirer de Brambilla pour les flock et pattern.
 		\end{comment}
 	
-	For \citet{csahin2005swarm}, swarm robotics is defined as \quot{the study of how large numbers of relatively simple physically embodied agents can be designed such that a desired collective behaviour emerges from the local interactions among agents and between the agents and the environment}~\citep{csahin2005swarm}. Swarm robotics can be separated from other robotic studies by the following characteristics \citep{brambilla2013swarm}:
-\begin{itemize}
-\item Robots are \emph{autonomous}
-\item Robots evolve \emph{in the environment} and can interact with it
-\item Robots' interactions are \emph{local} (sensors and communications)
-\item No \emph{centralised control} or \emph{global knowledge}
-\item Robots \emph{cooperate} to achieve a certain goal
-\end{itemize}
-As in this field of study, one is always looking for \emph{robust}, \emph{scalable} and \emph{flexible} systems, the main source of inspiration is the group of social animals (e.g.: ants, birds, fishes). When some of these simple animals gather in groups, they are able to perform tasks that could not be achieved individually (collective behaviour emerges from local interactions). Below are listed the definitions of these three terms \citep{brambilla2013swarm}:
-\label{def:robustness_scalability_flexibility}
-\begin{description}
-\item[Robustness:] Resistance against \emph{loss of group entities}. One can increase it by adding redundancy or remove the need for a leader.
-\item[Scalability:] Low variation in the performance of a system with respect to the \emph{size of the system}. It can be increased by encouraging local interactions, such as sensing and communications.
-\item[Flexibility:] Low variation in the performance of a system with respect to the \emph{type of environment or the task}.
-\end{description}
-With these definitions in mind, we can explain swarm engineering as:
-\quoto{Swarm engineering is an emerging discipline that aims at defining systematic and well founded procedures for modeling, designing, realizing, verifying, validating, operating, and maintaining a swarm robotics system.}{\cite{brambilla2013swarm}}
-\citet{kazadi2000swarm} points out that \quot{to the swarm engineer, the important points in the design of a swarm are that the swarm will do precisely what it is designed to do, and that it will do so reliably and on time} \citep{kazadi2000swarm}.
-	
+			For \citet{csahin2005swarm}, swarm robotics is defined as \quot{the study of how large numbers of relatively simple physically embodied agents can be designed such that a desired collective behaviour emerges from the local interactions among agents and between the agents and the environment}~\citep{csahin2005swarm}. Swarm robotics can be separated from other robotic studies by the following characteristics \citep{brambilla2013swarm}:
+		\begin{itemize}
+			\item Robots are \emph{autonomous}
+			\item Robots evolve \emph{in the environment} and can interact with it
+			\item Robots' interactions are \emph{local} (sensors and communications)
+			\item No \emph{centralised control} or \emph{global knowledge}
+			\item Robots \emph{cooperate} to achieve a certain goal
+			\end{itemize}
+			As in this field of study, one is always looking for \emph{robust}, \emph{scalable} and \emph{flexible} systems, the main source of inspiration is the group of social animals (e.g.: ants, birds, fishes). When some of these simple animals gather in groups, they are able to perform tasks that could not be achieved individually (collective behaviour emerges from local interactions). Below are listed the definitions of these three terms \citep{brambilla2013swarm}:
+			\label{def:robustness_scalability_flexibility}
+			\begin{description}
+			\item[Robustness:] Resistance against \emph{loss of group entities}. One can increase it by adding redundancy or remove the need for a leader.
+			\item[Scalability:] Low variation in the performance of a system with respect to the \emph{size of the system}. It can be increased by encouraging local interactions, such as sensing and communications.
+			\item[Flexibility:] Low variation in the performance of a system with respect to the \emph{type of environment or the task}.
+		\end{description}
+		With these definitions in mind, we can explain swarm engineering as:
+		\quoto{Swarm engineering is an emerging discipline that aims at defining systematic and well founded procedures for modeling, designing, realizing, verifying, validating, operating, and maintaining a swarm robotics system.}{\cite{brambilla2013swarm}}
+		\citet{kazadi2000swarm} points out that \quot{to the swarm engineer, the important points in the design of a swarm are that the swarm will do precisely what it is designed to do, and that it will do so reliably and on time}.
+		
+		Since the robots have to protect the human, they need to stay close to him/her. The group composed by the human and the robots have to move in a coordinated manner. The scientific term for this coordinated behaviour is \emph{flocking}. Many examples can be found in nature, e.g. birds, fishes. In nature this behaviour offers many advantages. The most common approach for implementing a flocking behaviour is virtual physics design. One can also obtain these types of motion through artificial evolution \citep{brambilla2013swarm}. \citet{reynolds1987flocks} was the first to propose a model for flocking. It was meant for computer graphics applications. With only 3 simple rules that every agent in the swarm has to respect, he was able to obtain very realistic swarm behaviours.
+		\begin{description}
+			\item[Separation:] Each agent tries not to be too close from its neighbours to avoid collisions.
+			\item[Alignment:] Each agent changes its heading to the average heading of its neighbours.
+			\item[Cohesion:] Each agent tries to centre itself at the average position of its neighbours.
+		\end{description}
+		%
+		\citet{baldassarre2003evolving} used evolutionary techniques to develop collective flocking behaviours. They demonstrate that these techniques are a powerful method for implementing collective behaviours. One of the most effective strategy that arose contained forms of \enquote{ situated specialisations}. Robots with identical evolved controllers have behaviours that depend on the circumstances. They think this is caused by the objective to reduce the interference between the attraction to the target and the need to maintain an aggregation state. Thanks to these specialisations, they observed that one of the robots was leading the way to the target while the others just tried to stay close to it. This is close to the idea behind the solution we want to implement.
+		
+		\citet{turgut2008self} proposed one of the first implementations of Reynolds' \citep{reynolds1987flocks} behaviour. Each robot knows the heading of the neighbours and their distance.
+		
+		
+		Reynolds, Baldasserre, first implementation of R, Celikkanat and Sahin, Ferrante.
+			
 	\subsection{Human - Robots Swarm Interaction}
 		\begin{comment}
 			Work related to what I do (detect humans, protection, follow person). Conclude on why it cannot be applied to my problem.
@@ -1825,6 +1841,39 @@ In this chapter, we introduce the different experiments we conducted with the re
   volume={3},
   year={1999},
   organization={IEEE}
+}
+
+@inproceedings{reynolds1987flocks,
+  title={Flocks, herds and schools: A distributed behavioral model},
+  author={Reynolds, Craig W},
+  booktitle={ACM Siggraph Computer Graphics},
+  volume={21},
+  number={4},
+  pages={25--34},
+  year={1987},
+  organization={ACM}
+}
+
+@article{baldassarre2003evolving,
+  title={Evolving mobile robots able to display collective behaviors},
+  author={Baldassarre, Gianluca and Nolfi, Stefano and Parisi, Domenico},
+  journal={Artificial life},
+  volume={9},
+  number={3},
+  pages={255--267},
+  year={2003},
+  publisher={MIT Press}
+}
+
+@article{turgut2008self,
+  title={Self-organized flocking in mobile robot swarms},
+  author={Turgut, Ali E and {\c{C}}elikkanat, Hande and G{\"o}k{\c{c}}e, Fatih and {\c{S}}ahin, Erol},
+  journal={Swarm Intelligence},
+  volume={2},
+  number={2-4},
+  pages={97--120},
+  year={2008},
+  publisher={Springer}
 }
 
 \end{filecontents}
