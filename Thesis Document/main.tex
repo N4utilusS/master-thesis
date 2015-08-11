@@ -180,6 +180,7 @@
 	
 	\begin{comment}
 		Faire un chemin présentant diverses zones dangereuses. Chaque zone dangereuse contient des problèmes que j'ai rencontrés. La personne qui m'a aidé à la résoudre est affichée sur le chemin à l'endroit où il est dévié.
+		Ajouter Céline.
 	\end{comment}
 	
 	\begin{figure}[!htp]
@@ -234,30 +235,34 @@
 \mainmatter
 \chapter{Introduction}
 
-[I'll do this and this... blah blah blah... Overview and roadmap. The problem is given in the introduction, so we can put the SOA right after, before the detailed description of the problem.]
-
-\begin{comment}
-INTRO
-Il faut respecter un fil conducteur dans la thèse. D'abord teaser le contenu dans l'introduction : "j'ai fait un super controller qui peut permettre à des robots de protéger un humain. Ca n'avait jamais été fait avant. J'utilise une swarm. J'ai de très bons résultats. On a testé avec des vrais robots, et l'humain est empêché d'accéder à des zones dangereuses.
-
-STATE OF THE ART
-Voici ce qui existe dans le domaine human - robot interaction. Rien de tout cela ne me satisfait et répond à mon problème.
-
-Idem pour human - swarm interaction.
-
-Je vais donc essayer de répondre au problème avec une nouvelle solution... Elle est meilleure que les autres pour ce problème car...
-
-SOLUTION
-Pour parvenir à mes fins, j'ai dû implémenter un controller. J'ai choisi virtual physics car ces avantages et inconvénients. C'est ce gars qui l'a inventé, et voici les travaux utilisant cette technique.
-
-\end{comment}
-
-As swarm robotic systems are mostly destined to operate on risky floors, unknown environment, it would seem logical to consider their application in exploration and/or protection missions. However, at the time of writing this thesis, we could not find any study on the subject. Exploration experiments never included a human, or other living organism. The object of this thesis is to address this lack of study by designing and implementing a protective behaviour executed by a robotic swarm.
 	
-	The human operator is here part of the swarm system. The swarm has to protect him by preventing him from going into dangerous areas, in the same way a group of bodyguards protects someone. The swarm has to follow the operator anywhere to ensure permanent protection.
+	\begin{comment}
+	INTRO
 	
-	We believe this work to be important since it could lay the foundations of a new branch in swarm engineering: human protection, escort or swarm turn-by-turn navigation.
+	I'll do this and this... blah blah blah... Overview and roadmap. The problem is given in the introduction, so we can put the SOA right after, before the detailed description of the problem.
+	Il faut respecter un fil conducteur dans la thèse. D'abord teaser le contenu dans l'introduction : "j'ai fait un super controller qui peut permettre à des robots de protéger un humain. Ca n'avait jamais été fait avant. J'utilise une swarm. J'ai de très bons résultats. On a testé avec des vrais robots, et l'humain est empêché d'accéder à des zones dangereuses.
+	Solution de manière très générale.
 	
+	- Avancées dans la robotique ont permis de nouvelles applications et domaines d'étude
+	- Before after: one-way feedback (control from human) --> bidir. feed.
+	- 
+	
+	STATE OF THE ART
+	Voici ce qui existe dans le domaine human - robot interaction. Rien de tout cela ne me satisfait et répond à mon problème.
+	
+	Idem pour human - swarm interaction.
+	
+	Je vais donc essayer de répondre au problème avec une nouvelle solution... Elle est meilleure que les autres pour ce problème car...
+	
+	- SOA des méthodes d'augmentation de l'être humain ?
+	
+	SOLUTION
+	Pour parvenir à mes fins, j'ai dû implémenter un controller. J'ai choisi virtual physics car ces avantages et inconvénients. C'est ce gars qui l'a inventé, et voici les travaux utilisant cette technique.
+	
+	\end{comment}
+	
+	New progress in robotics have opened a new branch of studies. Taking inspiration from social animals like ants, bees or fishes, groups of robots are now able to perform tasks that they could undertake individually.
+		
 	An article will be written to expose this research to the rest of the swarm robotics community.
 
 \chapter{State of the Art}
