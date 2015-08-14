@@ -5,7 +5,6 @@
 \usepackage[marginparwidth=28mm]{geometry}
 \usepackage[pdftex]{graphicx}
 \usepackage{tikz}
-
 \usepackage{filecontents}
 \usepackage[T1]{fontenc}
 \usepackage[UKenglish]{babel}
@@ -209,14 +208,16 @@
 	\end{figure}
 
 \chapter{Résumé}
-
+	\renewcommand{\abstractname}{\vspace{-\baselineskip}}
 	\begin{abstract}
+		L’objectif de ce mémoire est d’introduire un nouveau type de protection pour l’être humain dans les environnements dangereux. Cette protection est basée sur la robotique en essaim. Un essaim de robots protège un être humain en augmentant les capacités de ce dernier. Les robots informent l’être humain à propos de zones dangereuses que seuls les robots sont à même de percevoir. En contraste avec la littérature courante qui explore davantage les solutions avec un canal de communication unidirectionnel depuis l’être humain vers les robots, notre solution prévoit un canal de communication bidirectionnel. L’être humain contrôle indirectement les robots en se déplaçant, tandis que l’essaim de robots encercle l’être humain et le met en garde contre les zones dangereuses invisibles. Les robots restent à la frontière de la zone dangereuse pour former une barrière entre l’être humain et le danger. Une paire de chaussure équipée de LEDs a été construite. Ces chaussures permettent aux robots de détecter l’être humain. Notre solution a été testée lors de nombreuses simulations et sur de vrais robots. Les résultats sont prometteurs, l’essaim encercle l’être humain et le prévient de dangers à proximité. Nos expériences font office de preuve de concept.
 		
+		\textbf{Mots-clés :} robotique en essaim, escorte d'être humain, zones dangereuses, chaussures équippées
 	\end{abstract}
 \chapter{Summary}
 
 	\begin{abstract}
-		The main objective of this master thesis is to introduce a new kind of protection. This protection is based on swarm robotics. A swarm of robots protects a human by augmenting his/her abilities in the sense that the robots provide feedback on the invisible nature of the environment. In contrast with the current literature that mostly explores solutions with a one-way feedback from the human operator to the robots, our solution provides a bidirectional feedback. The human indirectly controls the robots by changing his/her position. The swarm of robots, encircling the human, notifies the human about near invisible dangerous areas. The robots stay at the boundary of the dangerous area to form a kind of barrier. The software controlling the robots was implemented through a process of trial and error. It was tested heavily in simulation with ARGoS, a simulator used to run experiments involving large amount of robots, and on the real robots. A pair of augmented shoes was built and equipped with LEDs. They allow the robots to locate the human. The experiments conducted yielded good results and can act as proof of concept. However one will need to overcome some limitations to enable real life applications.
+		The objective of this master thesis is to introduce a novel type of protection for humans in dangerous environments. This protection is based on swarm robotics. A swarm of robots protects a human by augmenting his/her abilities. The robots provide the human with feedback about dangerous areas that only the robots are able to perceive. In contrast with the current literature that mostly explores solutions with a one-way feedback from the human operator to the robots, our solution provides a bidirectional feedback. The human indirectly controls the robots by changing his/her position. The swarm of robots, encircling the human, notifies the human about near invisible dangerous areas. The robots stay at the boundary of the dangerous area to form a barrier between the human and the danger. A pair of augmented shoes was built and equipped with LEDs. They allow the robots to locate the human. Our solution was tested heavily in simulation and on the real robots. The experiments conducted yielded promising results. The swarm of robots encircles the human and notifies him/her about dangerous areas. Our experiments can act as proof of concept.
 		
 		\textbf{Keywords:} swarm robotics, human escorting, dangerous areas, augmented shoes
 	\end{abstract}
