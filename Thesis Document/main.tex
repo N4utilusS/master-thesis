@@ -251,28 +251,31 @@
 	- Ce que j'ai dû faire pour y arriver
 	- Les résultats obtenus avec les tests.
 	
-	STATE OF THE ART
-	Voici ce qui existe dans le domaine human - robot interaction. Rien de tout cela ne me satisfait et répond à mon problème.
-	
-	Idem pour human - swarm interaction.
-	
-	Je vais donc essayer de répondre au problème avec une nouvelle solution... Elle est meilleure que les autres pour ce problème car...
-	
-	- SOA des méthodes d'augmentation de l'être humain ?
 	
 	SOLUTION
 	Pour parvenir à mes fins, j'ai dû implémenter un controller. J'ai choisi virtual physics car ces avantages et inconvénients. C'est ce gars qui l'a inventé, et voici les travaux utilisant cette technique.
 	
 	\end{comment}
 	
-	New progress in robotics have opened a new branch of studies. Taking inspiration from social animals like ants, bees or fishes, groups of robots are now able to perform tasks that could not be undertaken individually. These groups are called swarms. Applications related to these tasks have begun to flourish in the literature (e.g., foraging, task allocation, pattern formation). In these applications each robot is controlled by a piece of code. Most of the time, this piece of code is the same for every robot. The robots execute the portion of the code necessary to perform the task that suits the best the circumstances. They are driven by the stigmergy, which means that their behaviour is guided by the current status of the work. There is no hierarchy in the swarm. All the robots behave independently. In some applications, the swarm can be partially guided by a human operator. There is thus a one-way communication between the human and the swam of robots. Until now, little attention has been paid on the messages that are send from the swarm to the human operator. To our best knowledge, no study has considered a human being guided by a swarm of robots. We intend to address this lack of consideration by extending studies on exploration and pattern formation.
+	New progress in robotics have opened a new branch of studies. Taking inspiration from social animals like ants, bees or fishes, groups of robots are now able to perform tasks that could not be undertaken individually. These groups are called swarms. Applications related to these tasks have begun to flourish in the literature (e.g., foraging, task allocation, pattern formation). In these applications each robot is controlled by a piece of code. Most of the time, this piece of code is the same for every robot. The robots execute the portion of the code necessary to perform the task that suits the best the circumstances. They are driven by the stigmergy, which means that their behaviour is guided by the current status of the work. There is no hierarchy in the swarm. All the robots behave independently. In some applications, the swarm can be partially guided by a human operator. There is thus a one-way communication between the human and the swam of robots. Until now, little attention has been paid on the messages that are send from the swarm to the human operator. To our best knowledge, no study has considered a human being guided by a swarm of robots. We made an attempt to address this lack of consideration by extending studies on exploration and pattern formation.
 	
-	We found the idea of a human being escorted by a swarm of robots interesting. 
-		
-	An article will be written to expose this research to the rest of the swarm robotics community.
+	We found the idea of a human being escorted by a swarm of robots interesting. In this application, the swarm of robots is preventing the human from entering dangerous areas invisible to the human. There areas could contain mines, be radioactive or present another type of danger. In this application the swarm of robots is guiding the human. There is a bidirectional feedback between the swarm and the human. It contrasts with the previous applications that only contained a unidirectional feedback (the human controlling the swarm). To achieve this result, we had to imagine what the protection would look like. We took inspiration from the techniques in pattern formation to transform our ideas into executable code, i.e., a controller. For the robots to stay around the human, we had to find a way to make the human detectable for the robots. We built an entirely new portable device for that purpose.
+	
+	Our solution went through a series of tests. The majority of the tests was used to incrementally improve the solution. The tests were made in a simulator and on real robots. At the end of the implementation, more tests were performed to assess the quality of the solution. Overall results are promising. The robots are following the human. They notify him/her about close by dangers. This master thesis has high chances to serve as the base of a scientific article. With this research we hope to stimulate investigations in the field of applications of robots swarms, and promote a new type of applications.
 
 \chapter{State of the Art}
 	\label{chap:state_of_the_art}
+	\begin{comment}
+		STATE OF THE ART
+		Voici ce qui existe dans le domaine human - robot interaction. Rien de tout cela ne me satisfait et répond à mon problème.
+		
+		Idem pour human - swarm interaction.
+		
+		Je vais donc essayer de répondre au problème avec une nouvelle solution... Elle est meilleure que les autres pour ce problème car...
+		
+		- SOA des méthodes d'augmentation de l'être humain ?
+		
+	\end{comment}
 	In this section, we provide some general insight in the world of human - robot interaction and swarm robotics. We then expose interesting studies about the interaction between human and swarms of robots in swarm robotics.
 	
 	\section{Human - Robot Interaction}
