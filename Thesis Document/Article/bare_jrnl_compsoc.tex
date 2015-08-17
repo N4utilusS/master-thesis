@@ -771,6 +771,8 @@ NOTE   = {{revision 138643}},
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
+\usepackage{hyperref}
+\usepackage[pdftex]{graphicx}
 \setlength\parskip{\baselineskip}
 
 \begin{document}
@@ -947,6 +949,26 @@ NOTE   = {{revision 138643}},
 
 Even though swarm robotics can carry out tasks autonomously, they do not have a global understanding of the environment and of the task that they must carry out. A human operator can, therefore, interact with those swarm systems to issue them commands (i.e., what type of tasks to carry out and where to carry out the task). Issuing commands relies on a one-way communication between the human and the swarm of robots. For swarm robotics to be adopted outside of research laboratories and tackle real world issues, one should always be able to take control of the swarm at any time. This is a legitimate safety requirement when considering the use of a large amount of potentially harmful robots around humans. Hence one can understand the vital aspect of the interaction between human and swarms of robots. In this thesis, however, we did not implement a method granting the human to completely control the swarm. We leave it as a future work. For the purpose of this thesis, it was not necessary.
 
+To date, little attention has been paid to robotics swarm feedback, i.e., messages sent from the swarm to the human operator. Most of the research works focus on issuing commands to swarms. However, there might be situations in which the human does not know everything (e.g., where a gas leak comes from). For instance, we can leverage swarm robotics systems to help humans move in dangerous environments. To the best of our knowledge, no study has considered a human being escorted by a swarm of robots in a dangerous environment.
+
+In this thesis we make an attempt to address this lack of consideration. We study how a swarm of robots can help a human move in dangerous environments. We use inspiration from flocking and pattern formation to allow a swarm of robots (see Figure \ref{fig:e-puck}) to prevent a human from entering dangerous areas. In this thesis, these dangerous areas are invisible to the human. These dangerous areas could, for instance, contain mines or be radioactive, or present another type of danger (e.g., poisonous gas, unstable floor). In order for the human to avoid these dangerous areas, we designed a swarm system that escorts the human in an environment. The robots encircle the human. There is a bidirectional feedback between the swarm and the human. The robots warn the human about the danger, and the human indirectly controls the position of the robots by changing his/her position. The swarm is augmenting the capabilities of the human. The human is able to perceive dangers that he would not be able to perceive without the help of our robotic system. It contrasts with most of the studies that only contain a unidirectional feedback (the human controlling the swarm). For the robots to stay around the human, we had to find a way to make the human detectable for the robots. We built an entirely new portable device for that purpose: augmented shoes with coloured LEDs that the robots can detect with their camera (see Figure \ref{fig:shoes}).
+
+\begin{figure}[!t]
+	\centering
+	\includegraphics[width=3in]{../images/e-puck.jpg}
+	\caption{The robotic platform we used: the E-puck.}
+	\label{fig:e-puck}
+\end{figure}
+
+\begin{figure}[!t]
+	\centering
+	\includegraphics[width=3in]{../images/shoes2.jpg}
+	\caption{The augmented shoes.}
+	\label{fig:shoes}
+\end{figure}
+
+We conducted multiple experiments in simulations and with real robots to show that our solution addresses our problem. We characterised the system composed by the swarm of robots and the shoes by performing more tests: we tested the range of detection of the shoes to see how far away the robots could detect them. The maximum distance we obtained is sufficient for our purpose, but not for real applications. We also analysed the time needed by the robots to form a circle around the human from different starting positions. We obtained the best results for the starting configuration where all the robots are randomly placed in the arena. On the other hand we obtained longer delays for the configuration where all the robots are clustered near the shoes (this configuration is similar to a storage configuration). However, in all the cases, the robots surrounded the human. We ran an experiment with a human walking with the augmented shoes towards a virtual dangerous area. The robots in contact with the dangerous area correctly warned the human. Even though our solution satisfied our main problem (i.e., how to protect a human from going into dangerous areas), we believe that the current implementation of our solution has some limitations. These limitations could be investigated as future works.
+
 %\subsection{Subsection Heading Here}
 %Subsection text here.
 %
@@ -1097,7 +1119,7 @@ Even though swarm robotics can carry out tasks autonomously, they do not have a 
 \fi
 
 
-The authors would like to thank...
+The author would like to thank Mauro Birattari, Ga\"{e}tan Podevijn, Andreagiovanni Reina, Anthony Antoun, Brian Delhaisse, Lorenzo Garattoni and the IRIDIA laboratory for their precious help and the hardware provided.
 
 
 % Can use something like this to put references on a page
@@ -1151,22 +1173,36 @@ The authors would like to thank...
 %\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{mshell}}]{Michael Shell}
 % or if you just want to reserve a space for a photo:
 
-\begin{IEEEbiography}{Michael Shell}
-Biography text here.
-\end{IEEEbiography}
+%\begin{IEEEbiography}{Michael Shell}
+%Biography text here.
+%\end{IEEEbiography}
 
 % if you will not have a photo at all:
-\begin{IEEEbiographynophoto}{John Doe}
-Biography text here.
+\begin{IEEEbiographynophoto}{Mauro Birattari}
+Promoter. \href{mailto:mbiro@ulb.ac.be}{mbiro@ulb.ac.be}
 \end{IEEEbiographynophoto}
+
+\begin{IEEEbiographynophoto}{Marco Dorigo}
+Co-promoter. \href{mailto:mdorigo@ulb.ac.be}{mdorigo@ulb.ac.be}
+\end{IEEEbiographynophoto}
+
+\begin{IEEEbiographynophoto}{Ga\"{e}tan Podevijn}
+Supervisor. \href{mailto:gpodevij@ulb.ac.be}{gpodevij@ulb.ac.be}
+\end{IEEEbiographynophoto}
+
+\begin{IEEEbiographynophoto}{Andreagiovanni Reina}
+Supervisor. \href{mailto:areina@ulb.ac.be}{areina@ulb.ac.be}
+\end{IEEEbiographynophoto}
+
+\vfill
 
 % insert where needed to balance the two columns on the last page with
 % biographies
 %\newpage
 
-\begin{IEEEbiographynophoto}{Jane Doe}
-Biography text here.
-\end{IEEEbiographynophoto}
+%\begin{IEEEbiographynophoto}{Jane Doe}
+%Biography text here.
+%\end{IEEEbiographynophoto}
 
 % You can push biographies down or up by placing
 % a \vfill before or after them. The appropriate
