@@ -783,7 +783,7 @@ NOTE   = {{revision 138643}},
 % not capitalized unless they are the first or last word of the title.
 % Linebreaks \\ can be used within to get better formatting as desired.
 % Do not put math or special symbols in the title.
-\title{Human - Robots Swarms Interaction\\ \vspace{4mm} \Large{An Escorting Robot Swarm that Diverts a Human\\ away from Dangers one cannot perceive}}
+\title{Human - Robots Swarms Interaction\\ \vspace{4mm} \Large{An Escorting Robot Swarm that Diverts a Human\\ Away from Dangers One Cannot Perceive}}
 %
 %
 % author names and IEEE memberships
@@ -955,19 +955,48 @@ In this thesis we make an attempt to address this lack of consideration. We stud
 
 \begin{figure}[!t]
 	\centering
-	\includegraphics[width=3in]{../images/e-puck.jpg}
+	\includegraphics[width=2.5in]{../images/e-puck.jpg}
 	\caption{The robotic platform we used: the E-puck.}
 	\label{fig:e-puck}
 \end{figure}
 
 \begin{figure}[!t]
 	\centering
-	\includegraphics[width=3in]{../images/shoes2.jpg}
+	\includegraphics[width=2.5in]{../images/shoes2.jpg}
 	\caption{The augmented shoes.}
 	\label{fig:shoes}
 \end{figure}
 
-We conducted multiple experiments in simulations and with real robots to show that our solution addresses our problem. We characterised the system composed by the swarm of robots and the shoes by performing more tests: we tested the range of detection of the shoes to see how far away the robots could detect them. The maximum distance we obtained is sufficient for our purpose, but not for real applications. We also analysed the time needed by the robots to form a circle around the human from different starting positions. We obtained the best results for the starting configuration where all the robots are randomly placed in the arena. On the other hand we obtained longer delays for the configuration where all the robots are clustered near the shoes (this configuration is similar to a storage configuration). However, in all the cases, the robots surrounded the human. We ran an experiment with a human walking with the augmented shoes towards a virtual dangerous area. The robots in contact with the dangerous area correctly warned the human. Even though our solution satisfied our main problem (i.e., how to protect a human from going into dangerous areas), we believe that the current implementation of our solution has some limitations. These limitations could be investigated as future works.
+We conducted multiple experiments in simulations and with real robots to show that our solution addresses our problem. We characterised the system composed by the swarm of robots and the shoes by performing more tests: we tested the range of detection of the shoes to see how far away the robots could detect them. The maximum distance we obtained is sufficient for our purpose, but not for real applications. We also analysed the time needed by the robots to form a circle around the human from different starting positions. We obtained the best results for the starting configuration where all the robots are randomly placed in the arena. On the other hand we obtained longer delays for the configuration where all the robots are clustered near the shoes (this configuration is similar to a storage configuration). However, in all the cases, the robots surrounded the human. We ran an experiment with a human walking with the augmented shoes towards a virtual dangerous area (see Figure \ref{fig:demo_pictures}). The robots in contact with the dangerous area correctly warned the human. Even though our solution satisfied our main problem (i.e., how to protect a human from going into dangerous areas), we believe that the current implementation of our solution has some limitations. These limitations could be investigated as future works.
+
+\begin{figure}[!htp]
+	\begin{minipage}[r]{1.5in}
+		\includegraphics[width=\textwidth]{../images/vlcsnap-00001.jpg}
+		\centering (a)
+	\end{minipage}
+	%\hfill
+	\begin{minipage}[c]{1.5in}
+		\includegraphics[width=\textwidth]{../images/vlcsnap-00002.jpg}
+		\centering (b)
+	\end{minipage}
+	\begin{minipage}[c]{1.5in}
+		\includegraphics[width=\textwidth]{../images/vlcsnap-00003.jpg}
+		\centering (c)
+	\end{minipage}
+	%\hfill
+	\begin{minipage}[c]{1.5in}
+		\includegraphics[width=\textwidth]{../images/vlcsnap-00005.jpg}
+		\centering (d)
+	\end{minipage}
+	\begin{minipage}[c]{1.5in}
+		\includegraphics[width=\textwidth]{../images/vlcsnap-00007.jpg}
+		\centering (e)
+	\end{minipage}
+	
+	
+	\caption{Screenshots from the video of an experiment. The virtual dangerous area is added as an overlay as a red disc.}
+	\label{fig:demo_pictures}
+\end{figure}
 
 %\subsection{Subsection Heading Here}
 %Subsection text here.
@@ -1178,21 +1207,36 @@ The author would like to thank Mauro Birattari, Ga\"{e}tan Podevijn, Andreagiova
 %\end{IEEEbiography}
 
 % if you will not have a photo at all:
-\begin{IEEEbiographynophoto}{Mauro Birattari}
-Promoter. \href{mailto:mbiro@ulb.ac.be}{mbiro@ulb.ac.be}
-\end{IEEEbiographynophoto}
+%\begin{IEEEbiographynophoto}{Mauro Birattari}
+%Promoter. \href{mailto:mbiro@ulb.ac.be}{mbiro@ulb.ac.be}
+%\end{IEEEbiographynophoto}
+%
+%\begin{IEEEbiographynophoto}{Marco Dorigo}
+%Co-promoter. \href{mailto:mdorigo@ulb.ac.be}{mdorigo@ulb.ac.be}
+%\end{IEEEbiographynophoto}
+%
+%\begin{IEEEbiographynophoto}{Ga\"{e}tan Podevijn}
+%Supervisor. \href{mailto:gpodevij@ulb.ac.be}{gpodevij@ulb.ac.be}
+%\end{IEEEbiographynophoto}
+%
+%\begin{IEEEbiographynophoto}{Andreagiovanni Reina}
+%Supervisor. \href{mailto:areina@ulb.ac.be}{areina@ulb.ac.be}
+%\end{IEEEbiographynophoto}
 
-\begin{IEEEbiographynophoto}{Marco Dorigo}
-Co-promoter. \href{mailto:mdorigo@ulb.ac.be}{mdorigo@ulb.ac.be}
-\end{IEEEbiographynophoto}
+%\hline
 
-\begin{IEEEbiographynophoto}{Ga\"{e}tan Podevijn}
-Supervisor. \href{mailto:gpodevij@ulb.ac.be}{gpodevij@ulb.ac.be}
-\end{IEEEbiographynophoto}
+\section*{Contacts}
+\textbf{Anthony Debruyn} -- Author\\
+Email: \href{mailto:adebruyn@ulb.ac.be}{adebruyn@ulb.ac.be}\\
+\textbf{Mauro Birattari} -- Promoter\\
+Email: \href{mailto:mbiro@ulb.ac.be}{mbiro@ulb.ac.be}\\
+\textbf{Marco Dorigo} -- Co-promoter\\
+Email: \href{mailto:mdorigo@ulb.ac.be}{mdorigo@ulb.ac.be}\\
+\textbf{Ga\"{e}tan Podevijn} -- Supervisor\\
+Email: \href{mailto:gpodevij@ulb.ac.be}{gpodevij@ulb.ac.be}\\
+\textbf{Andreagiovanni Reina} -- Supervisor\\
+Email: \href{mailto:areina@ulb.ac.be}{areina@ulb.ac.be}
 
-\begin{IEEEbiographynophoto}{Andreagiovanni Reina}
-Supervisor. \href{mailto:areina@ulb.ac.be}{areina@ulb.ac.be}
-\end{IEEEbiographynophoto}
 
 \vfill
 
