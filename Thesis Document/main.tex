@@ -291,6 +291,10 @@
 		\end{comment}
 		
 		Human - robot interaction has become a subject of great importance. A lot of research has been done in this field recently in order to mimic the human communication behaviours in different circumstances. One of the most interesting examples is Minerva \citep{thrun1999minerva}. Minerva is a tour-guide robot that educates and entertains people in public places. It has a motorised face to imitate human emotions. It was tested in a museum where it successfully performed what it was created for while learning.
+		\citet{dautenhahn2006may} studied how a robot should best approach and place itself
+relative to a seated human subject. They performed experiments where a human asked for an object that would then be fetched by a robot. The robot would come to the human using different approach directions. The results reveal that most humans disliked the frontal approach and preferred to be approached from either the left or the right side.
+		\citet{itoh2006development} studied the negative physical and psychical effect of robots on humans. Their study aims to complete other studies that only subjectively measured these negative effects by questionnaires. They built a device to measure physiological parameters such as respiration, heart rate, perspiration and pulse wave, and arm motion to obtain an objective measure of the effects of robots on humans. Using this device, the robot was able to react to the stress of the human and move accordingly in order to decrease the stress.
+		\citet{bethel2009non} investigated on non-facial and non-verbal methods of affective expression for enabling social interaction in appearance-constrained robots and found 5 main methods: body movements, postures, orientation, color, and sound. Example of appearance-constrained robots can be found in search and rescue, law enforcement, and military applications. They conducted a study involving 128 participants in a confined-space simulated disaster site with the robots interacting in the dark. \quot{Statistically significant results indicated that participants felt the robots that exhibited affective expressions were more calming, friendly, and attentive, which improved the social human-robot interactions}~\citep{bethel2009non}.
 		
 		The objective of this project is to protect a human from dangerous areas using robots. For this purpose, the robots have to recognise and locate the human. Several solutions have emerged trying to solve that problem. However only few of them considered the sensor to detect the human as being close to the ground. These solutions rely either on 2D laser range data on an horizontal plane, or RGB-D data. RGB-D (Red Green Blue-Depth/Distance) associates the usual video stream to a \enquote{depth} channel \citep{wiki:004}. \citet{gritti2014kinect} propose a new robust solution for people detection and tracking using Kinect \citep{kinect} or Asus Xtion \citep{asus}. The floor must be flat. It uses a statistical classifier trained with a big dataset containing real-world data. After classification either as human leg or obstacle, the data is fed to a tracking algorithm to track people. Such lasers are very expensive, and at the time of realising this thesis it was not possible to use Kinect sensors on the robots. As robotics swarms imply the use of many robots, buying one of these sensors for each robot is too expensive. Thus we have to implement our own solution based on the sensors available on the robots that we have.
 		
@@ -302,10 +306,10 @@
 			For \citet{csahin2005swarm}, swarm robotics is defined as \quot{the study of how large numbers of relatively simple physically embodied agents can be designed such that a desired collective behaviour emerges from the local interactions among agents and between the agents and the environment}~\citep{csahin2005swarm}. These groups of agents do not depend on any external structure or centralised control \citep{Dorigo:2014}. The development of swarms of robots rely on the principles of swarm intelligence. Swarm robotics can be separated from other robotic studies by the following characteristics \citep{brambilla2013swarm}:
 %
 		\begin{itemize}
-			\item Robots are \emph{autonomous}
-			\item Robots evolve \emph{in the environment} and can interact with it
-			\item Robots' interactions are \emph{local} (sensors and communications)
-			\item No \emph{centralised control} or \emph{global knowledge}
+			\item Robots are \emph{autonomous};
+			\item Robots evolve \emph{in the environment} and can interact with it;
+			\item Robots' interactions are \emph{local} (sensors and communications);
+			\item No \emph{centralised control} or \emph{global knowledge};
 			\item Robots \emph{cooperate} to achieve a certain goal.
 			\end{itemize}%
 %
@@ -1531,7 +1535,7 @@ In this chapter, we introduce the different experiments we conducted with the re
 			Once enhancements on the hardware side have been realised, one could update the controller to perform other related activities. One interesting application one could look into is guidance. The human would have less freedom of movement. Instead, the robots would encircle the human and help him to move in a previously computed and optimised direction. Guidance could also apply to animals. Below are presented 3 examples of guidance:
 			\begin{description}
 				%\item[Zero Visibility Areas or Blind People:] 
-				\item[$\circledcirc$ Vehicle Guidance:] This application is very similar to our project: helping someone or a vehicle that cannot see the danger augment his/her/its abilities to detect it, or preventing this vehicle from making any damage. One could imagine a vehicle whose driver cannot see the danger because of unusual circumstances (e.g., smoke, fog), or a vehicle behaving in a dangerous way. For example, one could imagine a boat entering an unsafe region of the sea (shallow water, streams), a channel or a harbour. In the case of the harbour, the robots would also act as buoys or shock absorbers. In the future, a greater part of vehicle will operate without a driver. Guidance could also be extended to driverless vehicles. These vehicles could be encircled by a swarm of robots to progress safely towards the destination. If we consider a boat without a driver, the robots acting as shock absorbers around the boat in the harbour are interesting. Indeed if an error occurs in the boat driving program, or if someone hacks into the boat, the robots surrounding the vehicle would prevent big damages. One could argue that it would be easier to equip the boat or the other vehicles with the needed sensors or equipment. However, as these risky situations might occur very sporadically, it might be a bad investment to buy the ad hoc equipment.
+				\item[$\circledcirc$ Vehicle Guidance:] This application is very similar to our project: helping someone or a vehicle that cannot see the danger augment his/her/its abilities to detect it, or preventing this vehicle from making any damage. One could imagine a vehicle whose driver cannot see the danger because of unusual circumstances (e.g., smoke, fog), or a vehicle behaving in a dangerous way. For example, one could imagine a boat entering an unsafe region of the sea (shallow water, streams), a channel or a harbour. In the case of the harbour, the robots would also act as buoys or shock absorbers. In the future, a greater part of vehicle will operate without a driver. Guidance could also be extended to driverless vehicles. These vehicles could be encircled by a swarm of robots to progress safely towards the destination. If we consider a boat without a driver, the robots acting as shock absorbers around the boat in the harbour are interesting. Indeed if an error occurs in the boat driving program, or if someone hacks into the boat, the robots surrounding the vehicle would prevent big damages. One could argue that it would be easier to equip the boat or the other vehicles with the needed sensors or equipment. However, as these risky situations might occur very sporadically, it might be a bad investment to buy the ad hoc equipment. The U.S. Navy performed tests where a swarm of boats had to protect a main ship against enemies \citep{USNavy2014}.
 				
 				\item[$\circledcirc$ Human Motion Synchronisation:] The second application we thought about was the synchronisation of multiple humans. For instance, one can imagine a restricted area where security rounds have to be made. With the help of the robots, the members of the security personnel could maximise the covered area by synchronising their progression and walking speeds. In case of intrusion or attack, the robots next to each member of the security personnel could help to defend the personnel and provide additional equipment (shields, aimbots, additional ammunition).
 				
@@ -1939,6 +1943,41 @@ VOLUME  = 9,
 NUMBER  = 1,
 PAGES   = 1463,
 NOTE   = {{revision 138643}},
+}
+
+@misc{USNavy2014,
+	title={U.S. Navy Tests Robot Boat Swarm to Overwhelm Enemies},
+	url={http://spectrum.ieee.org/automaton/robotics/military-robots/us-navy-robot-boat-swarm},
+	author={Jeremy Hsu},
+	year={2014},
+	note={Last consulted on 17th August 2015}
+}
+
+@inproceedings{bethel2009non,
+  title={Non-facial and non-verbal affective expression in appearance-constrained robots for use in victim management: robots to the rescue!},
+  author={Bethel, Cindy L and Bringes, Christine and Murphy, Robin R},
+  booktitle={Proceedings of the 4th ACM/IEEE international conference on Human robot interaction},
+  pages={191--192},
+  year={2009},
+  organization={ACM}
+}
+
+@inproceedings{dautenhahn2006may,
+  title={How may I serve you?: a robot companion approaching a seated person in a helping context},
+  author={Dautenhahn, Kerstin and Walters, M and Woods, Sarah and Koay, Kheng Lee and Nehaniv, Chrystopher L and Sisbot, A and Alami, Rachid and Sim{\'e}on, Thierry},
+  booktitle={Proceedings of the 1st ACM SIGCHI/SIGART conference on Human-robot interaction},
+  pages={172--179},
+  year={2006},
+  organization={ACM}
+}
+
+@inproceedings{itoh2006development,
+  title={Development of a bioinstrumentation system in the interaction between a human and a robot},
+  author={Itoh, Kazuko and Miwa, Hiroyasu and Nukariya, Yuko and Zecca, Massimiliano and Takanobu, Hideaki and Roccella, Stefano and Carrozza, Maria and Dario, Paolo and Takanishi, Atsuo},
+  booktitle={Intelligent Robots and Systems, 2006 IEEE/RSJ International Conference on},
+  pages={2620--2625},
+  year={2006},
+  organization={IEEE}
 }
 
 \end{filecontents}
