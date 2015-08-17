@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass{memoir}
 \usepackage[utf8]{inputenc}
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \usepackage[marginparwidth=28mm]{geometry}
@@ -44,6 +44,12 @@
 	\draw [very thick, rotate around={#1:(#2,#3)}] (#2-0.25,#3-0.433) -- (#2,#3+0.45) -- (#2+0.25,#3-0.433);
 }
 
+\newcommand{\epuckop}[4][0] % [angle]{x}{y} avec angle optionel
+{
+	\draw [very thick, fill=white, opacity=#4] (#2,#3) circle [radius=0.5];
+	\draw [very thick, , opacity=#4, rotate around={#1:(#2,#3)}] (#2-0.25,#3-0.433) -- (#2,#3+0.45) -- (#2+0.25,#3-0.433);
+}
+
 \newcommand{\human}[3][0] % [angle]{x}{y}
 {
 	\draw [very thick, fill=white, rotate around={#1:(#2,#3)}] (#2-1,#3+0.5) ellipse (0.25cm and 0.5cm);
@@ -52,6 +58,44 @@
 	\draw [thick, fill=white, rotate around={#1:(#2,#3)}] (#2-0.05,#3+1) -- (#2,#3+1.1) -- (#2+0.05,#3+1);
 	\draw [very thick, fill=white, rotate around={#1:(#2,#3)}] (#2,#3+0.5) circle [radius=0.5cm];
 }
+
+
+\chapter{Acknowledgements}
+	
+	\begin{comment}
+		Faire un chemin présentant diverses zones dangereuses. Chaque zone dangereuse contient des problèmes que j'ai rencontrés. La personne qui m'a aidé à la résoudre est affichée sur le chemin à l'endroit où il est dévié.
+		Ajouter Céline.
+	\end{comment}
+	
+	\begin{figure}[!htp]
+		\centering\begin{tikzpicture}
+		%Mauro, Gaëtan, Giovanni, Anthony, Lorenzo, Brian, Family and friends.
+		\epuck{-7.5}{12}
+		\epuck{-7.5}{10}
+		\epuck{-7.5}{8}
+		\epuck{-7.5}{6}
+		\epuck{-7.5}{4}
+		\epuck{-7.5}{2}
+		%\epuck{-7.5}{0}
+		
+		\foreach \i in {0,20,...,180} {
+			\begin{scope}[rotate around={\i:(0,0)}]
+				\epuckop{-7.5}{0}{(180-\i)/180}
+			\end{scope}
+		}
+		
+		\draw (-6,12) node[anchor=west] {Mauro Birattari \color{Gray} for his precious guidance during};
+		\draw (-6,10) node[anchor=west] {Gaëtan Podevijn};
+		\draw (-6,8) node[anchor=west] {Andreagiovanni Reina};
+		\draw (-6,6) node[anchor=west] {Anthony Antoun};
+		\draw (-6,4) node[anchor=west] {Brian Delhaisse};
+		\draw (-6,2) node[anchor=west] {Lorenzo Garattoni \color{Gray} for his help};
+		\draw (-6,0) node[anchor=west] {Family \& Friends \color{Gray} for their endless support from the beginning of my studies until now};
+		
+		\end{tikzpicture}
+	\end{figure}
+
+
 \begin{figure}\centering
 \begin{tikzpicture}
 
