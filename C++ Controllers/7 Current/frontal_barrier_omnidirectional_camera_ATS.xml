@@ -45,13 +45,16 @@
         <epuck_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="false" noise_std_dev="0.0" calibrated="true" low_level_config="/home/root/adebruyn/low_level_configuration/omnidirectional_camera_sensor.xml"/>
         <virtual_rgb_ground_sensor implementation="default" real_experiment="true"/>
       </sensors>
+
+      <!--
+        gravityPotentialGain true when human moving false for experiments -->
       <params defaultSpeed="5" 
       	humanPotentialGain="500" 
       	humanPotentialDistance="35" 
         humanPotentialDistanceVariationDelta="0.5" 
       	agentPotentialGain="100" 
       	agentPotentialDistance="50" 
-        gravityPotential="false"
+        gravityPotential="false"  
         gravityPotentialGain="5"
         humanLeftColorRef="red"
         humanRightColorRef="green"
@@ -63,7 +66,8 @@
       />
     </e-puck_frontal_barrier_oc_controller>
 
-    <e-puck_frontal_barrier_human_oc_controller id="cppHumanLeft"
+    <!-- old controller  for replqacing the shoes by robots -->
+    <!--e-puck_frontal_barrier_human_oc_controller id="cppHumanLeft"
                         library="/home/adebruyn/argos3-anthony-controllers/build/controllers/frontal_barrier/libe-puck_frontal_barrier_human_oc_controller">
       <actuators>
         <epuck_wheels implementation="default" />
@@ -97,7 +101,7 @@
         rightSpeed="0"
         color="0,255,0"
       />
-    </e-puck_frontal_barrier_human_oc_controller>
+    </e-puck_frontal_barrier_human_oc_controller-->
 
   </controllers>
 
@@ -182,6 +186,7 @@
   <!-- ******************* -->
   <physics_engines>
     <!--dynamics2d id="dyn2d"/-->
+    <!-- camera 3 -->
     <iridia_tracking_system 
       id="its"
       its_host="164.15.10.153"

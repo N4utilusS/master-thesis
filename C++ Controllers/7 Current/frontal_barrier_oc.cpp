@@ -364,6 +364,7 @@ const CVector2 CEpuckFrontalBarrierOC::HumanPotential() {
             Real fDistance = 0;
 
             for (size_t i = 0; i < blobs.size(); ++i) {
+                // distance facor is to move from tam detection to robot blob detection
                 fDistance = blobs[i]->Distance * DISTANCE_CORRECTION_FACTOR;
                 if (fDistance > 9 && IsHuman(blobs[i]->Color)
                     && (fDistance < fMinimum || fMinimum < 0)) {
