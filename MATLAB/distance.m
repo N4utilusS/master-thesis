@@ -29,7 +29,7 @@ yIndices = mod(1:AMOUNT_OF_ROBOTS*2, 2) == 0;
 x = (data(:, xIndices) - TRANSLATE_X) * DISTANCE_RATIO;
 y = (data(:, yIndices) - TRANSLATE_Y) * DISTANCE_RATIO;
 
-distancesToCenter = sqrt(x.^2 + y.^2); % Distance to center for all robots at time step t.
+%distancesToCenter = sqrt(x.^2 + y.^2); % Distance to center for all robots at time step t.
 
 % Compute the distance from the rectangle
 % http://stackoverflow.com/questions/5254838/calculating-distance-between-a-point-and-a-rectangular-box-nearest-point
