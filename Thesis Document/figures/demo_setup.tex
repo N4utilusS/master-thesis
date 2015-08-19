@@ -66,6 +66,22 @@
 		Faire un chemin présentant diverses zones dangereuses. Chaque zone dangereuse contient des problèmes que j'ai rencontrés. La personne qui m'a aidé à la résoudre est affichée sur le chemin à l'endroit où il est dévié.
 		Ajouter Céline.
 	\end{comment}
+	I thank...
+	\vfill
+	\begin{figure}[!htp]
+		\begin{tikzpicture}
+		
+		\draw[white] (-9.3,0) -- (7,0);
+		
+		\foreach \i in {0,-1,...,-15} {
+			\begin{scope}[rotate around={\i*20:(3,0)}]
+				\epuckop{-7.5-\i/1.5}{0}{(15+\i)/15}
+			\end{scope}
+		}
+	\end{tikzpicture}
+\end{figure}
+
+		
 	
 	\begin{figure}[!htp]
 		\centering\begin{tikzpicture}
@@ -84,12 +100,12 @@
 			\end{scope}
 		}
 		
-		\draw (-6,12) node[anchor=west] {Mauro Birattari \color{Gray} for his precious guidance during};
-		\draw (-6,10) node[anchor=west] {Gaëtan Podevijn};
-		\draw (-6,8) node[anchor=west] {Andreagiovanni Reina};
-		\draw (-6,6) node[anchor=west] {Anthony Antoun};
-		\draw (-6,4) node[anchor=west] {Brian Delhaisse};
-		\draw (-6,2) node[anchor=west] {Lorenzo Garattoni \color{Gray} for his help};
+		\draw (-6,12) node[anchor=west, text width=13cm] {Mauro Birattari \color{Gray} for his precious ideas and support during the whole year, for the construction of the augmented shoes, and also for proposing this master thesis topic};
+		\draw (-6,10) node[anchor=west, text width=13cm] {Gaëtan Podevijn \color{Gray} for his precious ideas, support and patience during the whole year, for his attentive corrections of my texts, and also for proposing this master thesis topic};
+		\draw (-6,8) node[anchor=west, text width=13cm] {Andreagiovanni Reina \color{Gray} for his precious ideas, support and patience during the whole year, for his attentive corrections of my texts, and also for proposing this master thesis topic};
+		\draw (-6,6) node[anchor=west] {Anthony Antoun \color{Gray} for his help in the construction of the electronic part of the shoes};
+		\draw (-6,4) node[anchor=west, text width=13cm] {Brian Delhaisse \color{Gray} for the table tennis matches that I won, not for all the ones that I lost, but mostly for all the knowledge he shared with me};
+		\draw (-6,2) node[anchor=west] {Lorenzo Garattoni \color{Gray} for the help provided in the arena when I needed it the most};
 		\draw (-6,0) node[anchor=west] {Family \& Friends \color{Gray} for their endless support from the beginning of my studies until now};
 		
 		\end{tikzpicture}

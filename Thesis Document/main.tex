@@ -92,6 +92,12 @@
 	\draw [very thick, rotate around={#1:(#2,#3)}] (#2-0.25,#3-0.433) -- (#2,#3+0.45) -- (#2+0.25,#3-0.433);
 }
 
+\newcommand{\epuckop}[4][0] % [angle]{x}{y} avec angle optionel
+{
+	\draw [very thick, fill=white, opacity=#4] (#2,#3) circle [radius=0.5];
+	\draw [very thick, , opacity=#4, rotate around={#1:(#2,#3)}] (#2-0.25,#3-0.433) -- (#2,#3+0.45) -- (#2+0.25,#3-0.433);
+}
+
 \newcommand{\human}[3][0] % [angle]{x}{y}
 {
 	\draw [very thick, fill=white, rotate around={#1:(#2,#3)}] (#2-1,#3+0.5) ellipse (0.25cm and 0.5cm);
@@ -164,6 +170,17 @@
 		
 		\put(145,5){\makebox(30,5)[r]{\yearA}}
 		\put(145,0){\makebox(30,5)[r]{\yearB}}
+		
+		\put(80,30){
+%		\begin{tikzpicture}[scale=0.5]
+%		\foreach \i in {0,-1,...,-15} {
+%			\begin{scope}[rotate around={\i*20:(3,0)}]
+%				\epuckop{-7.5-\i/1.5}{0}{(15+\i)/15}
+%			\end{scope}
+%		}
+%		\end{tikzpicture}
+		\includegraphics[scale=0.5]{tikz_external_figures/main-figure1.pdf}
+		}
 	
 	\end{picture}
 	\restoregeometry
@@ -181,28 +198,47 @@
 		Faire un chemin présentant diverses zones dangereuses. Chaque zone dangereuse contient des problèmes que j'ai rencontrés. La personne qui m'a aidé à la résoudre est affichée sur le chemin à l'endroit où il est dévié.
 		Ajouter Céline.
 	\end{comment}
+	I thank...
+	\vfill
+	\begin{figure}[!htp]
+		\begin{tikzpicture}
+		
+		\draw[white] (-8,0) -- (7,0);
+		
+		\foreach \i in {0,-1,...,-15} {
+			\begin{scope}[rotate around={\i*20:(3,0)}]
+				\epuckop{-7.5-\i/1.5}{0}{(15+\i)/15}
+			\end{scope}
+		}
+		\end{tikzpicture}
+	\end{figure}
+
+		
 	
 	\begin{figure}[!htp]
 		\centering\begin{tikzpicture}
 		%Mauro, Gaëtan, Giovanni, Anthony, Lorenzo, Brian, Family and friends.
-		\epuck{-5}{12}
-		\epuck{-5}{10}
-		\epuck{-5}{8}
-		\epuck{-5}{6}
-		\epuck{-5}{4}
-		\epuck{-5}{2}
-		\epuck{-5}{0}
-		\epuck[60]{-2.5}{-4.33}
-		\epuck[120]{2.5}{-4.33}
-		\epuck[180]{5}{0}
+		\epuck{-7.5}{12}
+		\epuck{-7.5}{10}
+		\epuck{-7.5}{8}
+		\epuck{-7.5}{6}
+		\epuck{-7.5}{4}
+		\epuck{-7.5}{2}
+		%\epuck{-7.5}{0}
 		
-		\draw (-4,12) node[anchor=west] {Mauro Birattari};
-		\draw (-4,10) node[anchor=west] {Gaëtan Podevijn};
-		\draw (-4,8) node[anchor=west] {Andreagiovanni Reina};
-		\draw (-4,6) node[anchor=west] {Anthony Antoun};
-		\draw (-4,4) node[anchor=west] {Brian Delhaisse};
-		\draw (-4,2) node[anchor=west] {Lorenzo Garattoni};
-		\draw (-4,0) node[anchor=west] {Family \& Friends};
+		\foreach \i in {0,20,...,180} {
+			\begin{scope}[rotate around={\i:(0,0)}]
+				\epuckop{-7.5}{0}{(180-\i)/180}
+			\end{scope}
+		}
+		
+		\draw (-6,12) node[anchor=west, text width=13cm] {Mauro Birattari \color{Gray} for his precious ideas and support during the whole year, for the construction of the augmented shoes, and also for proposing this master thesis topic};
+		\draw (-6,10) node[anchor=west, text width=13cm] {Gaëtan Podevijn \color{Gray} for his precious ideas, support and patience during the whole year, for his attentive corrections of my texts, and also for proposing this master thesis topic};
+		\draw (-6,8) node[anchor=west, text width=13cm] {Andreagiovanni Reina \color{Gray} for his precious ideas, support and patience during the whole year, for his attentive corrections of my texts, and also for proposing this master thesis topic};
+		\draw (-6,6) node[anchor=west, text width=13cm] {Anthony Antoun \color{Gray} for his help in the construction of the electronic part of the shoes};
+		\draw (-6,4) node[anchor=west, text width=13cm] {Brian Delhaisse \color{Gray} for the table tennis matches that I won, not for all the ones that I lost, but mostly for all the knowledge he shared with me};
+		\draw (-6,2) node[anchor=west, text width=13cm] {Lorenzo Garattoni \color{Gray} for the help provided in the arena when I needed it the most};
+		\draw (-6,0) node[anchor=west, text width=13cm] {Family \& Friends \color{Gray} for their endless support from the beginning of my studies until now};
 		
 		\end{tikzpicture}
 	\end{figure}
@@ -348,7 +384,9 @@ relative to a seated human subject. They performed experiments where a human ask
 	
 	Currently, little attention has been devoted to the study of the interaction between humans and robotic swarms, how one can send instructions and receive feedback. One of the challenges in human-swarm interaction is the difference in perspective between the swarm and the human operator. The human only observes the global collective behaviour, not the local interactions or individual behaviours driving the robots. The simplicity of the hardware found on the robots, or the efficient synthesis of all the information sent by the robots (i.e., feedback) are also challenging. Most of the existing works in the literature present a major disadvantage: they require an extra layer between the group of robots and the human. This requirement might not always be satisfied when we remember that swarms like this are mostly destined to evolve in an unknown environment. The monitoring equipment necessary to operate the swarm may not be safely deployed. Furthermore, a synthesis of all the local information pieces must be done in order to provide an understandable state of the system to the human. This synthesis involves modelling, additional overheads and perhaps heavy computations, and the gathering of all information at a central point (eliminating by the way the distributed and decentralised properties of the swarm system) \citep{podevijn2012self}.\\
 	\citet{daily2003world} used a head-mounted display and augmented reality to add information right on top of the robot in the environment itself, suppressing the need for an additional display. \citet{baizid2009human} proposed a platform to interact with multiple robots simultaneously through a graphical user interface, or a head-mounted display, in virtual reality. They also studied how virtual reality abstraction affected the human perception and cognitive capabilities, i.e, they created a virtual environment by filtering useless information. \citet{mclurkin2006speaking} developed an centralised graphical user interface taking inspiration from real-time strategy video games, where one must control armies. They also imagined a feedback approach based on LEDs and sounds. The robots transmit their internal state by applying to their LEDs and sound system a defined pattern, recognisable by the operator, now able to quickly understand the state of the swarm without looking at a supplementary interface.\\
-	\citet{podevijn2012self} argue that self-organised mechanism, as those ruling the behaviour of the swarm, should be used to provide feedback to the operator. They suggest that the best entity which could communicate the status of the system and the whole swarm is the swarm itself. They performed experiments using colour feedback to distinguish different internal states and split the swarms into groups to tackle different tasks.
+	\citet{podevijn2012self} argue that self-organised mechanism, as those ruling the behaviour of the swarm, should be used to provide feedback to the operator. They suggest that the best entity which could communicate the status of the system and the whole swarm is the swarm itself. They performed experiments using colour feedback to distinguish different internal states and split the swarms into groups to tackle different tasks.\\
+	\citet{giusti2012cooperative} present a novel approach for distributed real-time recognition tasks using a swarm of mobile robots. Robots from multiple points of view exchange their local information to generate a global classification. They validated their solution on real robots for hand gesture recognition.\\
+	\citet{ayanian2014controlling} implemented an iOS application with multitouch. The multitouch gestures are translated into low-level commands for the robots composing the swarm. On the screen, the swarm of robots is represented as a bounding box that the user can manipulate to control the robots.
 	
 \begin{comment}
 [Currently, only little research on feedback between human and robots swarms. That research is focused on interaction with an additional layer... Mostly unidirectional communication (human to robots). Need new types of interactions for new applications. Robots to human (guide). Write about article saying self-organised feedback is better.]
@@ -442,7 +480,7 @@ As discussed in the introduction, the problem we want to address is the protecti
 	
 	
 	\section{Solution}
-	
+	\label{sec:solution}
 	\begin{comment}
 	[Solution at high level and the problems I will have to solve? Faire le lien avec flocking et pattern. \textcolor{red}{The swarm is extending the perception capabilities of the human.} Challenges.
 	On a choisit d'utiliser des swarms car... Equidistance par rapport à l'humain. Carac du système. Pb pour détecter l'humain...avec solution. Agent de la swarm doit être capable de détecter le danger. Humain perçoit la swarm qui elle perçoit le danger.]
@@ -556,7 +594,7 @@ Our objective in this thesis, is to present an innovative protection using swarm
 		[I will in this section describe the need for a device to detect a human and its development. What are the objectives of the hardware? The choices we made to get the final solution. How we built it. Calibration an adaptation process to make the current algorithm compatible with the new hardware. Where does the term come from?]
 		\end{comment}
 		
-	As explained in chapter \ref{chap:escorting_swarm}, one of the main issue was to enhance the robots so they could detect the user and position themselves with respect to him without any large external equipment. Large external equipments are not recommended since, in the targeted unknown environment, they might not be usable. For example, one might use a tracking system to get the position of the robots in real time and communicate it to the robots for them to adjust their speed. In a controlled environment, this may work very well, but in the field it would be difficult to deploy such a tracking system.
+	As explained in section \ref{sec:solution}, one of the main issue was to enhance the robots so they could detect the user and position themselves with respect to him without any large external equipment. Large external equipments are not recommended since, in the targeted unknown environment, they might not be usable. For example, one might use a tracking system to get the position of the robots in real time and communicate it to the robots for them to adjust their speed. In a controlled environment, this may work very well, but in the field it would be difficult to deploy such a tracking system.
 	
 	We thus opted for a compact, wearable device that would act as a \enquote{landmark} for the robots: a pair of shoes. In order for the robots to understand on which side of the human they are (to go in front of him/her), the two shoes have to emit a different message. The two shoes have to emit a different colour to give the robot information on the direction of the human. In section \ref{sec:robot_behaviour} we come back on the algorithm used to deduce the direction of the human from the observed colours.
 	
@@ -1977,6 +2015,24 @@ NOTE   = {{revision 138643}},
   booktitle={Intelligent Robots and Systems, 2006 IEEE/RSJ International Conference on},
   pages={2620--2625},
   year={2006},
+  organization={IEEE}
+}
+
+@inproceedings{giusti2012cooperative,
+  title={Cooperative sensing and recognition by a swarm of mobile robots},
+  author={Giusti, Alessandro and Nagi, Jawad and Gambardella, Luca and Di Caro, Gianni and others},
+  booktitle={Intelligent Robots and Systems (IROS), 2012 IEEE/RSJ International Conference on},
+  pages={551--558},
+  year={2012},
+  organization={IEEE}
+}
+
+@inproceedings{ayanian2014controlling,
+  title={Controlling a team of robots with a single input},
+  author={Ayanian, Nora and Spielberg, Andrew and Arbesfeld, Matthew and Strauss, Jason and Rus, Daniela},
+  booktitle={Robotics and Automation (ICRA), 2014 IEEE International Conference on},
+  pages={1755--1762},
+  year={2014},
   organization={IEEE}
 }
 
